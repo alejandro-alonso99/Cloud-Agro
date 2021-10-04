@@ -1,3 +1,141 @@
-#login-title {
-    color: red;
+@import url(http://fonts.googleapis.com/css?family=Muli);
+
+body {
+    margin:0;
+    padding:0;
+    font-family:helvetica, sans-serif;
+}
+
+p {
+    line-height: 1.8;
+}
+
+a {
+    color:#12c063ad;
+    text-decoration:none;
+}
+
+a:hover {
+    color:#00a74f;
+}
+
+h1, h2, h3, h4, h5 , h6 { font-family: 'Muli', sans-serif; font-weight:normal; }
+
+#header {
+    padding:10px 100px;
+    font-size:14px;
+    background:#12c063ad;
+    color:#fff;
+    border-bottom:4px solid #1cdf78;
+    overflow:auto;
+}
+
+#header .logo {
+    font-family: 'Muli', sans-serif;
+    float:left;
+    color:#f3f7cc;
+    font-size:20px;
+    margin-right:10%;
+}
+
+#content {
+    padding:30px 100px;
+}
+
+#login-container{
+    width: 80vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-box{
+    padding: 20px;
+    margin-top: 10vh;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:#12c063ad;
+    width: fit-content;
+    border-radius: 20px;
+}
+
+#login-title{
+    color: #fff;
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+#login-logo-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: fit-content;
+}
+
+#login-logo{
+    width: 150px;
+    height: fit-content;
+}
+
+/* Forms */
+
+form {
+    overflow:auto;
+}
+
+form p {
+    width:100%;
+    overflow:auto;
+}
+
+label {
+    display: block;
+    clear:both;
+    color:#fff;
+    margin-bottom:4px;
+    text-align: center;
+    font-size: 18px;
+}
+
+input, textarea {
+    clear:both;
+    float:left;
+    margin:0 0 10px;
+    background:#efefef;
+    border:0;
+    padding:6px 10px;
+    font-size:17px;
+    width: 20vw;
+    border-radius: 10px;
+    text-align: center;
+}
+input[type=submit], a.button {
+    font-weight:bold;
+    float: none;
+    background:#fff;
+    color:#222222;
+    padding:10px 20px;
+    font-size:14px;
+    text-transform:uppercase;
+    transition: all 0.5s;
+}
+
+input[type=submit]:hover {
+    background-color: #f3f7cc;
+}
+.errorlist {
+    color:#cc0033;
+    float:left;
+    clear:both;
+    padding-left:10px;
+}
+.helptext {
+    margin:0 0 20px 0;
+    color:#aaa;
+    clear:both;
+    float:left;
+    font-size:13px;
 }

@@ -1,11 +1,42 @@
 {% extends "base.html" %}
 {% block title %}Log-in{% endblock %}
 {% block content %}
-    <h1 id="login-title">Log-in</h1>
-    <p>Please, use the following form to log-in:</p>
-    <form action="." method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <p><input type="submit" value="Log in"></p>
-    </form>
+    <div id="login-container">
+        <div id="login-box">
+            <div id="login-logo-container"><svg width="400" height="256" viewBox="0 0 400 256" fill="none" xmlns="http://www.w3.org/2000/svg" id="login-logo">
+                <rect x="88.8887" y="218.357" width="229.952" height="30.9179" fill="white" fill-opacity="0.5"/>
+                <circle cx="104" cy="94" r="75" fill="white" fill-opacity="0.6"/>
+                <circle cx="280.194" cy="121.739" r="96.6184" fill="white" fill-opacity="0.8"/>
+                <circle cx="322.705" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <circle cx="96.6184" cy="152.657" r="96.6184" fill="white" fill-opacity="0.7"/>
+                <circle cx="96.6179" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="119.806" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="129.469" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="146.86" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="125.604" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="106.28" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="96.6179" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="88.8884" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <circle cx="160.386" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <circle opacity="0.7" cx="146.86" cy="129.469" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <path d="M285.991 77.2947C285.991 119.983 251.385 154.589 208.696 154.589C166.007 154.589 131.401 119.983 131.401 77.2947C131.401 34.606 166.007 0 208.696 0C251.385 0 285.991 34.606 285.991 77.2947Z" fill="white" fill-opacity="0.9"/>
+                <circle cx="173.913" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <circle cx="197.101" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <circle cx="224.155" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <circle cx="260.87" cy="171.981" r="77.2947" fill="white"/>
+                <circle cx="280.193" cy="171.981" r="77.2947" fill="white"/>
+                <circle cx="266.667" cy="171.981" r="77.2947" fill="white"/>
+                <circle cx="299.517" cy="171.981" r="77.2947" fill="white" fill-opacity="0.8"/>
+                <circle cx="245.411" cy="171.981" r="77.2947" fill="white" fill-opacity="0.7"/>
+                <path d="M100 49.2269C313.214 49.2269 263.661 190.879 263.884 212.754L300 249.227H288.393L256.964 217.441C239.554 219.316 201.429 232.843 161.25 200.923C120.982 169.004 123.214 130.789 100 49.2269ZM135.58 69.7626C113.393 59.2715 133.259 73.8697 133.259 73.8697C153.437 87.7983 162.723 106.772 173.527 127.397C187.589 154.272 208.795 189.763 237.902 202.263C266.92 214.763 253.17 207.843 240.58 198.468C227.991 189.004 210.134 159.629 199.955 140.343C185.804 113.557 172.723 87.3965 135.58 69.7626V69.7626Z" fill="#7CFC00"/>
+                </svg>
+            </div>
+            <h1 id="login-title">CloudAgro</h1>
+            <form action="." method="post">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <p><input type="submit" value="Log in"></p>
+            </form>
+        </div>
+    </div>
 {% endblock %}
