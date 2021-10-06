@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Logged out{% endblock %}
+{% block content %}
+    <div id="content-wrapper">
+        <div id="form-box">
+            <h1>Fuera de la App</h1>
+            <img src="{% static 'images/logout-img.svg' %}" alt="" id="logout-svg">
+            <p>Saliste exitosamente. Podés <a href="{% url 'login' %}">volver a entrar</a>.</p>
+        </div>
+    </div>
+{% endblock %}

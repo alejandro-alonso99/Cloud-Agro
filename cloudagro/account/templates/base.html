@@ -9,9 +9,16 @@
         </head>
     <body>
         <div id="header">
-            <span class="logo"><i class="fab fa-envira"></i> CloudAgro</span>
+            <span class="logo"><i class="fab fa-envira"></i> AgroCloud</span>
+            <span class="user">
+            {% if request.user.is_authenticated %}
+                Hola {{ request.user.username }},
+                <a href="{% url 'logout' %}">Salir</a>
+            {% else %}
+                <a href="{% url "login" %}">Log-in</a>
+            {% endif %}
+            </span>
         </div>
-
         <div id="content">
             {% block content %}
             {% endblock %}
