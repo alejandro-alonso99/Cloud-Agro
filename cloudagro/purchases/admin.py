@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Animals, Purchases
+from .models import Animal, Purchases
 
-admin.site.register(Animals)
+admin.site.register(Animal)
 admin.site.register(Purchases)

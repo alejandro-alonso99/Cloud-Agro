@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Compras{% endblock %}
+{% block content %}
+
+    <div id="top-buttons">
+        <div id="section-button">
+            <h2>Agregar compra <i class="fas fa-plus"></i></h2>
+        </div>
+        <div id="section-button">
+            <a href="{% url 'purchases:purchase_search' %}">
+                <h2>Buscar compra <i class="fas fa-search"></i></h2>
+            </a>
+        </div>
+    </div>
+
+    <div id="section-title">
+        <h1>Historial de Compras:</h1>
+    </div>
+
+    <div class="list-container" >
+        
+        {% for purchase in purchases %}
+            <a href="{{ purchase.get_absolute_url }}">
+                <div class="movement-card">
+                    <div id="card-row-1">
+                        <h2 id="client-tag">{{ purchase.client }}</h2>
+                        <h2 id="date-tag"> {{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
+                    </div>
+                    <div id="card-row-2">
+                        <h2 id="status-tag">{{ purchase.status }}</h2>
+                        <h2 id="total-tag">Total: ${{ purchase.total }}</h2>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div id="section-title">
+        <h1>Viendo compra: {{ purchase }}</h1>
+    </div>
+
+    <div class="list-container">
+        <div id="purchase-main-info">
+            
+            <div id="info-title">
+                <h1>Fecha</h1>
+                <div id="info-item">{{ purchase.date.day }} / {{ purchase.date.month }} / {{ purchase.date.year }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Vendedor:</h1>
+                <div id="info-item">{{ purchase.client }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Animales</h1>
+                <div id="info-item"> {{ purchase.total_animals }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Kg brutos: </h1>
+                <div id="info-item">{{ purchase.brute_kg }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Desbaste</h1>
+                <div id="info-item">{{ purchase.desbaste }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Estado:</h1>
+                <div id="info-item">{{ purchase.status }}</div>
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}

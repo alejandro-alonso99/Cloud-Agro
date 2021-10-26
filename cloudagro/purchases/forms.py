@@ -1,8 +1,20 @@
-from django.contrib.auth import models
-from django.forms import ModelForm, fields
+from django import forms
 from .models import Purchases
 
-class PurchaseForm(ModelForm):
+
+class PurchaseForm(forms.ModelForm):
+    
     class Meta: 
         model = Purchases
-        fields = '__all__'
+        fields = ('client', 'total_animals', 'brute_kg', 'desbaste', )
+
+'''
+class RowForm(forms.ModelForm):
+
+    class Meta:
+        model = Animals
+        fields = ('category', 'price_kg', 'heads', 'iva', )
+'''
+
+class SearchForm(forms.Form):
+    query = forms.CharField()

@@ -1,27 +1,57 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
     <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/d743caab95.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>{% block title %}{% endblock %}</title>
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
-        </head>
-    <body>
-        <div id="header">
-            <span class="logo"><i class="fab fa-envira"></i> AgroCloud</span>
-            <span class="user">
-            {% if request.user.is_authenticated %}
-                Hola {{ request.user.username }},
-                <a href="{% url 'logout' %}">Salir</a>
-            {% else %}
-                <a href="{% url "login" %}">Log-in</a>
-            {% endif %}
-            </span>
-        </div>
-        <div id="content">
-            {% block content %}
-            {% endblock %}
+    </head>
+
+    <body>     
+        <div id="overall-wrapper">
+            {% if user.is_authenticated and  request.get_full_path != '/account/login/' %}
+            
+                <div id="sidebar">
+                    <div id="sidebar-title">
+                        <img src="{% static 'images/darklogo.svg' %}" alt="">
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="{% url 'account:dashboard' %}"><i class="fas fa-clipboard-list"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-money-bill-wave"></i> Fondos
+                        </li>
+                        <li>
+                             <a href="{% url 'purchases:purchase_list' %}"><i class="fas fa-shopping-basket"></i> Compras</a> 
+                        </li>
+                        <li>
+                            <i class="fas fa-hand-holding-usd"></i> Ventas
+                        </li>
+                        <li>
+                            <i class="fas fa-donate"></i> Gastos
+                        </li>
+                        <li>
+                            <i class="fas fa-box-open"></i> Stock
+                        </li>
+                        <li>
+                            <i class="fas fa-user"></i> Cuenta
+                        </li>
+                        <h3>Copyright © 2021 CloudSoftware, todos los derechos reservados.</h3>
+                        <h4>Prohibida su copia o distribución.</h4>
+                    </ul>
+                </div>
+                
+            {% endif %}    
+            <div id="content">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </body>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

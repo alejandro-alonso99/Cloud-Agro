@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Búsqueda{% endblock %}
+{% block content %}
+
+    {% if query %}
+        <div id="section-title">
+            <h1>Filtrando por: "{{ query }}"</h1>
+            <p><a href="{% url 'purchases:purchase_search' %}">Buscar de nuevo</a></p>
+        </div>
+    <div class="list-container" >
+
+        {% for purchase in results %}
+            <a href="{{ purchase.get_absolute_url }}">
+                <div class="movement-card">
+                    <div id="card-row-1">
+                        <h2 id="client-tag">{{ purchase.client }}</h2>
+                        <h2 id="date-tag">{{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
+                    </div>
+                    <div id="card-row-2">
+                        <h2 id="status-tag">{{ purchase.status }}</h2>
+                        <h2 id="total-tag">Total: ${{ purchase.total }}</h2>
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <div id="section-title">
+                <h1>No hay resultados para la búsqueda.</h1>
+            </div>
+        {% endfor %}
+    </div>
+        
+    {% else %}
+        <div id="content-wrapper">
+            <div id="form-box">
+                <h1>Filtre sus compras: </h1>
+                <h6>(Nombre del vendedor o año)</h6>
+                <form action="." method="get">
+                    <div class="form-element">
+                        <i class="fas fa-search"></i> {{ form.query }} 
+                    </div>
+                    <p><input type="submit" value="Filtrar" id="form-btn"></p>
+                </form>
+            </div>
+        </div>    
+    {% endif %}
+
+{% endblock %}
