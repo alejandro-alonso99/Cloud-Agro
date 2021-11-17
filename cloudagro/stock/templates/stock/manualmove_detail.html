@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div id="section-title">
+        <h1>Viendo Movimiento: {{ manualmove }}</h1>
+    </div>
+    <div class="info-container">
+        <div id="purchase-main-info">
+
+            <div id="info-title">
+                <h1>Acción:</h1>
+                <div id="info-item">{{ manualmove.tipo | capfirst}}</div>
+            </div>
+            <div id="info-title">
+                <h1>Categoría:</h1>
+                <div id="info-item"> {{ manualmove.categoria | capfirst}}</div>
+            </div>
+            <div id="info-title">
+                <h1>Cantidad:</h1>
+                <div id="info-item"> {{ manualmove.cantidad }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Fecha</h1>
+                <div id="info-item">{{ manualmove.date.day }} / {{ manualmove.date.month }} / {{ manualmove.date.year }}</div>
+            </div>
+
+        </div>
+    </div>  
+
+{% endblock %}

@@ -32,7 +32,13 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
+    'django.contrib.humanize',
     'purchases.apps.PurchasesConfig',
+    'sales.apps.SalesConfig',
+    'stock.apps.StockConfig',
+    'expenses.apps.ExpensesConfig',
+    'payments.apps.PaymentsConfig',
+    'funds.apps.FundsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

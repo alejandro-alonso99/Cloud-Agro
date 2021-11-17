@@ -1,13 +1,12 @@
-import decimal
 from django.db import models
 from django.urls import reverse
 from cloudagro.utils import unique_slug_generator
-from django.conf import settings
-from decimal import Decimal
+from django.contrib.contenttypes.models import ContentType
 
+from payments.models import Payments
 
 class Purchases(models.Model):
-
+ 
     STATUS_CHOICES = (
         ('pagado','Pagado'),
         ('por pagar','Por pagar')
@@ -21,11 +20,9 @@ class Purchases(models.Model):
     total_animals = models.IntegerField(default=0)
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='por pagar')
 
-
     def __str__(self):
 
         return str(self.client) + ' ' + self.date.strftime("%d-%m-%Y")
-
 
     def get_absolute_url(self):
         return reverse ('purchases:purchase_detail',
@@ -34,6 +31,54 @@ class Purchases(models.Model):
                                                 self.date.year,
                                                 self.slug])
 
+    def calculate_total(self):
+        animals = self.animal_set.all()
+
+        kg_neto =  self.brute_kg - (self.brute_kg * (self.desbaste/100)) 
+
+        try:   
+            kg_cabeza = kg_neto / self.total_animals
+        except ZeroDivisionError:
+            kg_cabeza = 0
+
+        kg_totales=[]
+        for animal in animals:
+            kg_totales.append(animal.cantidad * kg_cabeza)
+
+        animal_precio_kg =list(map(int,animals.values_list('precio_por_kg', flat=True)))
+
+        sub_totals= [a * b for a, b in zip(animal_precio_kg, kg_totales)]
+
+        animal_ivas = list(map(int,animals.values_list('iva', flat=True)))
+
+        animal_totals = [a + b for a, b in zip(animal_ivas, sub_totals)]
+
+        purchase_total = sum(animal_totals)
+
+        return purchase_total
+
+    def calculate_amount_to_pay(self):
+        payments = self.payments
+
+        total_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+
+        amount_to_pay = self.calculate_total() - total_payed
+
+        return amount_to_pay
+
+    def change_status(self,val):
+            
+        STATUS_CHOICES = (
+                ('pagado','Pagado'),
+                ('por pagar','Por pagar')
+        )
+
+        status_dict = dict(STATUS_CHOICES)
+
+        self.status = status_dict[val][:]
+        self.save()
+        
+
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.client, self.slug)
         super(Purchases, self).save(*args,**kwargs)
@@ -41,6 +86,17 @@ class Purchases(models.Model):
     class Meta:
         ordering = ('-date',)
 
+    @property
+    def payments(self):
+        instance = self
+        qs = Payments.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instace = self
+        content_type = ContentType.objects.get_for_model(instace.__class__)
+        return content_type
 
 class Animal(models.Model):
 
@@ -48,21 +104,21 @@ class Animal(models.Model):
         ('ternero','Ternero'),
         ('ternera','Ternera'),
         ('novillo','Novillo'),
-        ('vaquillona','vaquillona'),
+        ('vaquillona','Vaquillona'),
         ('vaca','Vaca')
     )
 
     purchase = models.ForeignKey(Purchases, on_delete=models.CASCADE)
-    name = models.CharField(max_length=500, choices=ANIMAL_CHOICES, default='ternero')
-    quantity = models.IntegerField(default=0)
-    price_kg = models.DecimalField(max_digits=200,decimal_places=10, default=0)
-    iva = models.DecimalField(max_digits=200,decimal_places=10, default=0)
+    categoria = models.CharField(max_length=500, choices=ANIMAL_CHOICES, default='ternero')
+    cantidad = models.IntegerField(default=0)
+    precio_por_kg = models.DecimalField(max_digits=10,decimal_places=2, default=0)
+    iva = models.DecimalField(max_digits=10,decimal_places=2, default=0)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('categoria',)
         
 
     def __str__(self):
 
-        return self.name
+        return self.categoria
 

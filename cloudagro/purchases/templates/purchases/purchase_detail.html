@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
+{% load purchase_extras %}
+
 {% block content %}
     <div id="section-title">
         <h1>Viendo compra: {{ purchase }}</h1>
+        {% if purchase.status == 'por pagar' %}
+            <h2 id="total-tag">Total por pagar: {{ purchase.calculate_amount_to_pay | currency}}</h2>
+        {% else %}
+            <h2 id="total-tag">Pagado</h2>
+        {% endif %}
     </div>
-
-    <div class="list-container">
+    <div class="info-container">
         <div id="purchase-main-info">
             
             <div id="info-title">
@@ -26,13 +32,114 @@
             </div>
             <div id="info-title">
                 <h1>Desbaste</h1>
-                <div id="info-item">{{ purchase.desbaste }}</div>
+                <div id="info-item">{{ purchase.desbaste | percentage}}</div>
+            </div>
+            <div id="info-title">
+                <h1>Kg neto</h1>
+                <div id="info-item">{{ kg_neto }}</div>
             </div>
             <div id="info-title">
                 <h1>Estado:</h1>
-                <div id="info-item">{{ purchase.status }}</div>
+                <div id="info-item">{{ purchase.status | capfirst}}</div>
             </div>
         </div>
+        <div id="purchase-main-info">
+         
+            <div id="info-title">
+                <h1>Categoría:</h1>
+                    {% for animal in animals %}
+                    <div id="info-item">{{animal.categoria | capfirst}}</div>
+                    {% endfor %}   
+                    <div id="total-info-item">Total:</div>             
+            </div>
+            <div id="info-title">
+                <h1>Precio/kg:</h1>
+                    {% for animal in animals %}
+                    <div id="info-item">{{animal.precio_por_kg}}</div>
+                    {% endfor %}                
+                    <div id="total-info-item">- - -</div>
+            </div>
+            <div id="info-title">
+                <h1>Cabezas:</h1>
+                    {% for animal in animals %}
+                    <div id="info-item">{{animal.cantidad}}</div>
+                    {% endfor %}     
+                    <div id="total-info-item">{{ total_cabezas }}</div>
+            </div>
+            <div id="info-title">
+                <h1>kg/Cabeza:</h1>
+                    {% for animal in animals %}
+                    <div id="info-item">{{kg_cabeza | floatformat:2}}</div>
+                    {% endfor %}
+                    <div id="total-info-item">- - -</div>                
+            </div>
+            <div id="info-title">
+                <h1>kg totales:</h1>
+                {% for kg_total in kg_totales %}
+                    <div id="info-item">{{kg_total | floatformat:2 }}</div>     
+                {% endfor %}     
+                <div id="total-info-item">{{total_kg_total | floatformat:2}}</div>                      
+            </div>
+            <div id="info-title">
+                <h1>Sub total:</h1>
+                {% for sub_total in sub_totals %}
+                    <div id="info-item">{{sub_total | floatformat:2 | currency }}</div>     
+                {% endfor %}             
+                <div id="total-info-item">{{ total_sub_totals | floatformat:2 | currency }}</div>
+            </div>
+            <div id="info-title">
+                <h1>Iva:</h1>
+                    {% for iva in animal_ivas %}
+                    <div id="info-item">{{ iva | floatformat:2 | currency }}</div>
+                    {% endfor %}           
+                    <div id="total-info-item">{{ total_ivas | floatformat:2 | currency}}</div>
+            </div>
+            <div id="info-title">
+                <h1>Total:</h1>
+                    {% for total in animal_totals %}
+                    <div id="info-item">{{ total | floatformat:2 | currency}}</div>
+                    {% endfor %} 
+                    <div id="total-info-item">{{ purchase_total | floatformat:2 | currency}}</div>
+            </div>
+        </div>
+
+        <h1 id="list-title">Pagos:</h1>
+        {%if payments%}
+            {% for payment in payments %}
+                <div class="movement-card">
+                    <div id="card-row-1">
+                        <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
+                        <h2 id="date-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
+                    </div>
+                    <div id="card-row-2">
+                        <h2 id="total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if purchase.status == 'por pagar' %}
+        <h1 id="list-title">Agregar Pagos:</h1>
         
+        <div id="create-form-box">
+            <h4>Efectivo o transferencia:</h4>
+            <form method="post" action=".">
+                {% csrf_token %}
+                {{ payment_form.content_type.as_hidden }}
+                {{ payment_form.object_id.as_hidden }}
+                <div id="create-wrapper">
+                    <div class="create-element">
+                        <h3>Monto:</h3>
+                        {{payment_form.monto}}
+                    </div>
+                    <div class="create-element">
+                        <h3>Tipo:</h3>
+                        {{payment_form.tipo}}
+                    </div>
+                </div>                
+               <p><input type="submit" value="Añadir Pago" id="create-btn"></p> 
+            </form>
+        </div>        
+        {% endif %}
     </div>
 {% endblock %}

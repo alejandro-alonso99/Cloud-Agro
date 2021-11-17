@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+
+    <div id="top-buttons">
+        <div id="section-button">
+            <a href="{% url 'sales:sale_create' %}">
+                <h2 id="add-btn">Agregar Venta <i class="fas fa-plus"></i></h2>
+            </a>
+        </div>
+        <div id="section-button">
+            <a href="{% url 'sales:sale_search' %}">
+                <h2 id="search-btn">Buscar Venta <i class="fas fa-search"></i></h2>
+            </a>
+        </div>
+    </div>
+
+    <div class="list-container" >
+        <div id="purchase-main-info">
+            <div id="info-title">
+                <h1>Ventas totales</h1>
+                <div id="info-item">
+                    {{ total_sales }}
+                </div>
+            </div>
+            <div id="info-title">
+                <h1>Ventas por cobrar</h1>
+                <div id="info-item">
+                    {{ total_unpayed_sales }}
+                </div>
+            </div>
+            <div id="info-title">
+                <h1>Monto a cobrar:</h1>
+                <div id="info-item">{{ amount_to_receive_total | currency }}</div>                
+            </div>
+        </div>
+
+        <h1 id="list-title">Historial de Ventas:</h1>
+
+        {% for sale in sales %}
+            <a href="{{ sale.get_absolute_url }}">
+                <div class="movement-card">
+                    <div id="card-row-1">
+                        <h2 id="client-tag">{{ sale.client }}</h2>
+                        <h2 id="date-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
+                    </div>
+                    <div id="card-row-2">
+                        <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
+                        <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+
+    </div>
+{% endblock %}

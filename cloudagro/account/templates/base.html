@@ -10,42 +10,53 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>{% block title %}{% endblock %}</title>
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        <link rel="icon" href="{% static 'images/Frame 21.svg' %}">
     </head>
 
     <body>     
         <div id="overall-wrapper">
             {% if user.is_authenticated and  request.get_full_path != '/account/login/' %}
             
-                <div id="sidebar">
-                    <div id="sidebar-title">
-                        <img src="{% static 'images/darklogo.svg' %}" alt="">
-                    </div>
-                    <ul>
-                        <li>
-                            <a href="{% url 'account:dashboard' %}"><i class="fas fa-clipboard-list"></i> Dashboard</a>
-                        </li>
+            <div id="sidebar">
+                <div id="sidebar-title">
+                    <img src="{% static 'images/darklogo.svg' %}" alt="">
+                </div>
+                <ul>
+                    <li>
+                        <a href="{% url 'account:dashboard' %}"><i class="fas fa-clipboard-list"></i> Dashboard</a>
+                    </li>
+                    <a href="{% url 'funds:funds_main' %}">
                         <li>
                             <i class="fas fa-money-bill-wave"></i> Fondos
                         </li>
+                    </a>
+                    <a href="{% url 'purchases:purchase_list' %}">
                         <li>
-                             <a href="{% url 'purchases:purchase_list' %}"><i class="fas fa-shopping-basket"></i> Compras</a> 
+                                <i class="fas fa-shopping-basket"></i> Compras
                         </li>
+                    </a>
+                    <a href="{% url 'sales:sale_list' %}">
                         <li>
                             <i class="fas fa-hand-holding-usd"></i> Ventas
                         </li>
+                    </a>
+                    <a href="{% url 'expenses:expenses_summary' %}">
                         <li>
                             <i class="fas fa-donate"></i> Gastos
                         </li>
+                    </a>
+                    <a href="{% url 'stock:stock_list' %}">
                         <li>
                             <i class="fas fa-box-open"></i> Stock
                         </li>
-                        <li>
-                            <i class="fas fa-user"></i> Cuenta
-                        </li>
-                        <h3>Copyright © 2021 CloudSoftware, todos los derechos reservados.</h3>
-                        <h4>Prohibida su copia o distribución.</h4>
-                    </ul>
-                </div>
+                    </a>
+                    <li>
+                        <i class="fas fa-user"></i> Cuenta
+                    </li>
+                    <h3>Copyright © 2021 CloudSoftware, todos los derechos reservados.</h3>
+                    <h4>Prohibida su copia o distribución.</h4>
+                </ul>
+            </div>
                 
             {% endif %}    
             <div id="content">

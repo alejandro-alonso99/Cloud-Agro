@@ -6,7 +6,7 @@
     {% if query %}
         <div id="section-title">
             <h1>Filtrando por: "{{ query }}"</h1>
-            <p><a href="{% url 'purchases:purchase_search' %}">Buscar de nuevo</a></p>
+            <p><a href="{% url 'purchases:purchase_search' %}" class="page-link">Buscar de nuevo</a></p>
         </div>
     <div class="list-container" >
 
@@ -32,7 +32,7 @@
         
     {% else %}
         <div id="content-wrapper">
-            <div id="form-box">
+            <div id="create-form-box">
                 <h1>Filtre sus compras: </h1>
                 <h6>(Nombre del vendedor o año)</h6>
                 <form action="." method="get">

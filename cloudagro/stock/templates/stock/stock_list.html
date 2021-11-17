@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block content %}
+
+    <div id="top-buttons">
+        <div id="section-button">
+            <a href="{% url 'stock:manualmove_list' %}">
+                <h2 id="search-btn">Ver movimientos a mano </h2>
+            </a>
+        </div>
+        <div id="section-button">
+            <a href="{% url 'stock:manualmove_create' %}">
+                <h2 id="add-btn">Movimiento a mano <i class="fas fa-plus"></i></h2>
+            </a>
+        </div>
+    </div>
+
+    <div id="section-title">
+        <h1>Listado de Stock de Ganado:</h1>
+    </div>
+
+    <div class="list-container" >
+        <div id="purchase-main-info">
+            <div id="info-title">
+                <h1>Categoría:</h1>
+                <div id="info-item">
+                    Total:
+                </div>
+            </div>
+            {% for i in totals_len|loop_maker %}
+            <div id="info-title">
+                <h1>{% get_index choices_names i %}</h1>
+                    <div id="info-item">{% get_index category_totals i %}</div>                
+            </div>
+            {% endfor %}
+        </div>
+
+        <h1 id="list-title">Últimas 3 compras, ventas y agregados a mano:</h1>
+        {% for object in last_3_vector %}
+            {% if object.client %}
+                <a href="{{ object.get_absolute_url }}">
+                    <div class="movement-card">
+                        <div id="card-row-1">
+                            <h2 id="client-tag">{{ object.client }}</h2>
+                            <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
+                        </div>
+                        <div id="card-row-2">
+                            <h2 id="status-tag">{{ object.status | capfirst}}</h2>
+                            <h2 id="total-tag">Total: {{ object.calculate_total | floatformat:2 | currency }}</h2>
+                        </div>
+                    </div>
+                </a>
+            {% else %}
+            <a href="{{ object.get_absolute_url }}">
+                <div class="movement-card">
+                    <div id="card-row-1">
+                        <h2 id="client-tag"> Movimiento a mano </h2>
+                        <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
+                    </div>
+                    <div id="card-row-2">
+                        <h2 id="manualmove-type-tag">{{ object.tipo | capfirst}}</h2>
+                        <h2 id="total-tag"> {{ object.categoria | capfirst }}</h2>
+                    </div>
+                </div>
+            </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}

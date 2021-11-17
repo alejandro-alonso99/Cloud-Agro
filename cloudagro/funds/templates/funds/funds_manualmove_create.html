@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="section-title">
+        <h1>Movimiento manual de fondos:</h1>
+    </div>
+    <div class="info-container">
+        <div id="create-form-box">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div id="create-wrapper">
+                    <div class="create-element">
+                        <h3>Acción:</h3>
+                        {{move_form.action}}
+                    </div>
+                    <div class="create-element">
+                        <h3>Categoría:</h3>
+                        {{move_form.tipo}}
+                    </div>
+                    <div class="create-element">
+                        <h3>Cantidad:</h3>
+                        {{move_form.monto}}
+                    </div>
+                </div>
+                <p><input type="submit" value="Crear" id="create-btn"/> </p>  
+            </form>
+        </div>
+        <h1 id="list-title">Últimos 3 Movimientos a mano:</h1>
+        {% for object in last_3_manual_moves %}
+            <div class="movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ object.tipo | capfirst}}</h2>
+                    <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
+                </div>
+                <div id="card-row-2">
+                    <h2 id="status-tag">{{ object.action | capfirst}}</h2>
+                    <h2 id="total-tag">Total: {{ object.monto }}</h2>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
