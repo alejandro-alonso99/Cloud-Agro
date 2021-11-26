@@ -5,8 +5,8 @@ from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from django.db import models, transaction
-from payments.forms import PaymentForm
-from payments.models import Payments
+from payments.forms import PaymentForm, SelfChecksForm
+from payments.models import Payments, SelfChecks
 
 @login_required
 def purchase_list(request):
@@ -89,8 +89,13 @@ def purchase_detail(request, year, month, day, purchase):
     # PAGOS #
     payments = purchase.payments
 
-    total_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+    self_checks = purchase.self_checks
 
+    total_payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+    total_checks_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
+
+    total_payed = total_checks_payed + total_payments_payed
+    
     if purchase_total - total_payed <=0:
         purchase.change_status('pagado')
         purchase.save()
@@ -102,6 +107,8 @@ def purchase_detail(request, year, month, day, purchase):
     }
 
     payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
+
+    self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
 
     if payment_form.is_valid():
         content_type = payment_form.cleaned_data.get('content_type')
@@ -116,17 +123,41 @@ def purchase_detail(request, year, month, day, purchase):
 
         return redirect(purchase.get_absolute_url())
 
+    if self_check_form.is_valid():
+        content_type = self_check_form.cleaned_data.get('content_type')
+        obj_id = self_check_form.cleaned_data.get('object_id')
+        fecha_pago = self_check_form.cleaned_data.get('fecha_pago')
+        banco_emision = self_check_form.cleaned_data.get('banco_emision')
+        numero_cheque = self_check_form.cleaned_data.get('numero_cheque')
+        titular_cheque = self_check_form.cleaned_data.get('titular_cheque')
+        monto = self_check_form.cleaned_data.get('monto')
+
+        cliente = purchase.client
+        descripcion = purchase
+
+        attrs = {'content_type':content_type, 'object_id':obj_id, 
+                                                'cliente':cliente,
+                                                'descripcion':descripcion,
+                                                'fecha_pago':fecha_pago, 
+                                                'banco_emision':banco_emision,
+                                                'numero_cheque':numero_cheque,
+                                                'titular_cheque':titular_cheque,
+                                                'monto':monto}
+        
+        new_self_check = SelfChecks(**attrs)
+        new_self_check.save()
+
+        return redirect(purchase.get_absolute_url())
+
+    purchase_zip = zip(animals,kg_totales,sub_totals,animal_ivas,animal_totals)
+
+    money_zip = zip(payments,self_checks)
 
     return render(request, 'purchases/purchase_detail.html',
                                     {'purchase' : purchase,
-                                    'animals': animals,
                                     'kg_neto': kg_neto,
                                     'kg_cabeza':kg_cabeza,
-                                    'kg_totales' : kg_totales,
                                     'animal_cantidades':animal_precio_kg,
-                                    'sub_totals':sub_totals,
-                                    'animal_ivas':animal_ivas,
-                                    'animal_totals':animal_totals,
                                     'total_cabezas':total_cabezas,
                                     'total_sub_totals':total_sub_totals,
                                     'total_ivas':total_ivas,
@@ -134,6 +165,10 @@ def purchase_detail(request, year, month, day, purchase):
                                     'total_kg_total':total_kg_total,
                                     'payment_form':payment_form,
                                     'payments':payments,
+                                    'self_checks':self_checks,
+                                    'self_check_form':self_check_form,
+                                    'purchase_zip':purchase_zip,
+                                    'money_zip':money_zip,
                                     })
 
 

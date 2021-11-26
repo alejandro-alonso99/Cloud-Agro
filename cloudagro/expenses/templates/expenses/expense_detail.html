@@ -7,7 +7,7 @@
     <div id="section-title">
         <h1>Viendo gasto: {{ expense }}</h1>
         {% if expense.status == 'por pagar' %}
-            <h2 id="total-tag">Total por pagar: {{ expense.calculate_amount_to_pay | currency}}</h2>
+            <h2 id="total-to-pay-tag">Total por pagar: {{ expense.calculate_amount_to_pay | currency}}</h2>
         {% else %}
             <h2 id="total-tag">Pagado</h2>
         {% endif %}
@@ -48,8 +48,6 @@
                     <div id="card-row-1">
                         <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
                         <h2 id="date-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
-                    </div>
-                    <div id="card-row-2">
                         <h2 id="total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
                     </div>
                 </div>

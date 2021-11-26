@@ -10,60 +10,66 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>{% block title %}{% endblock %}</title>
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
-        <link rel="icon" href="{% static 'images/Frame 21.svg' %}">
+        <link rel="icon" href="{% static 'images/Darklogo.svg' %}">
     </head>
 
     <body>     
-        <div id="overall-wrapper">
-            {% if user.is_authenticated and  request.get_full_path != '/account/login/' %}
-            
-            <div id="sidebar">
-                <div id="sidebar-title">
-                    <img src="{% static 'images/darklogo.svg' %}" alt="">
-                </div>
-                <ul>
-                    <li>
-                        <a href="{% url 'account:dashboard' %}"><i class="fas fa-clipboard-list"></i> Dashboard</a>
-                    </li>
+        {% if user.is_authenticated and  request.get_full_path != '/account/login/' %}
+        
+            <div id="navbar">                
+                <div class="navbar-logo">
+                    <img src="{% static 'images/Darklogo.svg' %}" alt="">
+                    <h1>AgroCloud</h1>
+                </div> 
+                <div class="navbar-items">
+                    <a href="{% url 'account:dashboard' %}">
+                        <div class="navbar-item">
+                            <i class="fas fa-clipboard-list"></i> Dashboard
+                        </div>
+                    </a>
                     <a href="{% url 'funds:funds_main' %}">
-                        <li>
+                        <div class="navbar-item">
                             <i class="fas fa-money-bill-wave"></i> Fondos
-                        </li>
+                        </div>
                     </a>
                     <a href="{% url 'purchases:purchase_list' %}">
-                        <li>
+                        <div class="navbar-item">
                                 <i class="fas fa-shopping-basket"></i> Compras
-                        </li>
+                        </div>
                     </a>
                     <a href="{% url 'sales:sale_list' %}">
-                        <li>
+                        <div class="navbar-item">
                             <i class="fas fa-hand-holding-usd"></i> Ventas
-                        </li>
+                        </div>
                     </a>
                     <a href="{% url 'expenses:expenses_summary' %}">
-                        <li>
+                        <div class="navbar-item">
                             <i class="fas fa-donate"></i> Gastos
-                        </li>
+                        </div>
                     </a>
                     <a href="{% url 'stock:stock_list' %}">
-                        <li>
+                        <div class="navbar-item">
                             <i class="fas fa-box-open"></i> Stock
-                        </li>
+                        </div>
                     </a>
-                    <li>
+                    <div class="navbar-item">
                         <i class="fas fa-user"></i> Cuenta
-                    </li>
-                    <h3>Copyright © 2021 CloudSoftware, todos los derechos reservados.</h3>
-                    <h4>Prohibida su copia o distribución.</h4>
-                </ul>
+                    </div>   
+                </div>   
+                    
             </div>
-                
-            {% endif %}    
+            
             <div id="content">
                 {% block content %}
                 {% endblock %}
             </div>
-        </div>
+
+        {% endif %} 
+
+        <div id="login-content">
+            {% block login %}
+            {% endblock %}
+        </div>           
     </body>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

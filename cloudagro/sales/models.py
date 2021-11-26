@@ -1,7 +1,7 @@
 from django.db import models
 from cloudagro.utils import unique_slug_generator
 from django.urls import reverse
-from payments.models import Payments
+from payments.models import Payments, ThirdPartyChecks
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -62,8 +62,14 @@ class Sales(models.Model):
 
     def calculate_amount_to_pay(self):
         payments = self.payments
+        
+        third_p_checks = self.third_party_checks
 
-        total_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+        check_payed =sum(list(map(int,third_p_checks.values_list('monto', flat=True))))
+        
+        payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+
+        total_payed = check_payed + payments_payed
 
         amount_to_pay = self.calculate_total() - total_payed
 
@@ -92,6 +98,12 @@ class Sales(models.Model):
     def payments(self):
         instance = self
         qs = Payments.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def third_party_checks(self):
+        instance = self
+        qs = ThirdPartyChecks.objects.filter_by_instance(instance)
         return qs
 
     @property

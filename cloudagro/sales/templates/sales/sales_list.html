@@ -19,37 +19,44 @@
         </div>
     </div>
 
-    <div class="list-container" >
-        <div id="purchase-main-info">
-            <div id="info-title">
-                <h1>Ventas totales</h1>
-                <div id="info-item">
-                    {{ total_sales }}
+    <div class="info-container" >
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="date-title-tag">Ventas totales:</h2>
+                    <h2 id="date-title-tag">Ventas por pagar:</h2>
+                    <h2 id="date-title-tag">Monto por pagar:</h2>              
                 </div>
             </div>
-            <div id="info-title">
-                <h1>Ventas por cobrar</h1>
-                <div id="info-item">
-                    {{ total_unpayed_sales }}
+            <div class="movement-card">
+                <div id="card-row-1">
+                    <h2 id="date-tag">{{ total_sales }}</h2>
+                    <h2 id="date-tag">{{ total_unpayed_sales }}</h2>
+                    <h2 id="total-tag">{{ amount_to_receive_total | currency }}</h2>               
                 </div>
             </div>
-            <div id="info-title">
-                <h1>Monto a cobrar:</h1>
-                <div id="info-item">{{ amount_to_receive_total | currency }}</div>                
-            </div>
-        </div>
+        </div>        
 
         <h1 id="list-title">Historial de Ventas:</h1>
-
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="client-title-tag">Cliente:</h2>
+                        <h2 id="date-title-tag">Fecha:</h2>
+                        <h2 id="state-title-tag">Estado:</h2>              
+                        <h2 id="total-title-tag">Total venta:</h2>
+                    </div>
+                </div>
         {% for sale in sales %}
             <a href="{{ sale.get_absolute_url }}">
                 <div class="movement-card">
                     <div id="card-row-1">
                         <h2 id="client-tag">{{ sale.client }}</h2>
                         <h2 id="date-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
-                    </div>
-                    <div id="card-row-2">
-                        <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
+                        {% if sale.status == 'por cobrar' %}
+                            <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
+                        {% else %}
+                            <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
+                        {% endif %}
                         <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
                     </div>
                 </div>

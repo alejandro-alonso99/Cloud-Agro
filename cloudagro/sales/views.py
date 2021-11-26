@@ -1,11 +1,12 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
 from .forms import SaleSearchForm, SaleForm, SaleRowForm, SaleRowFormset
 from django.contrib.postgres.search import SearchVector
 from django.views.generic.edit import CreateView
 from django.db import transaction
-from payments.forms import PaymentForm
+from payments.forms import PaymentForm, ThirdPartyChecksForm
 from .models import Payments
 
 
@@ -90,11 +91,17 @@ def sales_detail(request, year, month, day, sale):
 
     payments = sale.payments
 
-    total_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+    third_p_checks = sale.third_party_checks
+
+    total_payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+    total_checks_payed = sum(list(map(int,third_p_checks.values_list('monto', flat=True))))
+
+    total_payed = total_payments_payed + total_checks_payed
 
     if sale_total - total_payed <=0:
         sale.change_status('cobrado')
         sale.save()
+
 
     initial_payment_data = {
         'content_type': sale.get_content_type,
@@ -102,6 +109,8 @@ def sales_detail(request, year, month, day, sale):
     }
 
     payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
+
+    third_p_form = ThirdPartyChecksForm(request.POST or None, initial= initial_payment_data)
 
     if payment_form.is_valid():
         content_type = payment_form.cleaned_data.get('content_type')
@@ -115,24 +124,54 @@ def sales_detail(request, year, month, day, sale):
         new_payment.save()
         
         return redirect(sale.get_absolute_url())
+    
+    if third_p_form.is_valid():
+        content_type = third_p_form.cleaned_data.get('content_type')
+        obj_id = third_p_form.cleaned_data.get('object_id')
+        fecha_deposito = third_p_form.cleaned_data.get('fecha_deposito')
+        banco_emision = third_p_form.cleaned_data.get('banco_emision')
+        numero_cheque = third_p_form.cleaned_data.get('numero_cheque')
+        titular_cheque = third_p_form.cleaned_data.get('titular_cheque')
+        monto = third_p_form.cleaned_data.get('monto')
+        observacion = ''
+
+        cliente = sale.client
+        descripcion = sale
+        attrs = {'content_type':content_type, 'object_id':obj_id,
+                                     'cliente':cliente,
+                                     'descripcion': descripcion,                                      
+                                     'fecha_deposito':fecha_deposito,
+                                     'banco_emision':banco_emision,
+                                     'numero_cheque':numero_cheque,
+                                     'titular_cheque':titular_cheque,
+                                     'monto':monto,
+                                     'observacion':observacion,    
+                                     }
+
+        new_third_p_check = ThirdPartyChecks(**attrs)
+        new_third_p_check.save()
         
+        return redirect(sale.get_absolute_url())
+
+    sale_zip = zip(sale_rows,kg_totales,sub_totals,animal_ivas,animal_totals)
+    money_zip = zip(payments,third_p_checks)
+
     return render(request, 'sales/sales_detail.html',
                                     {'sale' : sale,
-                                    'sale_rows': sale_rows,
                                     'kg_neto': kg_neto,
                                     'kg_cabeza':kg_cabeza,
-                                    'kg_totales' : kg_totales,
                                     'animal_cantidades':animal_precio_kg,
-                                    'sub_totals':sub_totals,
-                                    'animal_ivas':animal_ivas,
-                                    'animal_totals':animal_totals,
                                     'total_cabezas':total_cabezas,
                                     'total_sub_totals':total_sub_totals,
                                     'total_ivas':total_ivas,
                                     'sale_total':sale_total,
                                     'total_kg_total':total_kg_total,
                                     'payment_form':payment_form,
-                                    'payments':payments})
+                                    'third_p_form':third_p_form,
+                                    'payments':payments,
+                                    'third_p_checks':third_p_checks,
+                                    'sale_zip' : sale_zip,
+                                    'money_zip':money_zip})
 
 
 class SaleCreate(CreateView):

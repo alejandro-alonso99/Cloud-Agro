@@ -61,8 +61,6 @@
                     <div id="card-row-1">
                         <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
                         <h2 id="date-tag"> {{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }} </h2>
-                    </div>
-                    <div id="card-row-2">
                         {% if expense.status == 'por pagar' %}
                             <h2 id="status-tag">{{ expense.status | capfirst}}</h2>
                         {% else %}

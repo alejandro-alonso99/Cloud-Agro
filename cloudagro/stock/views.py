@@ -52,17 +52,10 @@ def stock_list(request):
     
     totals_len = len(purchase_category_totals)
 
-    last_3_manual_moves = ManualMove.objects.all()[:3]
-    last_3_purchases = Purchases.objects.all()[:3]
-    last_3_sales = Sales.objects.all()[:3]
-
-    last_3_vector = sorted(chain(last_3_purchases, last_3_sales, last_3_manual_moves), key= lambda instace: instace.date )
-
     return render(request, 'stock/stock_list.html', {'animal_choices':ANIMAL_CHOICES,
                                                         'category_totals':category_totals,
                                                         'totals_len':totals_len,
                                                         'choices_names':choices_names,
-                                                        'last_3_vector':last_3_vector,
                                                      })
 
 def manualmove_detail(request, year, month, day, manualmove):

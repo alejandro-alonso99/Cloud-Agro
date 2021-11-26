@@ -36,36 +36,5 @@
             </div>
             {% endfor %}
         </div>
-
-        <h1 id="list-title">Últimas 3 compras, ventas y agregados a mano:</h1>
-        {% for object in last_3_vector %}
-            {% if object.client %}
-                <a href="{{ object.get_absolute_url }}">
-                    <div class="movement-card">
-                        <div id="card-row-1">
-                            <h2 id="client-tag">{{ object.client }}</h2>
-                            <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
-                        </div>
-                        <div id="card-row-2">
-                            <h2 id="status-tag">{{ object.status | capfirst}}</h2>
-                            <h2 id="total-tag">Total: {{ object.calculate_total | floatformat:2 | currency }}</h2>
-                        </div>
-                    </div>
-                </a>
-            {% else %}
-            <a href="{{ object.get_absolute_url }}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag"> Movimiento a mano </h2>
-                        <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
-                    </div>
-                    <div id="card-row-2">
-                        <h2 id="manualmove-type-tag">{{ object.tipo | capfirst}}</h2>
-                        <h2 id="total-tag"> {{ object.categoria | capfirst }}</h2>
-                    </div>
-                </div>
-            </a>
-            {% endif %}
-        {% endfor %}
     </div>
 {% endblock %}
