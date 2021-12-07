@@ -7,7 +7,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/d743caab95.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>{% block title %}{% endblock %}</title>
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
         <link rel="icon" href="{% static 'images/Darklogo.svg' %}">
@@ -15,54 +14,32 @@
 
     <body>     
         {% if user.is_authenticated and  request.get_full_path != '/account/login/' %}
-        
-            <div id="navbar">                
-                <div class="navbar-logo">
-                    <img src="{% static 'images/Darklogo.svg' %}" alt="">
-                    <h1>AgroCloud</h1>
-                </div> 
-                <div class="navbar-items">
-                    <a href="{% url 'account:dashboard' %}">
-                        <div class="navbar-item">
-                            <i class="fas fa-clipboard-list"></i> Dashboard
-                        </div>
-                    </a>
-                    <a href="{% url 'funds:funds_main' %}">
-                        <div class="navbar-item">
-                            <i class="fas fa-money-bill-wave"></i> Fondos
-                        </div>
-                    </a>
-                    <a href="{% url 'purchases:purchase_list' %}">
-                        <div class="navbar-item">
-                                <i class="fas fa-shopping-basket"></i> Compras
-                        </div>
-                    </a>
-                    <a href="{% url 'sales:sale_list' %}">
-                        <div class="navbar-item">
-                            <i class="fas fa-hand-holding-usd"></i> Ventas
-                        </div>
-                    </a>
-                    <a href="{% url 'expenses:expenses_summary' %}">
-                        <div class="navbar-item">
-                            <i class="fas fa-donate"></i> Gastos
-                        </div>
-                    </a>
-                    <a href="{% url 'stock:stock_list' %}">
-                        <div class="navbar-item">
-                            <i class="fas fa-box-open"></i> Stock
-                        </div>
-                    </a>
-                    <div class="navbar-item">
-                        <i class="fas fa-user"></i> Cuenta
-                    </div>   
-                </div>   
-                    
+
+        <div class="navbar">
+            <a href="#home" id="nav-title">AgroCloud </a>
+            <div class="navbar-items">
+                <a href="{% url 'account:dashboard' %}">Resumen</a>
+                <a href="{% url 'purchases:purchase_list' %}">Compras</a>
+                <a href="{% url 'sales:sale_list' %}">Ventas</a>
+                <a href="{% url 'expenses:expenses_summary' %}">Gastos</a>
+                <a href="#news">Stock</a>
+                <div class="dropdown">
+                    <button class="dropbtn">Fondos
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">Caja</a>
+                        <a href="#">Banco</a>
+                        <a href="#">Cheques</a>
+                    </div>
+                </div>
             </div>
-            
-            <div id="content">
-                {% block content %}
-                {% endblock %}
-            </div>
+        </div>
+
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
 
         {% endif %} 
 
@@ -73,5 +50,4 @@
     </body>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </html>
