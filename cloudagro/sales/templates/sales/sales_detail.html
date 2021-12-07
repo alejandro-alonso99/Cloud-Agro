@@ -89,7 +89,7 @@
                         <h2 id="total-title-tag">Total:</h2>
                     </div>
                 </div>
-                {% for payment in payments %}
+                {% for payment,check in money_zip %}
                     <div class="movement-card">
                         <div id="card-row-1">
                             <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
@@ -97,8 +97,8 @@
                             <h2 id="total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
                         </div>
                     </div>
-                {% endfor %}
-                {% for check in third_p_checks %}
+                
+                
                     <div class="movement-card">
                         <div id="card-row-1">
                             <h2 id="client-tag"> Cheque </h2>
@@ -106,6 +106,7 @@
                             <h2 id="total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
                         </div>
                     </div>
+                
                 {% endfor %}
         {% endif %}
                 
