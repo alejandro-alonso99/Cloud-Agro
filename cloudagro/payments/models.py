@@ -3,6 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.urls import reverse
 from cloudagro.utils import unique_slug_generator
+import datetime
+from django.utils.timezone import utc
 
 
 class PaymentManager(models.Manager):
@@ -56,6 +58,7 @@ class ThirdPartyChecks(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
+    slug = models.SlugField(max_length=250,unique_for_date='fecha_ingreso', default='ckeck')
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
     cliente = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=50)
@@ -70,6 +73,63 @@ class ThirdPartyChecks(models.Model):
     
     objects = PaymentManager()
 
+    @property
+    def calculate_remaining(self):
+        left = self.fecha_deposito - datetime.date.today()
+        remaining = int(left.days)
+        return remaining
+
+    class Meta:
+        ordering = ('-fecha_ingreso',)
+
+    def __str__(self):
+        return self.fecha_deposito.strftime("%d-%m-%Y") + ' ' + str(self.monto) + str(self.id)
+
+    def get_absolute_url(self):
+        return reverse ('funds:third_p_check_detail',
+                                        args=[self.fecha_ingreso.day,
+                                                self.fecha_ingreso.month,
+                                                self.fecha_ingreso.year,
+                                                self.slug])
+
+    def save(self, *args, **kwargs):
+        self.slug = unique_slug_generator(self, self.cliente, self.slug)
+        super(ThirdPartyChecks, self).save(*args,**kwargs)
+
+class EndorsedChecks(models.Model):
+
+    STATE_CHOICES = (
+        ('depositado','Depositado'),
+        ('a depositar','A depositar'),
+        ('endosado','Endosado')
+    )
+
+    BANK_CHOICES = (
+        ('credicoop','Credicoop'),
+        ('supervielle','Supervielle'),
+        ('galicia','Banco Galicia'),
+        ('frances','Banco Frances'),
+    )
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    slug = models.SlugField(max_length=250,unique_for_date='fecha_ingreso', default='ckeck')
+    fecha_ingreso = models.DateTimeField(auto_now_add=True)
+    cliente = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=50)
+    fecha_deposito = models.DateField()
+    banco_emision = models.CharField(choices=BANK_CHOICES,default='galicia', max_length=50)
+    numero_cheque = models.IntegerField()
+    titular_cheque = models.CharField(max_length=50)
+    monto =  models.DecimalField(max_digits=10,decimal_places=2, default=0)
+    estado = models.CharField(choices=STATE_CHOICES,default='endosado', max_length=50)
+    depositado_en = models.CharField(choices=BANK_CHOICES, default='galicia', max_length=50)
+    observacion = models.TextField(max_length=50, blank=True)
+    
+    objects = PaymentManager()
+
     class Meta:
         ordering = ('-fecha_ingreso',)
 
@@ -78,16 +138,16 @@ class ThirdPartyChecks(models.Model):
 
     '''
     def get_absolute_url(self):
-        return reverse ('sales:sales_detail',
-                                        args=[self.date.day,
-                                                self.date.month,
-                                                self.date.year,
+        return reverse ('funds:third_p_check_detail',
+                                        args=[self.fecha_ingreso.day,
+                                                self.fecha,ingreso.month,
+                                                self.fecha_ingreso.year,
                                                 self.slug])
     '''
 
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.cliente, self.slug)
-        super(ThirdPartyChecks, self).save(*args,**kwargs)
+        super(EndorsedChecks, self).save(*args,**kwargs)
 
 class SelfChecks(models.Model):
 

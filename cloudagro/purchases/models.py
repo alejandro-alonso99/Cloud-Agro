@@ -3,7 +3,7 @@ from django.urls import reverse
 from cloudagro.utils import unique_slug_generator
 from django.contrib.contenttypes.models import ContentType
 
-from payments.models import Payments, SelfChecks
+from payments.models import Payments, SelfChecks, EndorsedChecks
 
 class Purchases(models.Model):
  
@@ -62,11 +62,15 @@ class Purchases(models.Model):
 
         self_checks = self.self_checks
 
+        endorsed_checks = self.endorsed_checks
+
         check_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
 
         payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
 
-        total_payed = check_payed + payments_payed
+        endorsed_payed = sum(list(map(int,endorsed_checks.values_list('monto', flat=True))))
+
+        total_payed = check_payed + payments_payed + endorsed_payed
 
         amount_to_pay = self.calculate_total() - total_payed
 
@@ -101,6 +105,12 @@ class Purchases(models.Model):
     def self_checks(self):
         instance = self
         qs = SelfChecks.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def endorsed_checks(self):
+        instance = self
+        qs = EndorsedChecks.objects.filter_by_instance(instance)
         return qs
 
     @property

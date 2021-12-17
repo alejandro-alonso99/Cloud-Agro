@@ -171,7 +171,7 @@ def sales_detail(request, year, month, day, sale):
                                     'payments':payments,
                                     'third_p_checks':third_p_checks,
                                     'sale_zip' : sale_zip,
-                                    'money_zip':money_zip})
+                                    'money_zip': money_zip})
 
 
 class SaleCreate(CreateView):

@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://kit.fontawesome.com/d743caab95.js" crossorigin="anonymous"></script>
         <title>{% block title %}{% endblock %}</title>
+        <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
         <link rel="icon" href="{% static 'images/Darklogo.svg' %}">
     </head>
@@ -22,15 +23,19 @@
                 <a href="{% url 'purchases:purchase_list' %}">Compras</a>
                 <a href="{% url 'sales:sale_list' %}">Ventas</a>
                 <a href="{% url 'expenses:expenses_summary' %}">Gastos</a>
-                <a href="#news">Stock</a>
+                <a href="{% url 'stock:stock_list' %}">Stock</a>
                 <div class="dropdown">
-                    <button class="dropbtn">Fondos
-                        <i class="fa fa-caret-down"></i>
-                    </button>
+                    
+                        <button class="dropbtn">Fondos
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                    </a>                    
                     <div class="dropdown-content">
+                        <a href="{% url 'funds:funds_main' %}">Resumen</a>
                         <a href="#">Caja</a>
                         <a href="#">Banco</a>
-                        <a href="#">Cheques</a>
+                        <a href="#">Cheques Propios</a>
+                        <a href="{% url 'funds:funds_third_party_checks' %}">Cheques Terceros</a>
                     </div>
                 </div>
             </div>

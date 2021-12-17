@@ -23,29 +23,30 @@
         <div id="wrapper">
             <div class="title-movement-card">
                 <div id="card-row-1">
-                    <h2 id="date-title-tag">Ventas totales:</h2>
-                    <h2 id="date-title-tag">Ventas por pagar:</h2>
-                    <h2 id="date-title-tag">Monto por pagar:</h2>              
+                    <h2 id="title-client-tag">Ventas totales:</h2>
+                    <h2 id="title-client-tag">Ventas por pagar:</h2>
+                    <h2 id="title-client-tag">Monto por pagar:</h2>              
                 </div>
             </div>
             <div class="movement-card">
                 <div id="card-row-1">
-                    <h2 id="date-tag">{{ total_sales }}</h2>
-                    <h2 id="date-tag">{{ total_unpayed_sales }}</h2>
-                    <h2 id="total-tag">{{ amount_to_receive_total | currency }}</h2>               
+                    <h2 id="client-tag">{{ total_sales }}</h2>
+                    <h2 id="client-tag">{{ total_unpayed_sales }}</h2>
+                    <h2 id="client-total-tag">{{ amount_to_receive_total | currency }}</h2>               
                 </div>
             </div>
-        </div>        
-
-        <h1 id="list-title">Historial de Ventas:</h1>
-                <div class="title-movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-title-tag">Cliente:</h2>
-                        <h2 id="date-title-tag">Fecha:</h2>
-                        <h2 id="state-title-tag">Estado:</h2>              
-                        <h2 id="total-title-tag">Total venta:</h2>
+        </div>    
+        <h1 id="list-title">Historial de Ventas:</h1>    
+        {% if sales %}
+                    <div class="title-movement-card">
+                        <div id="card-row-1">
+                            <h2 id="title-client-tag">Cliente:</h2>
+                            <h2 id="title-date-tag">Fecha:</h2>
+                            <h2 id="title-state-tag">Estado:</h2>              
+                            <h2 id="title-total-tag">Total venta:</h2>
+                        </div>
                     </div>
-                </div>
+        {% endif %}
         {% for sale in sales %}
             <a href="{{ sale.get_absolute_url }}">
                 <div class="movement-card">

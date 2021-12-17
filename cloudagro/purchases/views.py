@@ -1,12 +1,13 @@
 from django.shortcuts import get_object_or_404, redirect, render
+
 from .models import Animal, Purchases
 from .forms import AnimalFormset, SearchForm, PurchaseForm
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from django.db import models, transaction
-from payments.forms import PaymentForm, SelfChecksForm
-from payments.models import Payments, SelfChecks
+from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
+from payments.models import Payments, SelfChecks, EndorsedChecks, ThirdPartyChecks
 
 @login_required
 def purchase_list(request):
@@ -91,10 +92,15 @@ def purchase_detail(request, year, month, day, purchase):
 
     self_checks = purchase.self_checks
 
+    endorsed_checks = purchase.endorsed_checks
+
+    third_p_checks = ThirdPartyChecks.objects.filter(estado='a depositar')
+
     total_payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
     total_checks_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
+    total_endorsed_payed = sum(list(map(int,endorsed_checks.values_list('monto', flat=True))))
 
-    total_payed = total_checks_payed + total_payments_payed
+    total_payed = total_checks_payed + total_payments_payed + total_endorsed_payed
     
     if purchase_total - total_payed <=0:
         purchase.change_status('pagado')
@@ -109,6 +115,8 @@ def purchase_detail(request, year, month, day, purchase):
     payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
 
     self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
+
+    endorsed_checks_form = EndorsedChecksForm(request.POST or None, initial=initial_payment_data)
 
     if payment_form.is_valid():
         content_type = payment_form.cleaned_data.get('content_type')
@@ -142,12 +150,48 @@ def purchase_detail(request, year, month, day, purchase):
                                                 'banco_emision':banco_emision,
                                                 'numero_cheque':numero_cheque,
                                                 'titular_cheque':titular_cheque,
-                                                'monto':monto}
+                                                'monto':monto,
+                                                'third_p_checks':third_p_checks}
         
         new_self_check = SelfChecks(**attrs)
         new_self_check.save()
 
         return redirect(purchase.get_absolute_url())
+
+    if endorsed_checks_form.is_valid():
+        third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
+
+        content_type = endorsed_checks_form.cleaned_data.get('content_type')
+        obj_id = endorsed_checks_form.cleaned_data.get('object_id')
+        fecha_deposito = third_p_check.fecha_deposito
+        banco_emision = third_p_check.banco_emision
+        numero_cheque = third_p_check.numero_cheque
+        titular_cheque = third_p_check.titular_cheque
+        monto = third_p_check.monto
+        cliente = third_p_check.cliente
+        descripcion = third_p_check.descripcion
+        observacion = ''    
+
+        attrs = {'content_type':content_type, 'object_id':obj_id,
+                                     'cliente':cliente,
+                                     'descripcion': descripcion,                                      
+                                     'fecha_deposito':fecha_deposito,
+                                     'banco_emision':banco_emision,
+                                     'numero_cheque':numero_cheque,
+                                     'titular_cheque':titular_cheque,
+                                     'monto':monto,
+                                     'observacion':observacion,    
+                                     }
+
+        new_endorsed_check = EndorsedChecks(**attrs)
+        new_endorsed_check.save()
+
+        third_p_check.estado = 'endosado'
+        third_p_check.save()
+
+        return redirect(purchase.get_absolute_url())
+
+    print(purchase.endorsed_checks)
 
     purchase_zip = zip(animals,kg_totales,sub_totals,animal_ivas,animal_totals)
 
@@ -169,6 +213,9 @@ def purchase_detail(request, year, month, day, purchase):
                                     'self_check_form':self_check_form,
                                     'purchase_zip':purchase_zip,
                                     'money_zip':money_zip,
+                                    'third_p_checks':third_p_checks,
+                                    'endorsed_checks_form':endorsed_checks_form,
+                                    'endorsed_checks':endorsed_checks
                                     })
 
 

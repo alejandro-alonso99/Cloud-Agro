@@ -1,8 +1,9 @@
 from django import forms
 from django.db import models
 from django.db.models import fields
+from django.db.models.base import Model
 from django.forms import ModelForm, widgets
-from payments.models import Payments, ThirdPartyChecks, SelfChecks
+from payments.models import Payments, ThirdPartyChecks, SelfChecks, EndorsedChecks
 
 
 class PaymentForm(ModelForm):
@@ -30,7 +31,18 @@ class SelfChecksForm(ModelForm):
 
     class Meta:
         model = SelfChecks
-        fields = ['content_type', 'object_id', 'fecha_pago', 'banco_emision', 'numero_cheque', 'titular_cheque', 'monto' ]
+        fields = ['content_type', 'object_id', 'fecha_pago', 'banco_emision', 'numero_cheque', 'titular_cheque', 'monto', 'cliente' ]
+
+        widgets = {
+            'content_type':forms.HiddenInput,
+            'object_id': forms.HiddenInput,
+        }
+
+class EndorsedChecksForm(ModelForm):
+
+    class Meta:
+        model = EndorsedChecks
+        fields = ['content_type', 'object_id']
 
         widgets = {
             'content_type':forms.HiddenInput,

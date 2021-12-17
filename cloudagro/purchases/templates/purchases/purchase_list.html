@@ -23,28 +23,32 @@
         <div id="wrapper">
             <div class="title-movement-card">
                 <div id="card-row-1">
-                    <h2 id="date-title-tag">Compras totales:</h2>
-                    <h2 id="date-title-tag">Compras por pagar:</h2>
-                    <h2 id="date-title-tag">Monto por pagar:</h2>              
+                    <h2 id="title-client-tag">Compras totales:</h2>
+                    <h2 id="title-client-tag">Compras por pagar:</h2>
+                    <h2 id="title-total-tag">Monto por pagar:</h2>              
                 </div>
             </div>
-            <div class="movement-card">
+            <div class="title-movement-card">
                 <div id="card-row-1">
-                    <h2 id="date-tag">{{ total_purchases }}</h2>
-                    <h2 id="date-tag">{{ total_unpayed_purchases }}</h2>
+                    <h2 id="client-tag">{{ total_purchases }}</h2>
+                    <h2 id="client-tag">{{ total_unpayed_purchases }}</h2>
                     <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>               
                 </div>
             </div>
         </div>        
-        <h1 id="list-title">Historial de Compras:</h1>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-title-tag">Cliente:</h2>
-                    <h2 id="date-title-tag">Fecha:</h2>
-                    <h2 id="state-title-tag">Estado:</h2>              
-                    <h2 id="total-title-tag">Total compra:</h2>
+        <div id="list-title">
+            Historial de Compras:
+        </div>
+            {% if purchases %}
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">Cliente:</h2>
+                        <h2 id="title-date-tag">Fecha:</h2>
+                        <h2 id="title-state-tag">Estado:</h2>              
+                        <h2 id="title-total-tag">Total compra:</h2>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         {% for purchase in purchases %}
             <a href="{{ purchase.get_absolute_url }}">
                 <div class="movement-card">

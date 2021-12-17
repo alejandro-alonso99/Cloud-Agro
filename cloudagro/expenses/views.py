@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from expenses.models import Expenses
 from .forms import ExpenseForm
 
-from payments.models import Payments
-from payments.forms import PaymentForm
+from payments.models import Payments, SelfChecks
+from payments.forms import PaymentForm, SelfChecksForm
 
 def expenses_list(request, category_id=''):
 
@@ -68,7 +68,7 @@ def expenses_summary(request):
     expenses_by_category = []
     for choice in CATEGORY_CHOICES:
         expense_by_category = Expenses.objects.filter(categoria = str(choice[0]))
-        expenses_by_category_totals = sum(list(map(int,expense_by_category.values_list('monto', flat=True))))
+        expenses_by_category_totals = sum(list(map(int,expense_by_category.values_list('monto', flat=True)))) 
         expense_category_totals.append(expenses_by_category_totals)
         expenses_by_category.append(expense_by_category)
 
@@ -99,6 +99,8 @@ def expenses_summary(request):
                                                                 'description_totals':description_totals,
                                                                 'expenses_dict':expenses_dict,
                                                                 'expense_category_descriptions':expense_category_descriptions,
+                                                                'category_names':category_names,
+                                                                'expense_category_totals':expense_category_totals,
                                                                 })
 
 def expense_detail(request, year, month, day, expense):
@@ -110,9 +112,13 @@ def expense_detail(request, year, month, day, expense):
     #PAGOS
     payments = expense.payments
 
+    self_checks = expense.self_checks
 
-    total_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+    total_payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+    total_checks_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
 
+    total_payed = total_checks_payed + total_payments_payed
+    
     if expense.monto - total_payed <=0:
         expense.change_status('pagado')
         expense.save()
@@ -124,6 +130,8 @@ def expense_detail(request, year, month, day, expense):
     }
 
     payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
+
+    self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
 
     if payment_form.is_valid():
         content_type = payment_form.cleaned_data.get('content_type')
@@ -137,7 +145,38 @@ def expense_detail(request, year, month, day, expense):
         new_payment.save() 
         return redirect(expense.get_absolute_url())          
 
+    if self_check_form.is_valid():
+        content_type = self_check_form.cleaned_data.get('content_type')
+        obj_id = self_check_form.cleaned_data.get('object_id')
+        fecha_pago = self_check_form.cleaned_data.get('fecha_pago')
+        banco_emision = self_check_form.cleaned_data.get('banco_emision')
+        numero_cheque = self_check_form.cleaned_data.get('numero_cheque')
+        titular_cheque = self_check_form.cleaned_data.get('titular_cheque')
+        monto = self_check_form.cleaned_data.get('monto')
+        cliente = self_check_form.cleaned_data.get('cliente')
+        
+        descripcion = expense.descripcion
+
+        attrs = {'content_type':content_type, 'object_id':obj_id, 
+                                                'cliente':cliente,
+                                                'descripcion':descripcion,
+                                                'fecha_pago':fecha_pago, 
+                                                'banco_emision':banco_emision,
+                                                'numero_cheque':numero_cheque,
+                                                'titular_cheque':titular_cheque,
+                                                'monto':monto}
+        
+        new_self_check = SelfChecks(**attrs)
+        new_self_check.save()
+
+        return redirect(expense.get_absolute_url())
+
+    money_zip = zip(payments,self_checks)
+
     return render(request, 'expenses/expense_detail.html',{'expense':expense,
                                                             'payment_form':payment_form,
+                                                            'self_check_form':self_check_form,
                                                             'payments':payments,
+                                                            'self_checks':self_checks,
+                                                            'money_zip':money_zip,
                                                                 })                                            

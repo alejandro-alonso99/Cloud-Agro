@@ -18,42 +18,30 @@
         </div>
     </div>
     <div class="info-container">
-
-        <div id="purchase-main-info">
-            {% if category_id != '' %}
-                <div id="info-title">
-                    <h1>Gastos en: {{ category_id | capfirst }}</h1>
-                    <div id="info-item">
-                        {{ total_expenses }}
-                    </div>
-                </div>
-            {% else %}
-                <div id="info-title">
-                    <h1>Gastos totales</h1>
-                    <div id="info-item">
-                        {{ total_expenses }}
-                    </div>
-                </div>
-            {% endif %}
-            <div id="info-title">
-                <h1>Gastos Por pagar</h1>
-                <div id="info-item">
-                    {{ total_unpayed_expenses }}
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    {% if category_id != '' %}
+                    <h2 id="title-client-tag">Gastos en: {{ category_id | capfirst }}</h2>
+                    {% else %}
+                    <h2 id="title-client-tag">Gastos totales</h2>
+                    {% endif %}
+                    <h2 id="title-client-tag">Gastos por pagar:</h2>
+                    <h2 id="title-total-tag">Monto a pagar:</h2>          
                 </div>
             </div>
-            <div id="info-title">
-                <h1>Monto a pagar:</h1>
-                <div id="info-item">{{ amount_to_pay_total | currency }}</div>                
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{total_expenses}}</h2>
+                    <h2 id="client-tag">{{ total_unpayed_expenses }}</h2>                    
+                    <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>
+                </div>
             </div>
-        </div>
+        </div>        
         {% if category_id != '' %}
-            <div id="section-title">
-                <h1 id="list-title">Historial de gastos por categoría: {{ category_id | capfirst }}</h1>
-            </div>
+            <h1 id="list-title">Historial de gastos por categoría: {{ category_id | capfirst }}</h1>
         {% else %}
-            <div id="section-title">
-                <h1 id="list-title">Historial de gastos:</h1>
-            </div>
+            <h1 id="list-title">Historial de gastos:</h1>
         {% endif %}
         {% for expense in expenses %}
             <a href="{{ expense.get_absolute_url }}">
@@ -71,6 +59,5 @@
                 </div>
            </a>
         {% endfor %}
-
     </div>
 {% endblock %}

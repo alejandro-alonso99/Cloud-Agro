@@ -23,42 +23,52 @@
         <h1>Resúmen de gastos:</h1>
     </div>
 
-    <div class="list-container" >
-        <div id="purchase-main-info">
-            <div id="info-title">
-                <h1>Categoría</h1>
-                    <div id="info-item">Total:</div>                
+    <div class="info-container" >
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">Categoría:</h2>
+                    {% for name in category_names %}
+                    <h2 id="title-client-tag">{{ name | capfirst }}</h2>   
+                    {% endfor %}       
+                </div>
             </div>
-            {% for name, category_total in expenses_names_and_totals %}
-            <div id="info-title">
-                <h1>{{ name | capfirst}}</h1>
-                    <div id="info-item">{{ category_total | currency }}</div>                
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">Total:</h2>
+                    {% for total in expense_category_totals %}
+                    <h2 id="client-tag">{{ total | currency}}</h2>
+                    {% endfor %}               
+                </div>
             </div>
-            {% endfor %}
-        </div>
+        </div>        
         <!--Diccionario de gastos por categoría y descripción-->
         <h1 id="list-title">Resúmen por categoría:</h1>
         {% for key1,value1 in expenses_dict.items %}
             {% if value1 %}
-            <a href="{% url 'expenses:expenses_list' key1 %}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{ key1 | capfirst}}</h2>
-                        <h2 id="date-tag"> --- </h2>                    
+                <div id="section-title">
+                    <h1> {{key1 | capfirst}}</h1>
+                </div>                
+                <a href="{% url 'expenses:expenses_list' key1 %}">
+                    <div id="expense-wrapper">
+                        <div class="title-movement-card">
+                            <div id="card-row-1">
+                                <h2 id="title-client-tag">Tipo:</h2>
+                                <h2 id="title-total-tag"> Total: </h2>       
+                            </div>
+                        </div>
+                        {% for key2,value2 in value1.items %}
+                            <div class="title-movement-card">
+                                <div id="card-row-1">
+                                    <h2 id="client-tag">{{key2 | capfirst}}</h2>
+                                    <h2 id="total-tag"> {{ value2 | currency }} </h2>       
+                                </div>
+                            </div>
+                        {% endfor %}    
                     </div>
-                    <hr>
-                    {% for key2,value2 in value1.items %}
-                    <div id="card-row-2">
-                        <h2 id="category-tag">{{ key2 | capfirst}}</h2>
-                        <h2 id="total-tag">Total: {{ value2 | currency}}</h2>
-                    </div>
-                    <hr>
-                    {% endfor %}
-                </div>
-            </a>
+                </a>
             {% endif %}
         {% endfor %}
-        <!--Diccionario de gastos por categoría y descripción-->
     </div>
 
 {% endblock %}

@@ -21,20 +21,24 @@
         <h1>Listado de Stock de Ganado:</h1>
     </div>
 
-    <div class="list-container" >
-        <div id="purchase-main-info">
-            <div id="info-title">
-                <h1>Categoría:</h1>
-                <div id="info-item">
-                    Total:
+    <div class="info-container" >
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">Categoría:</h2>
+                    {% for i in totals_len|loop_maker %}
+                    <h2 id="title-client-tag">{% get_index choices_names i %}</h2>
+                    {% endfor %}          
                 </div>
             </div>
-            {% for i in totals_len|loop_maker %}
-            <div id="info-title">
-                <h1>{% get_index choices_names i %}</h1>
-                    <div id="info-item">{% get_index category_totals i %}</div>                
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">Total:</h2>
+                    {% for i in totals_len|loop_maker %}
+                    <h2 id="client-tag">{% get_index category_totals i %}</h2>
+                    {% endfor %}               
+                </div>
             </div>
-            {% endfor %}
-        </div>
+        </div>        
     </div>
 {% endblock %}

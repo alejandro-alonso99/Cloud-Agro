@@ -15,7 +15,7 @@
                 <div id="create-wrapper">
                     <div id="create-item">
                         <div class="create-element">
-                            <h3>Cliente:</h3>
+                            <h3>Cliente</h3>
                             {{form.client}} 
                         </div>
                         <div class="create-element">
@@ -36,20 +36,24 @@
                 <div id="create-wrapper">
                     
                 </div>
+
+                <hr>
                 
                 <h2 id="step-text">2- Ingrese animales por su categoría. </h2>
                 
-                <table class="table">
+                <table class="form-table">
                     {{ animals.management_form }}
 
                     {% for form in animals.forms %}
                         {% if forloop.first %}
-                        <thead>
-                            <tr>
+                        <thead >
+                            <tr id="form-titles">
                                 {% for field in form.visible_fields %}
-
-                                    <th>{{ field.label | capfirst }}</th>
-
+                                    {% if field.label == "Delete" %}
+                                        <th id="form-title-box">- - -</th>
+                                    {% else %}
+                                        <th id="form-title-box">{{ field.label | capfirst }}</th>
+                                    {% endif %}
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -57,7 +61,7 @@
                         <tr class="{% cycle row1 row2 %} formset_row">
                             {% for field in form.visible_fields %}
 
-                                <td>
+                                <td id="form-row-item">
                                     {% if forloop.first %}
                                         {% for hidden in form.hidden_fields %}
 

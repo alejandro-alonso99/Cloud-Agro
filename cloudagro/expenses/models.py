@@ -1,7 +1,7 @@
 from django.db import models
 from cloudagro.utils import unique_slug_generator
 from django.urls import reverse
-from payments.models import Payments
+from payments.models import Payments, SelfChecks
 from django.contrib.contenttypes.models import ContentType
 
 
@@ -64,6 +64,12 @@ class Expenses(models.Model):
     def payments(self):
         instance = self
         qs = Payments.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def self_checks(self):
+        instance = self
+        qs = SelfChecks.objects.filter_by_instance(instance)
         return qs
 
     @property
