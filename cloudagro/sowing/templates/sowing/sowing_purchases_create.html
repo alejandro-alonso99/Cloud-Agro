@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %} Crear compra {% endblock %}
+
+{% block content %}
+<div id="info-container">
+    <div id="list-title">
+        Agregar compra:
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">Campo:</h2>
+                    <h2 id="title-client-tag">Factura (opcional):</h2>
+                    <h2 id="title-client-tag">Proveedor:</h2>
+                    <h2 id="title-client-tag">Producto:</h2>
+                </div>
+            </div>
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">{{sowing_p_form.campo}}</h2>
+                    <h2 id="title-client-tag">{{sowing_p_form.factura}}</h2>
+                    <h2 id="title-client-tag">{{sowing_p_form.proveedor}}</h2>
+                    <h2 id="title-client-tag">{{sowing_p_form.producto}}</h2>
+                </div>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">Precio lt/kg usd:</h2>
+                    <h2 id="title-client-tag">Litros o Kg:</h2>
+                    <h2 id="title-client-tag">Tipo cambio:</h2>
+                    <h2 id="title-client-tag">IVA (opcional):</h2>
+                </div>
+            </div>
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">{{sowing_p_form.precio_lt_kg_usd}}</h2>
+                    <h2 id="title-client-tag">{{sowing_p_form.lt_kg}}</h2>
+                    <h2 id="title-client-tag">{{sowing_p_form.tipo_cambio}}</h2>
+                    <h2 id="title-client-tag">{{sowing_p_form.iva}}</h2>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Agregar" id="form-create-btn">
+    </form>
+    
+        
+</div>
+{% endblock %}

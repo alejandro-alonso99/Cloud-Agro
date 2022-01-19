@@ -23,6 +23,7 @@ class Payments(models.Model):
         ('transferencia','Transferencia'),
     )
     
+    slug = models.SlugField(max_length=150, unique=True)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
@@ -33,11 +34,22 @@ class Payments(models.Model):
 
     objects = PaymentManager()
 
+    def get_absolute_url(self):
+        return reverse ('payments:payment_detail',
+                                    args=[self.date.day,
+                                            self.date.month,
+                                            self.date.year,
+                                            self.slug])     
+
     class Meta:
         ordering = ('-date',)
 
     def __str__(self):
         return self.date.strftime("%d-%m-%Y") + ' ' + str(self.monto) + str(self.id)
+    
+    def save(self, *args, **kwargs):
+        self.slug = unique_slug_generator(self, self.tipo, self.slug)
+        super(Payments, self).save(*args,**kwargs)    
 
 class ThirdPartyChecks(models.Model):
 
@@ -82,6 +94,16 @@ class ThirdPartyChecks(models.Model):
     class Meta:
         ordering = ('-fecha_ingreso',)
 
+    def change_state(self):
+        if self.estado == 'a depositar':
+            self.estado = 'depositado'
+            self.save()
+
+        else:
+            self.estado = 'a depositar'
+            self.save()
+        
+
     def __str__(self):
         return self.fecha_deposito.strftime("%d-%m-%Y") + ' ' + str(self.monto) + str(self.id)
 
@@ -90,7 +112,7 @@ class ThirdPartyChecks(models.Model):
                                         args=[self.fecha_ingreso.day,
                                                 self.fecha_ingreso.month,
                                                 self.fecha_ingreso.year,
-                                                self.slug])
+                                                self.slug])                                            
 
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.cliente, self.slug)
@@ -127,6 +149,7 @@ class EndorsedChecks(models.Model):
     estado = models.CharField(choices=STATE_CHOICES,default='endosado', max_length=50)
     depositado_en = models.CharField(choices=BANK_CHOICES, default='galicia', max_length=50)
     observacion = models.TextField(max_length=50, blank=True)
+    third_p_id = models.PositiveIntegerField(default=1)
     
     objects = PaymentManager()
 
@@ -136,14 +159,10 @@ class EndorsedChecks(models.Model):
     def __str__(self):
         return self.fecha_ingreso.strftime("%d-%m-%Y") + ' ' + str(self.monto) + str(self.id)
 
-    '''
+    
     def get_absolute_url(self):
-        return reverse ('funds:third_p_check_detail',
-                                        args=[self.fecha_ingreso.day,
-                                                self.fecha,ingreso.month,
-                                                self.fecha_ingreso.year,
-                                                self.slug])
-    '''
+        return ThirdPartyChecks.objects.get(pk = self.third_p_id).get_absolute_url()
+    
 
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.cliente, self.slug)
@@ -180,14 +199,24 @@ class SelfChecks(models.Model):
     
     objects = PaymentManager()
 
+    @property
+    def calculate_remaining(self):
+        left = self.fecha_pago - datetime.date.today()
+        remaining = int(left.days)
+        return remaining
+
+    def get_absolute_url(self):
+        return reverse ('funds:self_check_detail',
+                                        args=[self.slug])   
+
     class Meta:
         ordering = ('-fecha_salida',)
 
     def __str__(self):
-        return self.fecha_salida.strftime("%d-%m-%Y") + ' ' + str(self.monto) + str(self.id)
+        return  str(self.numero_cheque)
     
     def save(self, *args, **kwargs):
-        self.slug = unique_slug_generator(self, self.cliente, self.slug)
+        self.slug = unique_slug_generator(self, self.numero_cheque, self.slug)
         super(SelfChecks, self).save(*args,**kwargs)
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from land.models import Campaign, Land
 from cloudagro.utils import unique_slug_generator
 from django.contrib.contenttypes.models import ContentType
 
@@ -12,6 +13,7 @@ class Purchases(models.Model):
         ('por pagar','Por pagar')
     )
 
+    campo = models.ForeignKey(Land, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=250,unique_for_date='date')
     client = models.CharField(max_length=250)
     date = models.DateTimeField(auto_now_add=True)
@@ -22,7 +24,7 @@ class Purchases(models.Model):
 
     def __str__(self):
 
-        return str(self.client) + ' ' + self.date.strftime("%d-%m-%Y")
+        return str(self.client) + ' ' + self.date.strftime("%d-%m-%Y") + ' Hacienda'
 
     def get_absolute_url(self):
         return reverse ('purchases:purchase_detail',
@@ -76,6 +78,14 @@ class Purchases(models.Model):
 
         return amount_to_pay
 
+    def get_status(self):
+        if self.calculate_amount_to_pay() <= 0:
+            status = 'pagado'
+        else:
+            status = 'por pagar' 
+        
+        return status
+
     def change_status(self,val):
             
         STATUS_CHOICES = (
@@ -86,7 +96,7 @@ class Purchases(models.Model):
         status_dict = dict(STATUS_CHOICES)
 
         self.status = status_dict[val][:]
-        self.save()
+        self.save(update_fields=['status'])
         
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.client, self.slug)
@@ -142,4 +152,5 @@ class Animal(models.Model):
     def __str__(self):
 
         return self.categoria
+
 

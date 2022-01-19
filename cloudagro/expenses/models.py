@@ -1,9 +1,9 @@
 from django.db import models
 from cloudagro.utils import unique_slug_generator
 from django.urls import reverse
-from payments.models import Payments, SelfChecks
+from payments.models import Payments, SelfChecks, EndorsedChecks
 from django.contrib.contenttypes.models import ContentType
-
+from land.models import Land
 
 class Expenses(models.Model):
     
@@ -20,6 +20,7 @@ class Expenses(models.Model):
         ('impuestos', 'Impuestos'),
     )
 
+    campo = models.ForeignKey(Land, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=250,unique_for_date='date')
     concepto = models.CharField(max_length=250)
     date = models.DateTimeField(auto_now_add=True)
@@ -42,9 +43,20 @@ class Expenses(models.Model):
     def calculate_amount_to_pay(self):
         payments = self.payments
 
-        total_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+        self_checks = self.self_checks
+
+        endorsed_checks = self.endorsed_checks
+
+        check_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
+
+        payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+
+        endorsed_payed = sum(list(map(int,endorsed_checks.values_list('monto', flat=True))))
+
+        total_payed = check_payed + payments_payed + endorsed_payed
 
         amount_to_pay = self.monto - total_payed
+
 
         return amount_to_pay
 
@@ -71,6 +83,13 @@ class Expenses(models.Model):
         instance = self
         qs = SelfChecks.objects.filter_by_instance(instance)
         return qs
+
+    @property
+    def endorsed_checks(self):
+        instance = self
+        qs = EndorsedChecks.objects.filter_by_instance(instance)
+        return qs
+
 
     @property
     def get_content_type(self):

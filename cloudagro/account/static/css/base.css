@@ -1,32 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Muli);
 
-.form-element input:-webkit-autofill {
-  box-shadow: none;
-  -webkit-box-shadow: 0 0 0 50px #232230 inset;
-  -webkit-text-fill-color: #fff;
-}
-
-.form-element input:-webkit-autofill:focus {
-  font-feature-settings: none;
-  -webkit-font-feature-settings: none;
-  box-shadow: none;
-  -webkit-box-shadow: 0 0 0 50px #232230 inset;
-  -webkit-text-fill-color: #fff;
-}
-
-input:-webkit-autofill {
-  box-shadow: none;
-  -webkit-box-shadow: 0 0 0 50px #fff inset;
-  -webkit-text-fill-color: #232230;
-}
-
-input:-webkit-autofill:focus {
-  font-feature-settings: none;
-  -webkit-font-feature-settings: none;
-  box-shadow: none;
-  -webkit-box-shadow: 0 0 0 50px #fff inset;
-  -webkit-text-fill-color: #232230;
-}
 
 /* <------------------general--------------------> */
 
@@ -101,6 +74,14 @@ h6 {
   height: 100vh;
 }
 
+#center-content{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  
+}
+
 /* <------------------general--------------------> */
 
 /* <--------------------nav---------------------> */
@@ -169,8 +150,8 @@ h6 {
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: rgb(177, 177, 177);
-  border: 1px solid rgb(177, 177, 177);
+  background-color: #CACACACA;
+  border: 1px solid #CACACACA;
   min-width: 160px;
   z-index: 1;
 }
@@ -187,7 +168,7 @@ h6 {
 
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
-  background-color: rgb(220, 220, 220);
+  background-color: rgb(177, 177, 177);
 }
 
 /* Show the dropdown menu on hover */
@@ -202,11 +183,16 @@ h6 {
 #form-box {
   margin-top: 150px;
   width: fit-content;
+  height: fit-content;
   background-color: #fff;
   border-radius: 20px;
   padding: 20px;
   box-shadow: -4px -3px 45px 1px rgba(0, 0, 0, 0.35);
   z-index: 1000;
+}
+
+#form-box h1{
+  font-size: 1vw
 }
 
 .form-element {
@@ -220,17 +206,6 @@ h6 {
   color: #fff;
 }
 
-.form-element input {
-  border: none;
-  font-size: 17px;
-  padding: 6px 10px;
-  margin: 10px 10px;
-  width: 300px;
-  height: 35px;
-  background: none;
-  color: #fff;
-}
-
 .form-element select {
   border: none;
   font-size: 17px;
@@ -240,16 +215,6 @@ h6 {
   height: 35px;
   background: none;
   color: #fff;
-}
-
-.form-element input:valid {
-  border: none;
-  outline: none;
-}
-
-.form-element input:invalid {
-  border: none;
-  outline: none;
 }
 
 #form-btn {
@@ -499,6 +464,24 @@ e {
   cursor: pointer;
 }
 
+#change-state-btn{
+  font-size: 0.9vw;
+  width: fit-content;
+  color: #232230;
+  padding: 10px 20px;
+  font-weight: bolder;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.5s;
+  background-color: rgb(177, 177, 177);
+}
+
+#change-state-btn:hover {
+  background-color: #63ff9b;
+  color: #232230;
+  cursor: pointer;
+}
+
 .list-container {
   width: 100%;
   margin-bottom: 100px;
@@ -526,15 +509,23 @@ e {
   border-radius: 5px;
 }
 
+#total-list-title{
+  text-align: center;
+  font-size: 1vw;
+  margin: 30px 0;
+  background-color: #fff;
+  color: #f50004;
+  padding: 10px;
+  border: 2px solid #f50004;
+  border-radius: 5px;
+}
+
 .list-container a {
   text-decoration: none;
   color: #232230;
 }
 
 .title-movement-card {
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
   padding: 0 30px;
   height: fit-content;
   background-color: transparent;
@@ -607,8 +598,7 @@ e {
   align-items: center;
   text-align: left;
   width: 100%;
-  padding-top: 10px;
-  padding-left: 5px;
+  padding: 7px;
   border-bottom: 1px solid rgb(177, 177, 177);
 }
 
@@ -619,15 +609,9 @@ e {
   text-align: left;
   width: 100%;
   padding-top: 10px;
-  padding-left: 5px;
   border-bottom: 1px solid rgb(177, 177, 177);
   background-color: rgb(177, 177, 177);
-}
-
-#card-row-2 {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  padding: 7px;
 }
 
 #total-tag {
@@ -737,11 +721,9 @@ e {
 #wrapper {
   width: 100%;
   height: fit-content;
-  margin: 0;
-  padding: 0;
   margin: 20px 0px;
-  border: solid rgb(177, 177, 177);
-  border-width: 2px 2px;
+  border: 2px solid rgb(177, 177, 177);
+  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
   border-radius: 5px;
   padding: 20px 0;
 }
@@ -842,19 +824,6 @@ e {
   border-radius: 5px;
 }
 
-#purchase-main-info input {
-  text-align: center;
-  border: none;
-  font-size: 17px;
-  padding: 6px 10px;
-  margin: 10px 10px;
-  width: 80%;
-  height: 35px;
-  color: #232230;
-  border: 2px solid #232230;
-  border-radius: 5px;
-}
-
 #purchase-main-info textarea {
   text-align: center;
   border: none;
@@ -887,24 +856,6 @@ e {
   justify-content: flex-end;
 }
 
-#create-item input:valid {
-  font-size: 16px;
-  outline: none;
-  border: none;
-  border: 1px solid rgb(177, 177, 177);
-}
-
-#create-item input:invalid {
-  outline: none;
-  border: none;
-  border: 1px solid rgb(177, 177, 177);
-}
-
-#create-item input:focus {
-  outline: none;
-  border: 1px solid rgb(177, 177, 177);
-}
-
 #create-wrapper {
   display: flex;
   justify-content: space-between;
@@ -917,21 +868,6 @@ e {
 
 #create-wrapper h3 {
   font-size: 20px;
-}
-
-#create-wrapper input{
-  height: fit-content;
-  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
-}
-
-#create-wrapper input:valid {
-  border-bottom: 2px solid rgb(177, 177, 177);
-  outline: none;
-}
-
-#create-wrapper input:invalid {
-  border-bottom: 2px solid rgb(177, 177, 177);
-  outline: none;
 }
 
 #create-wrapper select {
@@ -968,10 +904,6 @@ e {
 
 .create-element{
   width: 15%;
-}
-
-.create-element input, select{
-  width: 100%;
 }
 
 #create-btn {
@@ -1028,39 +960,6 @@ e {
   width: 70vw;
 }
 
-.formset_row input:valid {
-  border-bottom: 2px solid rgb(177, 177, 177);
-  outline: none;
-}
-
-.formset_row input:invalid {
-  border: none;
-  outline: none;
-}
-
-.formset_row select,
-input {
-  width: 100%;
-  height: fit-content;
-  border: none;
-  font-size: 16px;
-  font-weight: 400;
-  border: 2px solid rgb(177, 177, 177);
-  padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
-  transition: border-bottom 0.5s;
-}
-
-.formset_row select:focus {
-  border-bottom: 2px solid #232230;
-  color: #232230;
-}
-
-.formset_row input:focus {
-  border-bottom: 2px solid #232230;
-  color: #232230;
-}
-
 .table {
   margin: 20px 0;
 }
@@ -1097,23 +996,15 @@ input {
 /* <----------------Payments---------------------> */
 
 #payments {
-  display: flex;
+  display: block;
   width: 70vw;
 }
 
 .payment-wrapper {
-  float: left;
-  display: block;
-  justify-content: center;
+  display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  height: fit-content;
-  border: 2px solid rgb(177, 177, 177);
-  border-radius: 5px;
-  padding: 20px;
-  margin-top: 20px;
-  margin-right: 5vw;
-  padding: 2vw;
 }
 
 .check-wrapper {
@@ -1131,6 +1022,7 @@ input {
 }
 
 #payment-section {
+  display: flex;
   width: fit-content;
   margin-top: 20px;
   border-radius: 5px;
@@ -1141,25 +1033,12 @@ input {
 #payment-title {
   text-align: center;
   margin-bottom: 20px;
-  width: 25vw;
   font-size: 1vw;
-  background-color: #fff;
-  color: #232230;
-  padding: 10px;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 #payment-section {
   margin-top: 20px;
   padding-right: 20px;
-}
-
-#payment-section input {
-  width: 100%;
-  font-size: 1vw;
-  border: 1px solid rgb(177, 177, 177);
-  border-radius: 5px;
-  margin-bottom: 20px;
 }
 
 #payment-section select {
@@ -1191,3 +1070,47 @@ input {
 }
 
 /* <----------------Payments---------------------> */
+
+input{
+  width: 60%;
+  outline: none;
+  border: none;
+  border-bottom: 2px solid rgb(177, 177, 177);
+  padding: 5px;
+  transition: all 0.5s;
+  text-align: center;
+}
+
+select {
+  outline: none;
+  border: none;
+  border-bottom: 2px solid rgb(177, 177, 177);
+  padding: 5px;
+  transition: all 0.5s;
+  text-align: center;
+}
+
+input:focus{
+  border-bottom: 2px solid  #63ff9b;
+}
+
+select:focus{
+  border-bottom: 2px solid #63ff9b;
+}
+
+#form-create-btn{
+  width: fit-content;
+  border: none;
+  background-color: #CACACACA;
+  font-size: 0.9vw;
+  cursor: pointer;
+  text-transform: uppercase;
+  padding: 10px;
+  border-radius: 3px;
+  transition: all 0.2s;
+  margin: 20px;
+}
+
+#form-create-btn:hover{
+  background-color: rgb(177, 177, 177);
+}

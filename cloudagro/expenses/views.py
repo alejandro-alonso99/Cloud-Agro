@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render, get_object_or_404
 from expenses.models import Expenses
 from .forms import ExpenseForm
 
-from payments.models import Payments, SelfChecks
-from payments.forms import PaymentForm, SelfChecksForm
+from payments.models import Payments, SelfChecks, ThirdPartyChecks, EndorsedChecks
+from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 
 def expenses_list(request, category_id=''):
 
@@ -113,14 +113,14 @@ def expense_detail(request, year, month, day, expense):
     payments = expense.payments
 
     self_checks = expense.self_checks
-
-    total_payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
-    total_checks_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
-
-    total_payed = total_checks_payed + total_payments_payed
     
-    if expense.monto - total_payed <=0:
-        expense.change_status('pagado')
+    third_p_checks = ThirdPartyChecks.objects.filter(estado='a depositar')
+
+    endorsed_checks = expense.endorsed_checks
+
+
+    if expense.calculate_amount_to_pay() <= 0:
+        expense.status = 'pagado'
         expense.save()
 
 
@@ -132,6 +132,8 @@ def expense_detail(request, year, month, day, expense):
     payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
 
     self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
+
+    endorsed_checks_form = EndorsedChecksForm(request.POST or None, initial=initial_payment_data)
 
     if payment_form.is_valid():
         content_type = payment_form.cleaned_data.get('content_type')
@@ -153,7 +155,7 @@ def expense_detail(request, year, month, day, expense):
         numero_cheque = self_check_form.cleaned_data.get('numero_cheque')
         titular_cheque = self_check_form.cleaned_data.get('titular_cheque')
         monto = self_check_form.cleaned_data.get('monto')
-        cliente = self_check_form.cleaned_data.get('cliente')
+        cliente = expense.concepto
         
         descripcion = expense.descripcion
 
@@ -171,12 +173,50 @@ def expense_detail(request, year, month, day, expense):
 
         return redirect(expense.get_absolute_url())
 
+    if endorsed_checks_form.is_valid() and request.POST.get("check_id"):
+        third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
+
+        content_type = endorsed_checks_form.cleaned_data.get('content_type')
+        obj_id = endorsed_checks_form.cleaned_data.get('object_id')
+        fecha_deposito = third_p_check.fecha_deposito
+        banco_emision = third_p_check.banco_emision
+        numero_cheque = third_p_check.numero_cheque
+        titular_cheque = third_p_check.titular_cheque
+        monto = third_p_check.monto
+        cliente = third_p_check.cliente
+        descripcion = third_p_check.descripcion
+        observacion = '' 
+        third_p_id = third_p_check.id   
+
+        attrs = {'content_type':content_type, 'object_id':obj_id,
+                                     'cliente':cliente,
+                                     'descripcion': descripcion,                                      
+                                     'fecha_deposito':fecha_deposito,
+                                     'banco_emision':banco_emision,
+                                     'numero_cheque':numero_cheque,
+                                     'titular_cheque':titular_cheque,
+                                     'monto':monto,
+                                     'observacion':observacion,    
+                                     'third_p_id':third_p_id,
+                                     }
+
+        new_endorsed_check = EndorsedChecks(**attrs)
+        new_endorsed_check.save()
+
+        third_p_check.estado = 'endosado'
+        third_p_check.save()
+
+        return redirect(expense.get_absolute_url())
+
     money_zip = zip(payments,self_checks)
 
     return render(request, 'expenses/expense_detail.html',{'expense':expense,
                                                             'payment_form':payment_form,
                                                             'self_check_form':self_check_form,
+                                                            'endorsed_checks_form':endorsed_checks_form,
                                                             'payments':payments,
                                                             'self_checks':self_checks,
+                                                            'third_p_checks':third_p_checks,
+                                                            'endorsed_checks':endorsed_checks,
                                                             'money_zip':money_zip,
                                                                 })                                            

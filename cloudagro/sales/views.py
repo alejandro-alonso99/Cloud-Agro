@@ -172,16 +172,16 @@ def sales_detail(request, year, month, day, sale):
                                     'third_p_checks':third_p_checks,
                                     'sale_zip' : sale_zip,
                                     'money_zip': money_zip})
-
+ 
 
 class SaleCreate(CreateView):
     model = Sales
-    fields = ['client', 'total_animals', 'brute_kg', 'desbaste']
+    fields = ['campo','client', 'total_animals', 'brute_kg', 'desbaste']
 
 
 class SaleAnimalsCreate(CreateView):
     model = Sales
-    fields = ['client', 'total_animals', 'brute_kg', 'desbaste']
+    fields = ['campo','client', 'total_animals', 'brute_kg', 'desbaste']
 
     def get_context_data(self, **kwargs):
         data = super(SaleAnimalsCreate, self).get_context_data(**kwargs)

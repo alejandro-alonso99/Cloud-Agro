@@ -3,7 +3,7 @@ from cloudagro.utils import unique_slug_generator
 from django.urls import reverse
 from payments.models import Payments, ThirdPartyChecks
 from django.contrib.contenttypes.models import ContentType
-
+from land.models import Land
 
 class Sales(models.Model):
 
@@ -11,7 +11,8 @@ class Sales(models.Model):
         ('cobrado','Cobrado'),
         ('por cobrar','Por cobrar')
     )
-
+ 
+    campo = models.ForeignKey(Land, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=250,unique_for_date='date')
     client = models.CharField(max_length=250)
     date = models.DateTimeField(auto_now_add=True)

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Crear campaña {% endblock %}
+
+{% block content %}
+
+<div id="center-content">
+    <div id="form-box">
+        <div class="login-form">
+            <form action="" method="post">
+                {% csrf_token %}     
+                <h1>Ingrese el nombre de la campaña:</h1>           
+                <div class="form-element">
+                    <i class="fas fa-mountain"></i> {{ campaign_form.nombre }}
+                </div>
+                <p><input type="submit" value="Crear" id="form-btn"></p>
+            </form>
+        </div>
+    <div>
+</div>
+
+{% endblock %}

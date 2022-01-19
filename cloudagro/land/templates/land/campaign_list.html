@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %} {% endblock %}
+
+{% block content %}
+
+<div class="info-container" >
+    <div id="list-title">
+        Listado de campañas:
+    </div>
+    {% if campaings %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Nombre:</h2>
+                <h2 id="title-client-tag">Fecha inicio:</h2>
+                <h2 id="title-client-tag">Estado:</h2>              
+            </div>
+        </div>
+    {% endif %}
+    {% for campaign in campaings %}
+
+        <a href="{{ campaign.get_absolute_url }}">
+            <div class="movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ campaign.nombre | capfirst }}</h2>
+                    <h2 id="client-tag"> {{ campaign.fecha_inicio.day }}/{{ campaign.fecha_inicio.month }}/{{ campaign.fecha_inicio.year }} </h2>
+                    <h2 id="client-tag"> {{ campaign.estado | capfirst}} </h2>                    
+                </div>
+            </div>
+        </a>
+        
+    {% endfor %}
+</div>
+
+{% endblock %}

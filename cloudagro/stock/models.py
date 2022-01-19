@@ -1,6 +1,7 @@
 from django.db import models
 from cloudagro.utils import unique_slug_generator
 from django.urls import reverse
+from land.models import Land
 
 class ManualMove(models.Model):
 
@@ -17,6 +18,7 @@ class ManualMove(models.Model):
         ('quitado','Quitado')
     )
 
+    campo = models.ForeignKey(Land, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=250,unique_for_date='date')
     date = models.DateTimeField(auto_now_add=True)
     categoria = models.CharField(max_length=500, choices=ANIMAL_CHOICES, default='ternero')

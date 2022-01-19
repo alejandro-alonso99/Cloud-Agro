@@ -15,6 +15,12 @@ def percentage(number):
 
 register.filter('percentage',percentage)
 
+def usd_currency(number):
+    number = 'USD ' + str(number)
+    return number
+
+register.filter('usd_currency',usd_currency)
+
 @register.filter(name='spanishy')
 def spanishy(arg):
     if arg == 'purchases':

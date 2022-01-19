@@ -12,6 +12,10 @@
                 {% csrf_token %}
                 <div id="create-wrapper">
                     <div class="create-element">
+                        <h3>Campo:</h3>
+                        {{expense_form.campo}}
+                    </div>
+                    <div class="create-element">
                         <h3>Concepto:</h3>
                         {{expense_form.concepto}}
                     </div>

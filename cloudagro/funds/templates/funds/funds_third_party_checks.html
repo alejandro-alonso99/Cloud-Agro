@@ -38,7 +38,8 @@
                 <div class="title-movement-card">
                     <div id="card-row-1">
                         <h2 id="title-client-tag">Cliente:</h2>
-                        <h2 id="title-date-tag">Fecha ingreso:</h2>
+                        <h2 id="title-client-tag">Fecha ingreso:</h2>
+                        <h2 id="title-client-tag">Fecha depósito:</h2>
                         <h2 id="title-state-tag">Estado:</h2>              
                         <h2 id="title-total-tag">Monto:</h2>
                     </div>
@@ -48,8 +49,9 @@
             <a href="{{ check.get_absolute_url }}">
                 <div class="movement-card">
                     <div id="card-row-1">
-                        <h2 id="client-tag">{{ check.cliente }}</h2>
-                        <h2 id="date-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year }} </h2>
+                        <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                        <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year }} </h2>
+                        <h2 id="client-tag"> {{ check.fecha_deposito.day }}/{{ check.fecha_deposito.month }}/{{ check.fecha_deposito.year }} </h2>
                         {% if check.estado == 'a depositar' %}
                             <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
                         {% elif check.estado == 'endosado' %}

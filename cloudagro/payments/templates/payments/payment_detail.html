@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %}Vista del pago{% endblock %}
+
+{% block content %}
+
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Fecha:</h2>
+                <h2 id="title-client-tag">Tipo:</h2>
+                <h2 id="title-client-tag">Monto:</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ payment.date.day }} / {{ payment.date.month }} / {{ payment.date.year }}</h2>
+                <h2 id="client-tag">{{ payment.tipo | capfirst }}</h2>
+                <h2 id="client-total-tag">{{ payment.monto | currency }}</h2>
+            </div>
+        </div>
+    </div>
+    <div id="top-buttons">
+        <form method="post" onsubmit="return confirm('Confirme para eliminar el pago')">
+            {% csrf_token %}
+            {{ detroy_object_form.field.as_hidden }}
+            <input type="submit" id="change-state-btn" value="Eliminar pago">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'expenses.apps.ExpensesConfig',
     'payments.apps.PaymentsConfig',
     'funds.apps.FundsConfig',
+    'land.apps.LandConfig',
+    'sowing.apps.SowingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

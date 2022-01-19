@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="info-container" >
+    <div id="list-title">
+        Listado de campos:
+    </div>
+    {% if lands %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Nombre:</h2>
+                <h2 id="title-client-tag">Tipo:</h2>
+                <h2 id="title-client-tag">Estado:</h2>              
+            </div>
+        </div>
+    {% endif %}
+    {% for land in lands %}
+
+        <a href="{{ land.get_absolute_url }}">
+            <div class="movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ land.nombre | capfirst }}</h2>
+                    <h2 id="client-tag"> {{ land.tipo | capfirst}} </h2>
+                    <h2 id="client-tag"> {{ land.estado | capfirst}} </h2>                    
+                </div>
+            </div>
+        </a>
+        
+    {% endfor %}
+</div>      
+
+{% endblock %}

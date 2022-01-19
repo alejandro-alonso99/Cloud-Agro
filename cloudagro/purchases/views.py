@@ -96,17 +96,10 @@ def purchase_detail(request, year, month, day, purchase):
 
     third_p_checks = ThirdPartyChecks.objects.filter(estado='a depositar')
 
-    total_payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
-    total_checks_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
-    total_endorsed_payed = sum(list(map(int,endorsed_checks.values_list('monto', flat=True))))
-
-    total_payed = total_checks_payed + total_payments_payed + total_endorsed_payed
-    
-    if purchase_total - total_payed <=0:
+    if purchase.calculate_amount_to_pay() <= 0:
         purchase.change_status('pagado')
         purchase.save()
-
-
+        
     initial_payment_data = {
         'content_type': purchase.get_content_type,
         'object_id': purchase.id,
@@ -151,14 +144,14 @@ def purchase_detail(request, year, month, day, purchase):
                                                 'numero_cheque':numero_cheque,
                                                 'titular_cheque':titular_cheque,
                                                 'monto':monto,
-                                                'third_p_checks':third_p_checks}
+                                                    }
         
         new_self_check = SelfChecks(**attrs)
         new_self_check.save()
 
         return redirect(purchase.get_absolute_url())
 
-    if endorsed_checks_form.is_valid():
+    if endorsed_checks_form.is_valid() and request.POST.get("check_id"):
         third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
 
         content_type = endorsed_checks_form.cleaned_data.get('content_type')
@@ -170,7 +163,8 @@ def purchase_detail(request, year, month, day, purchase):
         monto = third_p_check.monto
         cliente = third_p_check.cliente
         descripcion = third_p_check.descripcion
-        observacion = ''    
+        observacion = '' 
+        third_p_id = third_p_check.id   
 
         attrs = {'content_type':content_type, 'object_id':obj_id,
                                      'cliente':cliente,
@@ -181,6 +175,7 @@ def purchase_detail(request, year, month, day, purchase):
                                      'titular_cheque':titular_cheque,
                                      'monto':monto,
                                      'observacion':observacion,    
+                                     'third_p_id':third_p_id,
                                      }
 
         new_endorsed_check = EndorsedChecks(**attrs)
@@ -190,8 +185,6 @@ def purchase_detail(request, year, month, day, purchase):
         third_p_check.save()
 
         return redirect(purchase.get_absolute_url())
-
-    print(purchase.endorsed_checks)
 
     purchase_zip = zip(animals,kg_totales,sub_totals,animal_ivas,animal_totals)
 
@@ -222,12 +215,12 @@ def purchase_detail(request, year, month, day, purchase):
 
 class PurchaseCreate(CreateView):
     model = Purchases
-    fields = ['client', 'total_animals', 'brute_kg', 'desbaste']
+    fields = ['campo', 'client', 'total_animals', 'brute_kg', 'desbaste']
 
 
 class PurchaseAnimalsCreate(CreateView):
     model = Purchases
-    fields = ['client', 'total_animals', 'brute_kg', 'desbaste']
+    fields = ['campo','client', 'total_animals', 'brute_kg', 'desbaste']
 
     def get_context_data(self, **kwargs):
         data = super(PurchaseAnimalsCreate, self).get_context_data(**kwargs)

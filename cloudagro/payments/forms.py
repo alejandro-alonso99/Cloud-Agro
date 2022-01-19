@@ -31,7 +31,7 @@ class SelfChecksForm(ModelForm):
 
     class Meta:
         model = SelfChecks
-        fields = ['content_type', 'object_id', 'fecha_pago', 'banco_emision', 'numero_cheque', 'titular_cheque', 'monto', 'cliente' ]
+        fields = ['content_type', 'object_id', 'fecha_pago', 'banco_emision', 'numero_cheque', 'titular_cheque', 'monto' ]
 
         widgets = {
             'content_type':forms.HiddenInput,
@@ -47,4 +47,18 @@ class EndorsedChecksForm(ModelForm):
         widgets = {
             'content_type':forms.HiddenInput,
             'object_id': forms.HiddenInput,
+        }
+
+class ChangeStateForm(forms.Form):
+    field = forms.BooleanField(required=False)
+
+    widgets = {
+            'field': forms.HiddenInput
+        }
+
+class DestroyObjectForm(forms.Form):
+    field = forms.BooleanField(required=False)
+
+    widgets = {
+            'field': forms.HiddenInput
         }

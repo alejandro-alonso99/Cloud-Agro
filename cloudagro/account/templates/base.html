@@ -14,44 +14,66 @@
     </head>
 
     <body>     
-        {% if user.is_authenticated and  request.get_full_path != '/account/login/' %}
+        {% if request.get_full_path != '/account/login/' %}
 
-        <div class="navbar">
-            <a href="#home" id="nav-title">AgroCloud </a>
-            <div class="navbar-items">
-                <a href="{% url 'account:dashboard' %}">Resumen</a>
-                <a href="{% url 'purchases:purchase_list' %}">Compras</a>
-                <a href="{% url 'sales:sale_list' %}">Ventas</a>
-                <a href="{% url 'expenses:expenses_summary' %}">Gastos</a>
-                <a href="{% url 'stock:stock_list' %}">Stock</a>
-                <div class="dropdown">
-                    
-                        <button class="dropbtn">Fondos
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                    </a>                    
-                    <div class="dropdown-content">
-                        <a href="{% url 'funds:funds_main' %}">Resumen</a>
-                        <a href="#">Caja</a>
-                        <a href="#">Banco</a>
-                        <a href="#">Cheques Propios</a>
-                        <a href="{% url 'funds:funds_third_party_checks' %}">Cheques Terceros</a>
+            <div class="navbar">
+                <a href="#home" id="nav-title">AgroCloud </a>
+                <div class="navbar-items">
+                    <a href="{% url 'land:land_main' %}">Resumen</a>
+                    <div class="dropdown">
+                        
+                            <button class="dropbtn">General
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'land:land_main' %}">Campos</a>                        
+                            <a href="{% url 'land:land_create' %}">Agregar campo</a>
+                            <a href="{% url 'land:campaign_create' %}">Crear campaña</a>
+                            <a href="{% url 'land:campaign_list' %}">Campañas</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        
+                            <button class="dropbtn">Compras
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'purchases:purchase_list' %}">Compras Hacienda</a>                        
+                            <a href="{% url 'purchases:purchase_create' %}">Agregar Compra Hacienda</a>
+                            <a href="{% url 'sowing:sowing_purchases_list' %}">Compras Siembra</a>
+                            <a href="{% url 'sowing:sowing_purchases_create' %}">Agregar Compra Siembra</a>
+                        </div>
+                    </div>
+                    <a href="{% url 'sales:sale_list' %}">Ventas</a>
+                    <a href="{% url 'expenses:expenses_summary' %}">Gastos</a>
+                    <a href="{% url 'stock:stock_list' %}">Stock</a>
+                    <div class="dropdown">
+                        
+                            <button class="dropbtn">Fondos
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'funds:funds_main' %}">Resumen</a>
+                            <a href="#">Caja</a>
+                            <a href="#">Banco</a>
+                            <a href="#">Cheques Propios</a>
+                            <a href="{% url 'funds:funds_third_party_checks' %}">Cheques Terceros</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div id="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        {% endif %}  
+        {% if request.get_full_path == '/account/login/' %}    
+            <div id="login-content">
+                {% block login %}
+                {% endblock %}
+            </div>
+        {% endif %}
 
-        <div id="content">
-            {% block content %}
-            {% endblock %}
-        </div>
-
-        {% endif %} 
-
-        <div id="login-content">
-            {% block login %}
-            {% endblock %}
-        </div>           
     </body>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

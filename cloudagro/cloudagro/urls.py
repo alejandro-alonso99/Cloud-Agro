@@ -9,5 +9,8 @@ urlpatterns = [
     path('sales/',include('sales.urls', namespace='sales')),
     path('stock/',include('stock.urls', namespace='stock')),
     path('expenses/',include('expenses.urls', namespace='expenses')),
-    path('funds/',include('funds.urls', namespace='funds'))
+    path('payments', include('payments.urls', namespace='payments')),
+    path('funds/',include('funds.urls', namespace='funds')),
+    path('land/', include('land.urls', namespace='land')),
+    path('sowing/', include('sowing.urls', namespace='sowing')),
 ]

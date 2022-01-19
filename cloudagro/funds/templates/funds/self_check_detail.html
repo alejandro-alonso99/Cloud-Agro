@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %} Detalle del Cheque {% endblock %}
+
+{% block content %}
+
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Fecha Salida</h2>
+                <h2 id="title-client-tag">Proveedor</h2>
+                <h2 id="title-client-tag">Fecha Pago</h2>
+                <h2 id="title-client-tag">Monto</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ self_check.fecha_salida.day }} / {{ self_check.fecha_salida.month }} / {{ self_check.fecha_salida.year }}</h2>
+                <h2 id="client-tag">{{ self_check.cliente | capfirst }}</h2>
+                <h2 id="client-tag">{{ self_check.fecha_pago.day }} / {{ self_check.fecha_pago.month }} / {{ self_check.fecha_pago.year }}</h2>
+                <h2 id="client-total-tag">{{self_check.monto | currency}}</h2>
+            </div>
+        </div>        
+    </div>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Número cheque</h2>
+                <h2 id="title-client-tag">Banco de emisión</h2>
+                <h2 id="title-client-tag">Titular cheque</h2>
+                <h2 id="title-client-tag">Estado</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ self_check.numero_cheque}}</h2>
+                <h2 id="client-tag">{{ self_check.banco_emision | capfirst}}</h2>
+                <h2 id="client-tag">{{self_check.titular_cheque | capfirst}}</h2>
+                <h2 id="client-tag">{{self_check.estado | capfirst}}</h2>        
+            </div>
+        </div>
+    </div>
+    {% if self_check.estado != 'endosado' %}
+    <div id="top-buttons">
+        <form method="post" onsubmit="return confirm('Confirme el cambio de estado.')">
+            {% csrf_token %}
+            {{ change_state_form.field.as_hidden }}
+            <input type="submit" id="change-state-btn" value="Cambiar estado">
+        </form>
+    </div>
+    {% endif %}
+</div>   
+
+{% endblock %}

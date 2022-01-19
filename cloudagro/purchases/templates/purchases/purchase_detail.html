@@ -3,12 +3,10 @@
 {% load purchase_extras %}
 
 {% block content %}
-    <div id="section-title">
-        <h1 id="detail-title">Viendo compra: {{ purchase }}</h1>
-        {% if purchase.status == 'por pagar' %}
-            <h2 id="total-to-pay-tag">Total por pagar: {{ purchase.calculate_amount_to_pay | currency}}</h2>
-        {% endif %}
-    </div>
+    <h1 id="list-title">Viendo compra: {{purchase}}</h1>
+    {% if purchase.status == 'por pagar' %}
+        <h1 id="total-list-title">Total por pagar: {{ purchase.calculate_amount_to_pay | currency}}</h1>
+    {% endif %}
     <div class="info-container">
         <div id="wrapper">
             <div class="title-movement-card">
@@ -58,7 +56,7 @@
                         <h2 id="client-tag">{{row.categoria | capfirst}}</h2>
                         <h2 id="client-tag">{{row.precio_por_kg}}</h2>
                         <h2 id="client-tag">{{row.cantidad}}</h2>
-                        <h2 id="client-tag">{{kg_cabeza}}</h2>
+                        <h2 id="client-tag">{{kg_cabeza | floatformat:2}}</h2>
                         <h2 id="client-tag">{{kg_total | floatformat:2}}</h2>
                         <h2 id="client-tag">{{sub_total | floatformat:2 | currency }}</h2>
                         <h2 id="client-tag">{{ iva | floatformat:2 | currency }}</h2>
@@ -72,7 +70,7 @@
                         <h2 id="client-tag">- - -</h2>
                         <h2 id="client-tag">{{ total_cabezas }}</h2>
                         <h2 id="client-tag">- - -</h2>
-                        <h2 id="client-tag">{{total_kg_total}}</h2>
+                        <h2 id="client-tag">{{total_kg_total | floatformat:2 }}</h2>
                         <h2 id="client-tag">{{ total_sub_totals | floatformat:2 | currency }}</h2>
                         <h2 id="client-tag">{{ total_ivas | floatformat:2 | currency}}</h2>
                         <h2 id="client-tag">{{ purchase_total | floatformat:2 | currency}}</h2>
@@ -90,16 +88,18 @@
                     </div>
                 </div>
                 {% for payment in payments %}
-                    <div class="title-movement-card">
-                        <div id="card-row-1">
-                            <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
-                            <h2 id="client-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
-                            <h2 id="client-total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
-                        </div>
-                    </div>
+                    <a href="{{ payment.get_absolute_url }}">
+                        <div class="movement-card">
+                            <div id="card-row-1">
+                                <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
+                                <h2 id="client-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
+                                <h2 id="client-total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
+                            </div>
+                       </div>
+                    </a>                    
                 {% endfor %}
                 {% for check in self_checks %}
-                    <div class="title-movement-card">
+                    <div class="movement-card">
                         <div id="card-row-1">
                             <h2 id="client-tag"> Cheque </h2>
                             <h2 id="client-tag"> {{ check.fecha_salida.day }}/{{ check.fecha_salida.month }}/{{ check.fecha_salida.year }} </h2>
@@ -108,13 +108,15 @@
                     </div>
                 {% endfor %}
                 {% for check in endorsed_checks %}
-                    <div class="title-movement-card">
+                <a href="{{ check.get_absolute_url }}">
+                    <div class="movement-card">
                         <div id="card-row-1">
                             <h2 id="client-tag"> Endosado </h2>
                             <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year }} </h2>
                             <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
                         </div>
                     </div>
+                </a>
                 {% endfor %}
         {% endif %}
                 
@@ -190,8 +192,6 @@
                     </form>                
                 {% endfor %}
             {% endif %}
-
-
         {% endif %}
         
     </div>
