@@ -44,7 +44,18 @@
                             <a href="{% url 'sowing:sowing_purchases_create' %}">Agregar Compra Siembra</a>
                         </div>
                     </div>
-                    <a href="{% url 'sales:sale_list' %}">Ventas</a>
+                    <div class="dropdown">
+                        
+                        <button class="dropbtn">Ventas
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'sales:sale_list' %}">Ventas Hacienda</a>                        
+                            <a href="{% url 'sales:sale_create' %}">Agregar Venta Hacienda</a>
+                            <a href="">Ventas Siembra</a>
+                            <a href="">Agregar venta Siembra</a>
+                        </div>
+                    </div>
                     <a href="{% url 'expenses:expenses_summary' %}">Gastos</a>
                     <a href="{% url 'stock:stock_list' %}">Stock</a>
                     <div class="dropdown">

@@ -907,16 +907,18 @@ e {
 }
 
 #create-btn {
-  width: fit-content;
-  text-align: center;
+  float: right;
+  background-color: #232230;
+  color: #fff;
   text-transform: uppercase;
-  font-size: 0.8vw;
-  padding: 10px 30px;
+  font-size: 15px;
+  font-weight: bolder;
   border: none;
   border-radius: 5px;
-  color: #fff;
-  background-color: #232230;
-  transition: background-color 0.5s;
+  padding: 10px 20px;
+  transition: background-color 0.2s;
+  width: fit-content;
+  cursor: pointer;
 }
 
 #create-btn:hover {
@@ -956,10 +958,6 @@ e {
   width: 15%;
 }
 
-.formset-row{
-  width: 70vw;
-}
-
 .table {
   margin: 20px 0;
 }
@@ -976,7 +974,7 @@ e {
   transition: background-color 0.2s;
   float: left;
   width: fit-content;
-  margin-top: 20px;
+  margin-top: 50px;
 
 }
 

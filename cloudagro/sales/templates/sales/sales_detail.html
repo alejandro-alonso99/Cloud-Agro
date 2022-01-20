@@ -59,7 +59,7 @@
                         <h2 id="client-tag">{{row.categoria | capfirst}}</h2>
                         <h2 id="client-tag">{{row.precio_por_kg}}</h2>
                         <h2 id="client-tag">{{row.cantidad}}</h2>
-                        <h2 id="client-tag">{{kg_cabeza}}</h2>
+                        <h2 id="client-tag">{{kg_cabeza | floatformat:2}}</h2>
                         <h2 id="client-tag">{{kg_total | floatformat:2}}</h2>
                         <h2 id="client-tag">{{sub_total | floatformat:2 | currency }}</h2>
                         <h2 id="client-tag">{{ iva | floatformat:2 | currency }}</h2>
@@ -73,7 +73,7 @@
                         <h2 id="client-tag">- - -</h2>
                         <h2 id="client-tag">{{ total_cabezas }}</h2>
                         <h2 id="client-tag">- - -</h2>
-                        <h2 id="client-tag">{{total_kg_total}}</h2>
+                        <h2 id="client-tag">{{total_kg_total |floatformat:2}}</h2>
                         <h2 id="client-tag">{{ total_sub_totals | floatformat:2 | currency }}</h2>
                         <h2 id="client-tag">{{ total_ivas | floatformat:2 | currency}}</h2>
                         <h2 id="client-tag">{{ sale_total | floatformat:2 | currency}}</h2>
@@ -111,49 +111,62 @@
                 </a>                
             {% endfor %}
         {% endif %}
-                
+        
         {% if sale.status == 'por cobrar' %}
         <h1 id="list-title">Agregar Pagos:</h1>
-            <div id="payments">                
-                <div class="payment-wrapper">
-                    <div id="payment-section">
+            <form method="post" action=".">
+                <div id="wrapper">
+                    {% csrf_token %}
+                    {{ payment_form.content_type.as_hidden }}
+                    {{ payment_form.object_id.as_hidden }}
+                    <div class="title-movement-card">
                         <h1 id="payment-title">Efectivo o Transferencia:</h1>
-                        <form method="post" action=".">
-                            {% csrf_token %}
-                            {{ payment_form.content_type.as_hidden }}
-                            {{ payment_form.object_id.as_hidden }}
-                            <h1 id="payment-label">Monto:</h1>
-                            {{payment_form.monto}}
-                            <h1 id="payment-label">Tipo:</h1>
-                            {{payment_form.tipo}}
-                            <p><input type="submit" value="Agregar" id="payment-btn"></p>    
-                        </form>
-                    </div>                   
-                </div>
-                <div class="check-wrapper">
-                    <div id="payment-section">
+                    </div>
+                    <div class="title-movement-card">
+                        <div id="card-row-1">
+                            <h2 id="title-client-tag">Tipo:</h2>
+                            <h2 id="title-client-tag">Monto:</h2>
+                        </div>
+                    </div>
+                    <div class="title-movement-card">
+                        <div id="card-row-1">
+                            <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
+                            <h2 id="title-client-tag">{{payment_form.monto}}</h2>
+                        </div>
+                    </div>
+                </div>    
+                <input type="submit" value="Agregar" id="form-create-btn">
+            </form>
+            <form method="post" action=".">
+                <div id="wrapper">
+                    {% csrf_token %}
+                    {{ third_p_form.content_type.as_hidden }}
+                    {{ third_p_form.object_id.as_hidden }}
+                    <div class="title-movement-card">
                         <h1 id="payment-title">Cheque:</h1>
-                        <form method="post" action=".">
-                            {% csrf_token %}
-                            {{ third_p_form.content_type.as_hidden }}
-                            {{ third_p_form.object_id.as_hidden }}
-                            <h1 id="payment-label">Fecha Depósito:</h1>
-                            {{third_p_form.fecha_deposito}}
-                            <h1 id="payment-label">Banco Emisión:</h1>
-                            {{third_p_form.banco_emision}}
-                            <h1 id="payment-label">Número Cheque:</h1>
-                            {{third_p_form.numero_cheque}}
-                            <h1 id="payment-label">Titular Cheque:</h1>
-                            {{third_p_form.titular_cheque}}
-                            <h1 id="payment-label">Monto:</h1>
-                            {{third_p_form.monto}}
+                    </div>
+                    <div class="title-movement-card">
+                        <div id="card-row-1">
+                            <h2 id="title-client-tag">Fecha pago:</h2>
+                            <h2 id="title-client-tag">Banco Emisión:</h2>
+                            <h2 id="title-client-tag">Número Cheque:</h2>
+                            <h2 id="title-client-tag">Titular Cheque:</h2>
+                            <h2 id="title-client-tag">Monto:</h2>
+                        </div>
+                    </div>
+                    <div class="title-movement-card">
+                        <div id="card-row-1">
+                            <h2 id="title-client-tag">{{third_p_form.fecha_deposito}}</h2>
+                            <h2 id="title-client-tag">{{third_p_form.banco_emision}}</h2>
+                            <h2 id="title-client-tag">{{third_p_form.numero_cheque}}</h2>
+                            <h2 id="title-client-tag">{{third_p_form.titular_cheque}}</h2>
+                            <h2 id="title-client-tag">{{third_p_form.monto}}</h2>
                             {{third_p_form.errors}}
-                            <p><input type="submit" value="Agregar" id="payment-btn"></p>    
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <input type="submit" value="Agregar" id="form-create-btn">
+            </form>
         {% endif %}
-        
     </div>
 {% endblock %}
