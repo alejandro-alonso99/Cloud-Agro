@@ -6,96 +6,64 @@
 
     <div class="info-container">
 
-        <div id="create-form-box">
-            <form action="" method="post">
-
-                {% csrf_token %}
-                <h2 id="step-text">1- Datos generales de la compra </h2>
-                <hr>
-                <div id="create-wrapper">
-                    <div id="create-item">
-                        <div class="create-element">
-                            <h3>Campo</h3>
-                            {{ form.campo }}
-                        </div>
-                        <div class="create-element">
-                            <h3>Cliente</h3>
-                            {{form.client}} 
-                        </div>
-                        <div class="create-element">
-                            <h3>Animales</h3>
-                            {{form.total_animals}}
-                        </div>
-                        <div class="create-element">
-                            <h3>Kg brutos</h3>
-                            {{form.brute_kg}}
-                        </div>
-                        <div class="create-element">
-                            <h3>Desbaste</h3>
-                            {{form.desbaste}}
-                        </div>
+        
+        <form action="." method="post">
+            {% csrf_token %}
+            <div id="list-title">
+                1- Datos generales:
+            </div>
+            <div id="wrapper">
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">Campo:</h2>
+                        <h2 id="title-client-tag">Proveedor:</h2>
+                        <h2 id="title-client-tag">Kg brutos:</h2>
+                        <h2 id="title-client-tag">Desbaste:</h2>
+                        <h2 id="title-client-tag">Animales:</h2>
                     </div>
                 </div>
-                
-                <div id="create-wrapper">
-                    
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">{{purchase_form.campo}}</h2>
+                        <h2 id="title-client-tag">{{purchase_form.client}}</h2>
+                        <h2 id="title-client-tag">{{purchase_form.brute_kg}}</h2>
+                        <h2 id="title-client-tag">{{purchase_form.desbaste}}</h2>
+                        <h2 id="title-client-tag">{{purchase_form.total_animals}}</h2>
+                    </div>
                 </div>
+            </div>
+            <div id="list-title">
+                2- Animales por categoría (máximo 3 categorías) :
+            </div>
+            {{formset.management_form}}
+            {% for form in formset %}
+            <div id="wrapper">
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        {% for field in form %}
+                            {% if field.label != 'Id' %}
+                            <h2 id="title-client-tag">{{field.label}}</h2>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        {% for field in form %}
+                            {% if field.label != 'Id' %}
+                                <h2 id="title-client-tag">{{field}}</h2>
+                            {% endif %} 
+                        {% endfor %}                       
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
 
-                <hr>
-                
-                <h2 id="step-text">2- Ingrese animales por su categoría. </h2>
-                
-                <table class="form-table">
-                    {{ animals.management_form }}
+            <input type="submit" value="crear" id="create-btn">
 
-                    {% for form in animals.forms %}
-                        {% if forloop.first %}
-                        <thead >
-                            <tr id="form-titles">
-                                {% for field in form.visible_fields %}
-                                    {% if field.label == "Delete" %}
-                                        <th id="form-title-box">- - -</th>
-                                    {% else %}
-                                        <th id="form-title-box">{{ field.label | capfirst }}</th>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                        </thead>
-                        {% endif %}
-                        <tr class="{% cycle row1 row2 %} formset_row">
-                            {% for field in form.visible_fields %}
 
-                                <td id="form-row-item">
-                                    {% if forloop.first %}
-                                        {% for hidden in form.hidden_fields %}
+        </form>
 
-                                            {{ hidden }}
 
-                                        {% endfor %}
-                                    {% endif %}
-                                    {{ field.errors.as_ul }}
-                                    {{ field }}
-                                </td>
-
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}        
-                </table>
-               <p><input type="submit" value="Crear" id="create-btn"/> </p> 
-            </form>
-        </div>
-        
     </div>
-    
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="{% static 'js/formset/jquery.formset.js' %}"></script>
-    <script type="text/javascript">
-    
-        $('.formset_row').formset({
-                addText: 'Agregar Animales',
-                deleteText: 'Quitar',
-                prefix: 'animal_set'
-            });
-
-    </script>
 {% endblock %}

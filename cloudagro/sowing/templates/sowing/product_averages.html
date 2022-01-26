@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %} Promedio de productos {% endblock %}
+
+{% block content %}
+
+<div class="info-container" >
+
+    <div id="list-title">
+        Promedio de precios para campaña: "{{campaña | capfirst}}"
+    </div>
+    
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Producto</h2>
+            <h2 id="title-client-tag">Promedio USD:</h2>
+            <h2 id="title-client-tag">Promedio Pesos:</h2>
+        </div>
+    </div>
+    {% for key1,value1 in product_dict.items %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{key1 | capfirst}}</h2>
+                <h2 id="client-tag">{{ value1.0 | floatformat:2 | usd_currency}} </h2> 
+                <h2 id="client-tag">{{ value1.1 | floatformat:2 | currency}} </h2>    
+            </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+
+{% endblock %}

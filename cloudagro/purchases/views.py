@@ -1,13 +1,14 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Animal, Purchases
-from .forms import AnimalFormset, SearchForm, PurchaseForm
+from .forms import AnimalForm, SearchForm, PurchaseForm
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from django.db import models, transaction
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 from payments.models import Payments, SelfChecks, EndorsedChecks, ThirdPartyChecks
+from django.forms.models import modelformset_factory
 
 @login_required
 def purchase_list(request):
@@ -211,33 +212,26 @@ def purchase_detail(request, year, month, day, purchase):
                                     'endorsed_checks':endorsed_checks
                                     })
 
+@login_required
+def purchase_create(request):
+    purchase_form = PurchaseForm(request.POST or None)
+    qs = Animal.objects.none()
+    AnimalFormset = modelformset_factory(Animal, form=AnimalForm, extra=3)
+    formset = AnimalFormset(request.POST or None, queryset=qs)
 
+    if all([purchase_form.is_valid(),formset.is_valid()]):
+        parent = purchase_form.save(commit=False)
+        parent.save()
 
-class PurchaseCreate(CreateView):
-    model = Purchases
-    fields = ['campo', 'client', 'total_animals', 'brute_kg', 'desbaste']
-
-
-class PurchaseAnimalsCreate(CreateView):
-    model = Purchases
-    fields = ['campo','client', 'total_animals', 'brute_kg', 'desbaste']
-
-    def get_context_data(self, **kwargs):
-        data = super(PurchaseAnimalsCreate, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['animals'] = AnimalFormset(self.request.POST)
-        else:
-            data['animals'] = AnimalFormset()
-        return data
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        animals = context['animals']
-        with transaction.atomic():
-            self.object = form.save()
+        for form in formset:
+            child = form.save(commit=False)
+            child.purchase = parent
+            child.save()
         
-            if animals.is_valid():
-                animals.instance = self.object
-                animals.save()
-        return super(PurchaseAnimalsCreate, self).form_valid(form)    
-                                                    
+        return redirect(parent.get_absolute_url())
+
+    return render(request, 'purchases/purchases_form.html',{
+                                                    'purchase_form':purchase_form,
+                                                    'formset':formset,
+                                                    })
+                                                

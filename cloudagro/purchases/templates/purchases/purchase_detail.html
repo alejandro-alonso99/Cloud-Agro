@@ -121,49 +121,61 @@
         {% endif %}
                 
         {% if purchase.status == 'por pagar' %}
+        
         <h1 id="list-title">Agregar Pagos:</h1>
-            <div id="payments">                
-                <div class="payment-wrapper">
-                    <div id="payment-section">
-                        <h1 id="payment-title">Efectivo o Transferencia:</h1>
-                        <form method="post" action=".">
-                            {% csrf_token %}
-                            {{ payment_form.content_type.as_hidden }}
-                            {{ payment_form.object_id.as_hidden }}
-                            <h1 id="payment-label">Monto:</h1>
-                            {{payment_form.monto}}
-                            <h1 id="payment-label">Tipo:</h1>
-                            {{payment_form.tipo}}
-                            <p><input type="submit" value="Agregar" id="payment-btn"></p>    
-                        </form>
+        <form method="post" action=".">
+            <div id="wrapper">
+                {% csrf_token %}
+                {{ payment_form.content_type.as_hidden }}
+                {{ payment_form.object_id.as_hidden }}
+                <div class="title-movement-card">
+                    <h1 id="payment-title">Efectivo o Transferencia:</h1>
+                </div>
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">Tipo:</h2>
+                        <h2 id="title-client-tag">Monto:</h2>
                     </div>
                 </div>
-                <div class="check-wrapper">
-                    <div id="payment-section">
-                        <h1 id="payment-title">Cheque:</h1>
-                        <form method="post" action=".">
-                            {% csrf_token %}
-                            {{ self_check_form.content_type.as_hidden }}
-                            {{ self_check_form.object_id.as_hidden }}
-                            <h1 id="payment-label">Fecha pago:</h1>
-                            {{self_check_form.fecha_pago}}
-                            <h1 id="payment-label">Banco Emisión:</h1>
-                            {{self_check_form.banco_emision}}
-                            <h1 id="payment-label">Número Cheque:</h1>
-                            {{self_check_form.numero_cheque}}
-                            <h1 id="payment-label">Titular Cheque:</h1>
-                            {{self_check_form.titular_cheque}}
-                            <h1 id="payment-label">Monto:</h1>
-                            {{self_check_form.monto}}
-                            {{self_check_form.errors}}
-                            <p><input type="submit" value="Agregar" id="payment-btn"></p>    
-                        </form>
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
+                        <h2 id="title-client-tag">{{payment_form.monto}}</h2>
                     </div>
-                    <div id="payment-form-section">
-
+                </div>
+            </div>    
+            <input type="submit" value="Agregar" id="form-create-btn">
+        </form>
+        <form method="post" action=".">
+            <div id="wrapper">
+                {% csrf_token %}
+                {{ self_check_form.content_type.as_hidden }}
+                {{ self_check_form.object_id.as_hidden }}
+                <div class="title-movement-card">
+                    <h1 id="payment-title">Cheque:</h1>
+                </div>
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">Fecha pago:</h2>
+                        <h2 id="title-client-tag">Banco Emisión:</h2>
+                        <h2 id="title-client-tag">Número Cheque:</h2>
+                        <h2 id="title-client-tag">Titular Cheque:</h2>
+                        <h2 id="title-client-tag">Monto:</h2>
+                    </div>
+                </div>
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">{{self_check_form.fecha_pago}}</h2>
+                        <h2 id="title-client-tag">{{self_check_form.banco_emision}}</h2>
+                        <h2 id="title-client-tag">{{self_check_form.numero_cheque}}</h2>
+                        <h2 id="title-client-tag">{{self_check_form.titular_cheque}}</h2>
+                        <h2 id="title-client-tag">{{self_check_form.monto}}</h2>
+                        {{self_check_form.errors}}
                     </div>
                 </div>
             </div>
+            <input type="submit" value="Agregar" id="form-create-btn">
+        </form>
 
             {% if third_p_checks %}
                 <h1 id="list-title">Endosar Cheques:</h1>

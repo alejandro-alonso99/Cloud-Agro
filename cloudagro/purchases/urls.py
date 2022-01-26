@@ -7,6 +7,6 @@ urlpatterns = [
     path('', views.purchase_list, name='purchase_list'),
     path('<int:day>/<int:month>/<int:year>/<slug:purchase>/', views.purchase_detail, name='purchase_detail'),
     path('search/', views.purchase_search, name='purchase_search'),
-    path('create/', views.PurchaseAnimalsCreate.as_view(), name='purchase_create'),
+    path('create/', views.purchase_create, name='purchase_create'),
 ]
 

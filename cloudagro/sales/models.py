@@ -133,6 +133,6 @@ class SaleRow(models.Model):
         ordering = ('categoria',)
         
 
-    def __str__(self):
+    def __str__(self): 
 
         return self.categoria

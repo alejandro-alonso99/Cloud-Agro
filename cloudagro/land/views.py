@@ -1,7 +1,9 @@
+from itertools import product
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Land, Campaign
-from .forms import LandForm, CampaignForm
+from .models import Land, Campaign, Lote
+from .forms import LandForm, CampaignForm, LoteForm, ApplicationForm
+from django.http import HttpResponseRedirect
 
 
 def land_main(request):
@@ -80,4 +82,54 @@ def campaign_detail(request, campaign, pk):
 
     return render(request, 'land/campaign_detail.html',{
                                                         'campaign':campaign,
+                                                        })
+
+def lotes_list(request):
+
+    lotes = Lote.objects.all()
+
+
+    return render(request,'land/lotes_list.html',{
+                                                    'lotes':lotes
+                                                })
+
+def lote_create(request):
+
+    if request.method == 'POST':
+        lote_form = LoteForm(data=request.POST)
+
+        if lote_form.is_valid():
+            lote_form.save()
+
+            return redirect('land:lotes_list')
+        
+    else:
+        lote_form = LoteForm()
+
+    return render(request, 'land/lote_create.html',{
+                                                    'lote_form':lote_form,
+                                                    })
+
+def lote_detail(request,  id, lote):
+
+    lote = get_object_or_404(Lote, id=id, slug=lote)
+
+    product_choices = request.session.get('product_choices')
+
+    product_choices = tuple(tuple(product) for product in product_choices)
+
+    if request.method == 'POST':
+        application_form = ApplicationForm(data=request.POST)
+
+        if application_form.is_valid():
+            application_form.save()
+
+        
+            return redirect(lote.get_absolute_url())
+    else:
+        application_form = ApplicationForm()
+
+    return render(request, 'land/lote_detail.html', {
+                                                        'lote':lote,
+                                                        'application_form':application_form,
                                                         })

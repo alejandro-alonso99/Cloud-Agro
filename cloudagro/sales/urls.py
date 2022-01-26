@@ -8,5 +8,5 @@ urlpatterns= [
     path('', views.sales_list, name='sale_list'),
     path('search/', views.sale_search, name='sale_search'),
     path('<int:day>/<int:month>/<int:year>/<slug:sale>/', views.sales_detail, name='sales_detail'),
-    path('create/', views.SaleAnimalsCreate.as_view(), name='sale_create'),
+    path('create/', views.sale_create, name='sale_create'),
 ]

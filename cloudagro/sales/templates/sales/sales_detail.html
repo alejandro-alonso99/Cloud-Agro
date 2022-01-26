@@ -3,12 +3,10 @@
 {% load purchase_extras %}
 
 {% block content %}
-    <div id="section-title">
-        <h1 id="detail-title">Viendo venta: {{ sale }}</h1>
-        {% if sale.status == 'por cobrar' %}
-            <h2 id="total-to-pay-tag">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h2>
-        {% endif %}
-    </div>
+    <h1 id="list-title">Viendo venta: {{sale}}</h1>
+    {% if sale.status == 'por cobrar' %}
+        <h1 id="total-list-title">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h1>
+    {% endif %}
     
     <div class="info-container">
         <div id="wrapper">
@@ -54,6 +52,7 @@
                 </div>
             </div>
             {% for row,kg_total,sub_total,iva,total in sale_zip %}
+                {% if row.cantidad != 0 %}
                 <div class="title-movement-card">
                     <div id="card-row-1">
                         <h2 id="client-tag">{{row.categoria | capfirst}}</h2>
@@ -66,6 +65,7 @@
                         <h2 id="client-tag">{{total | floatformat:2 | currency}}</h2>
                     </div>
                 </div>
+                {% endif %}
             {% endfor %}
                 <div class="title-movement-card">
                     <div id="total-card-row"> 

@@ -8,14 +8,12 @@ from .models import Animal, Purchases
 class PurchaseForm(forms.ModelForm):
     class Meta: 
         model = Purchases
-        exclude = ()
+        exclude = ('status','slug')
 
 class AnimalForm(ModelForm):
     class Meta:
         model = Animal
-        exclude = ()
-
-AnimalFormset = inlineformset_factory(Purchases, Animal, form=AnimalForm, extra=1)
+        exclude = ('purchase',)
 
 class SearchForm(forms.Form):
     query = forms.CharField()

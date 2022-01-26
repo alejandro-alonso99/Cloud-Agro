@@ -16,6 +16,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="title-client-tag">Fecha:</h2>
+                <h2 id="title-client-tag">Campo:</h2>
                 <h2 id="title-client-tag">Factura:</h2>
                 <h2 id="title-client-tag">Proveedor:</h2>
                 <h2 id="title-client-tag">Precio por lt/kg USD:</h2>
@@ -26,13 +27,14 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ sowing_purchase.date.day }} / {{ sowing_purchase.date.month }} / {{ sowing_purchase.date.year }}</h2>
+                <h2 id="client-tag">{{ sowing_purchase.campo }}</h2>
                 {% if sowing_purchase.factura %}
                     <h2 id="client-tag">{{ sowing_purchase.factura }}</h2>
                 {% else %}
                 <h2 id="client-tag"> - - - </h2>
                 {% endif %}
                 <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
-                <h2 id="client-tag">{{ sowing_purchase.precio_lt_kg_usd | usd_currency}}</h2>
+                <h2 id="client-tag">{{ sowing_purchase.precio_lt_kg_usd | floatformat:2 | usd_currency }}</h2>
                 <h2 id="client-tag">{{ precio_lt_kg | currency}}</h2>
                 <h2 id="client-tag">{{ sowing_purchase.lt_kg | floatformat:2}}</h2>
             </div>

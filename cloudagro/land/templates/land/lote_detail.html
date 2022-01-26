@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="info-container">
+
+        <h1 id="list-title">Viendo Lote: {{lote}}</h1>
+        
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">Campo:</h2>
+                    <h2 id="title-client-tag">Lote número:</h2>
+                    <h2 id="title-client-tag">Hectáreas:</h2>
+                    <h2 id="title-client-tag">Tipo:</h2>              
+                </div>
+            </div>
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{lote.campo | capfirst}}</h2>
+                    <h2 id="client-tag">{{ lote.numero }}</h2>
+                    <h2 id="client-tag">{{ lote.hectareas}}</h2> 
+                    <h2 id="client-tag">{{ lote.tipo | capfirst}}</h2>               
+                </div>
+            </div>
+        </div>     
+        <form action="." method="post">
+            {% csrf_token %}
+            {{application_form.as_p}}
+            <input type="submit" value="crear">
+        </form>
+    </div>
+
+{% endblock %}

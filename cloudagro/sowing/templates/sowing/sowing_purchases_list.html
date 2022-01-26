@@ -7,6 +7,9 @@
 {% block content %}
 
 <div class="info-container" >
+    <div id="list-title">
+        Historial de Compras para la campaña: "{{campaña | capfirst}}"
+    </div>
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -18,21 +21,21 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ total_purchases }}</h2>
-                <h2 id="client-tag">0</h2>
-                <h2 id="client-total-tag">0</h2>               
+                <h2 id="client-tag">{{ total_unpayed_purchases }}</h2>
+                <h2 id="client-total-tag">{{ total_amount_to_pay | floatformat:2 | currency}}</h2>               
             </div>
         </div>
     </div>        
-    <div id="list-title">
-        Historial de Compras para la campaña: "{{campaña | capfirst}}"
-    </div>
     {% if sowing_purchases %}
         <div class="title-movement-card">
             <div id="card-row-1">
+                <h2 id="title-client-tag">Factura:</h2>
                 <h2 id="title-client-tag">Proveedor:</h2>
-                <h2 id="title-date-tag">Fecha:</h2>
-                <h2 id="title-state-tag">Estado:</h2>              
-                <h2 id="title-total-tag">Total compra:</h2>
+                <h2 id="title-client-tag">Producto:</h2>
+                <h2 id="title-client-tag">Fecha:</h2>
+                <h2 id="title-client-tag">Total:</h2>
+                <h2 id="title-client-tag">Estado:</h2>              
+                <h2 id="title-client-tag">Por pagar:</h2>
             </div>
         </div>
     {% endif %}
@@ -40,14 +43,21 @@
         <a href="{{ sowing_purchase.get_absolute_url }}">
             <div class="movement-card">
                 <div id="card-row-1">
+                    {% if sowing_purchase.factura %}
+                        <h2 id="client-tag">{{sowing_purchase.factura}}</h2>
+                    {% else %}
+                        <h2 id="title-client-tag">- - -</h2>
+                    {% endif %}
                     <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
-                    <h2 id="date-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}/{{ sowing_purchase.date.year }} </h2>
+                    <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>                    
+                    <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}/{{ sowing_purchase.date.year }} </h2>                    
+                    <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
                     {% if sowing_purchase.estado == 'por pagar' %}
                         <h2 id="status-tag">{{ sowing_purchase.estado | capfirst}}</h2>
                     {% else %}
                         <h2 id="status-done-tag">{{ sowing_purchase.estado | capfirst}}</h2>
                     {% endif %}    
-                    <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
+                    <h2 id="total-tag">{{ sowing_purchase.calculate_amount_to_pay | floatformat:2 | currency }}</h2>
                 </div>
             </div>
         </a>

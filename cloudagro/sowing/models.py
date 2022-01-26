@@ -1,11 +1,14 @@
+from itertools import product
+from lib2to3.pgen2.pgen import DFAState
 from django.db import models
 from land.models import Campaign, Land, Lote
 from cloudagro.utils import unique_slug_generator
 import datetime
 from django.urls import reverse
 from payments.models import EndorsedChecks, SelfChecks, Payments
-from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 from django.contrib.contenttypes.models import ContentType
+from django.utils.functional import lazy
+
 
 class SowingPurchases(models.Model):
 
@@ -21,11 +24,11 @@ class SowingPurchases(models.Model):
     factura = models.CharField(max_length=100, blank=True, null=True)
     proveedor = models.CharField(max_length=100)
     producto = models.CharField(max_length=100)
-    precio_lt_kg_usd = models.DecimalField(max_digits=10,decimal_places=4, default=0)
-    lt_kg = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    precio_lt_kg_usd = models.FloatField(default=0)
+    lt_kg = models.FloatField(default=0)
     estado = models.CharField(choices=STATUS_CHOICES, max_length=50, default='por pagar')
-    tipo_cambio = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    iva = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    tipo_cambio = models.FloatField( default=0)
+    iva = models.FloatField(default=0)
 
     def __str__(self):
         return str(self.proveedor) + ' ' + self.date.strftime("%d-%m-%Y") + ' Siembra'
@@ -43,9 +46,29 @@ class SowingPurchases(models.Model):
 
         subtotal = precio_lt_kg * self.lt_kg
 
-        total = subtotal + (subtotal * self.iva)
+        total = subtotal + (subtotal * (self.iva/100))
 
         return total 
+    
+    def calculate_total_usd(self):
+
+        sub_total_usd = self.precio_lt_kg_usd * self.lt_kg
+
+        total_usd = sub_total_usd + (sub_total_usd * (self.iva/100))
+
+        return total_usd
+
+    def calculate_usd_lt(self):
+
+        usd_lt = self.calculate_total_usd() / self.lt_kg
+
+        return usd_lt
+
+    def calculate_peso_lt(self):
+
+        peso_lt = self.calculate_total() / self.lt_kg
+
+        return peso_lt
 
     def calculate_amount_to_pay(self):
         payments = self.payments
@@ -63,6 +86,9 @@ class SowingPurchases(models.Model):
         total_payed = check_payed + payments_payed + endorsed_payed
 
         amount_to_pay = self.calculate_total() - total_payed
+
+        if amount_to_pay <= 0:
+            amount_to_pay = 0
 
         return amount_to_pay
 
@@ -102,17 +128,28 @@ class SowingPurchases(models.Model):
         content_type = ContentType.objects.get_for_model(instace.__class__)
         return content_type
 
+    class Meta:
+        ordering = ('-date',)
+
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.proveedor, self.slug)
         super(SowingPurchases, self).save(*args,**kwargs)
 
+
+
+
+
 class Applications(models.Model):
-    
+
     lote = models.ForeignKey(Lote, on_delete = models.CASCADE)
     slug = models.SlugField(max_length=250, unique_for_date='date')
     date = models.DateTimeField()
     numero = models.IntegerField()
     lt_kg = models.DecimalField(max_digits=10, decimal_places=2)
-
+    producto = models.CharField(max_length=30, default='glifosato')
+    
     def __str__(self):
         return 'Lote: ' + str(self.lote) + ' Aplicación nro: ' + str(self.numero)
+
+
+                            

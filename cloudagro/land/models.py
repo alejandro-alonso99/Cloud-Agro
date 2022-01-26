@@ -1,10 +1,9 @@
 from enum import unique
 from django.db import models
-from django.db.models.base import Model
 from django.urls import reverse
 import datetime
 from django.utils.text import slugify
-
+from cloudagro.utils import unique_slug_generator
 
 class Campaign(models.Model):
 
@@ -77,16 +76,20 @@ class Lote(models.Model):
         ('avena','Avena'),
         ('arroz','Arroz'),
     )
-
-    slug = models.SlugField(unique=True)
+    
+    campo = models.ForeignKey(Land, on_delete = models.CASCADE)
     numero = models.IntegerField()
     hectareas = models.IntegerField()
-    campo = models.ForeignKey(Land, on_delete = models.CASCADE)
-    tipo = models.CharField(choices=TYPE_CHOICES, max_length=50)
+    tipo = models.CharField(choices=TYPE_CHOICES, max_length=7)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
-        return  'Campo: ' + str(self.campo) + ' Lote número: ' +  str(self.numero)
+        return  'Campo: ' + str(self.campo) + ', ' ' Lote número: ' +  str(self.numero)
 
     def save(self, *args, **kwargs):
-        self.slug = str(self.campo) +  str(self.numero)
+        self.slug = unique_slug_generator(self, self.tipo, self.slug)
         super(Lote, self).save(*args,**kwargs)
+
+    def get_absolute_url(self):
+        return reverse ('land:lote_detail',
+                                    args=[self.id, self.slug])

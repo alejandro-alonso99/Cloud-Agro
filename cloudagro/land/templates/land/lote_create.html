@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Agregar Lote  {% endblock %}
+
+{% block content %}
+    <div class="info-container">
+        <div id="list-title">
+            Agregar Lote
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div id="wrapper">
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">Campo:</h2>
+                        <h2 id="title-client-tag">Número de lote:</h2>
+                        <h2 id="title-client-tag">Hectáreas:</h2>
+                        <h2 id="title-client-tag">Tipo de lote</h2>
+                    </div>
+                </div>
+                <div class="title-movement-card">
+                    <div id="card-row-1">
+                        <h2 id="title-client-tag">{{lote_form.campo}}</h2>
+                        <h2 id="title-client-tag">{{lote_form.numero}}</h2>
+                        <h2 id="title-client-tag">{{lote_form.hectareas}}</h2>
+                        <h2 id="title-client-tag">{{lote_form.tipo}}</h2>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Agregar" id="form-create-btn">
+        </form>
+    </div>
+{% endblock %}

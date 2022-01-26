@@ -1,12 +1,14 @@
+from ast import NodeTransformer
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
-from .forms import SaleSearchForm, SaleForm, SaleRowForm, SaleRowFormset
+from .forms import SaleSearchForm, SaleForm, SaleRowForm
 from django.contrib.postgres.search import SearchVector
 from django.views.generic.edit import CreateView
 from django.db import transaction
 from payments.forms import PaymentForm, ThirdPartyChecksForm
+from django.forms.models import modelformset_factory
 from .models import Payments
 
 
@@ -172,32 +174,25 @@ def sales_detail(request, year, month, day, sale):
                                     'third_p_checks':third_p_checks,
                                     'sale_zip' : sale_zip,
                                     'money_zip': money_zip})
- 
 
-class SaleCreate(CreateView):
-    model = Sales
-    fields = ['campo','client', 'total_animals', 'brute_kg', 'desbaste']
+def sale_create(request):
+    sale_form = SaleForm(request.POST or None)
+    qs = SaleRow.objects.none()
+    SaleRowFormset = modelformset_factory(SaleRow, form=SaleRowForm, extra=3)
+    formset = SaleRowFormset(request.POST or None, queryset=qs)
 
+    if all([sale_form.is_valid(),formset.is_valid()]):
+        parent = sale_form.save(commit=False)
+        parent.save()
 
-class SaleAnimalsCreate(CreateView):
-    model = Sales
-    fields = ['campo','client', 'total_animals', 'brute_kg', 'desbaste']
-
-    def get_context_data(self, **kwargs):
-        data = super(SaleAnimalsCreate, self).get_context_data(**kwargs)
-        if self.request.POST:
-            data['animals'] = SaleRowFormset(self.request.POST)
-        else:
-            data['animals'] = SaleRowFormset()
-        return data
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        animals = context['animals']
-        with transaction.atomic():
-            self.object = form.save()
+        for form in formset:
+            child = form.save(commit=False)
+            child.sale = parent
+            child.save()
         
-            if animals.is_valid():
-                animals.instance = self.object
-                animals.save()
-        return super(SaleAnimalsCreate, self).form_valid(form)                                                                                              
+        return redirect(parent.get_absolute_url())
+
+    return render(request, 'sales/sales_form.html',{
+                                                    'sale_form':sale_form,
+                                                    'formset':formset,
+                                                    })

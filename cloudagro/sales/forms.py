@@ -5,14 +5,12 @@ from .models import Sales, SaleRow
 class SaleForm(forms.ModelForm):
     class Meta: 
         model = Sales
-        exclude = ()
+        exclude = ('status','slug',)
 
-class SaleRowForm(ModelForm):
+class SaleRowForm(forms.ModelForm):
     class Meta:
         model = SaleRow
-        exclude = ()
-
-SaleRowFormset = inlineformset_factory(Sales, SaleRow, form=SaleRowForm, extra=1)
+        exclude = ('sale','id',)
 
 class SaleSearchForm(forms.Form):
     query = forms.CharField()

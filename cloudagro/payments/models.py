@@ -120,7 +120,7 @@ class ThirdPartyChecks(models.Model):
 
 class EndorsedChecks(models.Model):
 
-    STATE_CHOICES = (
+    STATE_CHOICES = ( 
         ('depositado','Depositado'),
         ('a depositar','A depositar'),
         ('endosado','Endosado')

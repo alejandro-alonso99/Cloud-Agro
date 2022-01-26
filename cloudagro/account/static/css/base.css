@@ -100,7 +100,7 @@ h6 {
 /* Links inside the navbar */
 .navbar a {
   float: left;
-  font-size: 16px;
+  font-size: 1vw;
   font-weight: bold;
   color: white;
   text-align: center;
@@ -112,7 +112,7 @@ h6 {
 #nav-title {
   width: 15vw;
   text-align: center;
-  font-size: 16px;
+  font-size: 1vw;
   font-weight: 600;
   color: #232230;
   background-color: #63ff9b;
@@ -129,7 +129,7 @@ h6 {
 
 /* Dropdown button */
 .dropdown .dropbtn {
-  font-size: 16px;
+  font-size: 1vw;
   border: none;
   outline: none;
   color: white;
@@ -550,6 +550,7 @@ e {
   font-size: 1vw;
   font-weight: bolder;
   text-align: center;
+  padding: 5px 0;
 }
 
 #title-date-tag {
@@ -567,7 +568,7 @@ e {
 }
 
 #title-total-tag {
-  width: 25%;
+  width: 20%;
   font-size: 1vw;
   font-weight: bolder;
   text-align: center;
@@ -577,6 +578,7 @@ e {
   font-size: 1vw;
   width: 20%;
   text-align: center;
+  padding: 5px 0;
 }
 
 #client-total-tag{
@@ -584,6 +586,8 @@ e {
   width: 20%;
   text-align: center;
   color: #f50004;
+  padding: 5px 0;
+
 }
 
 #date-tag {
@@ -618,8 +622,9 @@ e {
   float: right;
   color: #f50004;
   font-size: 1vw;
-  width: 25%;
+  width: 20%;
   text-align: center;
+  padding: 5px 0;
 }
 
 #total-to-pay-tag {
@@ -655,9 +660,9 @@ e {
   background-color: #f50004;
   font-size: 1vw;
   color: #fff;
-  padding: 5px 10px;
+  padding: 5px 0;
   border-radius: 5px;
-  width: 15%;
+  width: 20%;
 }
 
 #endose-tag{
@@ -678,7 +683,7 @@ e {
   background-color: rgb(177, 177, 177);
   color: #232230;
   font-size: 1vw;
-  padding: 5px 10px;
+  padding: 5px 0;
   border-radius: 5px;
   width: 15%;
 }
@@ -693,9 +698,9 @@ e {
   background-color: rgb(2, 170, 2);
   font-size: 1vw;
   color: #fff;
-  padding: 5px 10px;
+  padding: 5px 0;
   border-radius: 5px;
-  width: 15%;
+  width: 20%;
 }
 
 #category-tag {
@@ -703,7 +708,7 @@ e {
   background-color: #232230;
   font-size: 1vw;
   color: #fff;
-  padding: 5px 10px;
+  padding: 5px 0;
   border-radius: 5px;
   width: 25%;
 }
@@ -713,7 +718,7 @@ e {
   background-color: rgb(2, 170, 2);
   font-size: 1vw;
   color: #fff;
-  padding: 5px 10px;
+  padding: 5px 0;
   border-radius: 5px;
   width: 300px;
 }

@@ -1,3 +1,5 @@
+from math import prod
+from random import choices
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import SowingPurchases
 from .forms import SowingPurchasesForm
@@ -14,10 +16,23 @@ def sowing_purchases_list(request):
 
     total_purchases = sowing_purchases.count()
 
+    unpayed_purchases = sowing_purchases.filter(estado='por pagar')
+
+    total_unpayed_purchases = unpayed_purchases.count()
+
+    total_amounts_to_pay = []
+    for purchase in unpayed_purchases:
+        unpayed_amount = int(purchase.calculate_amount_to_pay())
+        total_amounts_to_pay.append(unpayed_amount)
+
+    total_amount_to_pay = sum(total_amounts_to_pay)
+
     return render(request, 'sowing/sowing_purchases_list.html', {
                                                                 'campaña':campaña,
                                                                 'sowing_purchases':sowing_purchases,
                                                                 'total_purchases':total_purchases,
+                                                                'total_unpayed_purchases':total_unpayed_purchases,
+                                                                'total_amount_to_pay':total_amount_to_pay,
                                                                 })
 
 
@@ -73,7 +88,7 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
 
     sub_total_usd = sowing_purchase.precio_lt_kg_usd * sowing_purchase.lt_kg
 
-    total_usd = sub_total_usd + (sub_total_usd * sowing_purchase.iva)
+    total_usd = sub_total_usd + (sub_total_usd * (sowing_purchase.iva/100))
 
     payments = sowing_purchase.payments
 
@@ -177,8 +192,6 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
         return redirect(sowing_purchase.get_absolute_url())
 
     
-    print(sowing_purchase.estado)
-
     return render(request, 'sowing/sowing_purchase_detail.html', {
                                                                 'sowing_purchase':sowing_purchase,
                                                                 'precio_lt_kg':precio_lt_kg,
@@ -193,3 +206,53 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
                                                                 'endorsed_checks':endorsed_checks,
                                                                 })                                
 
+
+def products_averages(request):
+
+    campaña = Campaign.objects.filter(estado = 'vigente').first()
+
+    sowing_purchases = SowingPurchases.objects.filter(campaña = campaña)
+
+    sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
+
+    #cálculo de precios promedi
+    #devuelve un dict producto -> [prom usd, prom peso]
+    product_dict = {}
+    for product in sowing_purchases_products:
+
+        product_purchases = sowing_purchases.filter(producto = product)
+        product_totals_arg = []
+        product_totals_usd = []
+        product_avgs = []
+
+        for product_purchase in product_purchases:
+            purchase_peso_lt = float(product_purchase.precio_lt_kg_usd * product_purchase.tipo_cambio)
+            purchase_usd_lt = product_purchase.precio_lt_kg_usd
+            product_totals_usd.append(purchase_usd_lt)
+            product_totals_arg.append(purchase_peso_lt)
+            product_total_usd_lt = sum(product_totals_usd)
+            product_total_arg_lt = sum(product_totals_arg)
+            
+        
+        product_usd_avg = product_total_usd_lt / (product_purchases.count())
+        product_peso_avg = product_total_arg_lt / (product_purchases.count())
+        product_avgs.append(product_usd_avg)
+        product_avgs.append(product_peso_avg)
+        product_dict[product] = product_avgs
+
+    
+    request.session['averages'] = product_dict
+
+    product_choices = []
+    for product in sowing_purchases_products:
+        product_tuple = (product, product.lower())
+        product_choices.insert(0, product_tuple)
+    
+    product_choices = tuple(product_choices)
+
+    request.session['product_choices'] = product_choices
+
+    return render(request, 'sowing/product_averages.html',{ 
+                                                            'product_dict':product_dict,
+                                                            'campaña':campaña,
+                                                            })
