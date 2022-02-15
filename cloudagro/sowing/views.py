@@ -1,13 +1,16 @@
-from math import prod
-from random import choices
+from functools import reduce
+from operator import attrgetter
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import SowingPurchases
-from .forms import SowingPurchasesForm
-from land .models import Campaign
+from django.urls import reverse_lazy
+from .models import Applications, Labors, SowingPurchases
+from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm
+from land .models import Campaign, Lote
 from payments.models import EndorsedChecks, SelfChecks, Payments, ThirdPartyChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def sowing_purchases_list(request):
 
     campaña = Campaign.objects.filter(estado = 'vigente').first()
@@ -36,6 +39,7 @@ def sowing_purchases_list(request):
                                                                 })
 
 
+@login_required
 def sowing_purchases_create(request):
 
     if request.method == 'POST':
@@ -75,6 +79,7 @@ def sowing_purchases_create(request):
                                                                 'sowing_p_form':sowing_p_form,
                                                                     })
 
+@login_required
 def sowing_purchase_detail(request, year, month, day, sowing_purchase):
 
     sowing_purchase = get_object_or_404(SowingPurchases, slug=sowing_purchase,
@@ -207,52 +212,176 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
                                                                 })                                
 
 
+@login_required
 def products_averages(request):
 
     campaña = Campaign.objects.filter(estado = 'vigente').first()
 
-    sowing_purchases = SowingPurchases.objects.filter(campaña = campaña)
-
-    sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
-
-    #cálculo de precios promedi
-    #devuelve un dict producto -> [prom usd, prom peso]
-    product_dict = {}
-    for product in sowing_purchases_products:
-
-        product_purchases = sowing_purchases.filter(producto = product)
-        product_totals_arg = []
-        product_totals_usd = []
-        product_avgs = []
-
-        for product_purchase in product_purchases:
-            purchase_peso_lt = float(product_purchase.precio_lt_kg_usd * product_purchase.tipo_cambio)
-            purchase_usd_lt = product_purchase.precio_lt_kg_usd
-            product_totals_usd.append(purchase_usd_lt)
-            product_totals_arg.append(purchase_peso_lt)
-            product_total_usd_lt = sum(product_totals_usd)
-            product_total_arg_lt = sum(product_totals_arg)
-            
-        
-        product_usd_avg = product_total_usd_lt / (product_purchases.count())
-        product_peso_avg = product_total_arg_lt / (product_purchases.count())
-        product_avgs.append(product_usd_avg)
-        product_avgs.append(product_peso_avg)
-        product_dict[product] = product_avgs
-
+    product_dict = SowingPurchases.calculate_averages()[0]
     
-    request.session['averages'] = product_dict
-
-    product_choices = []
-    for product in sowing_purchases_products:
-        product_tuple = (product, product.lower())
-        product_choices.insert(0, product_tuple)
-    
-    product_choices = tuple(product_choices)
-
-    request.session['product_choices'] = product_choices
-
     return render(request, 'sowing/product_averages.html',{ 
                                                             'product_dict':product_dict,
                                                             'campaña':campaña,
                                                             })
+
+@login_required
+def lotes_list(request):
+    
+    campaña = Campaign.objects.filter(estado = 'vigente').first()
+
+    lotes = Lote.objects.filter(campaña=campaña)
+
+    return render(request,'sowing/lotes_list.html',{
+                                                    'lotes':lotes,
+                                                    'campaña':campaña
+                                                })
+
+@login_required
+def lote_create(request):
+
+    if request.method == 'POST':
+        lote_form = LoteForm(data=request.POST)
+
+        if lote_form.is_valid():
+
+            campo = lote_form.cleaned_data.get('campo')
+            numero = lote_form.cleaned_data.get('numero')
+            hectareas= lote_form.cleaned_data.get('hectareas')
+            tipo= lote_form.cleaned_data.get('tipo')
+
+            campaña = Campaign.objects.filter(estado = 'vigente').first()
+            
+            attrs = {'campo':campo, 'numero':numero,
+                    'hectareas':hectareas, 'tipo':tipo,
+                    'campaña':campaña }
+
+            new_lote = Lote(**attrs)
+            new_lote.save()
+        
+
+            return redirect('sowing:lotes_list')
+        
+    else:
+        lote_form = LoteForm()
+
+    return render(request, 'sowing/lote_create.html',{
+                                                    'lote_form':lote_form,
+                                                    })
+
+@login_required
+def lote_detail(request,  lote_id):
+
+    lote = get_object_or_404(Lote, pk=lote_id)
+
+    product_choices = SowingPurchases.calculate_averages()[1]
+
+    product_choices = tuple(tuple(product) for product in product_choices)
+
+    product_averages = SowingPurchases.calculate_averages()[0]
+
+    lote_view = request.get_full_path()
+
+    if request.method == 'POST':
+        application_form = ApplicationForm(data=request.POST)
+        labors_form = LaborsForm(data=request.POST)
+
+        if application_form.is_valid():
+            
+            numero = application_form.cleaned_data.get('numero')
+            lt_kg = application_form.cleaned_data.get('lt_kg')
+            producto = application_form.cleaned_data.get('producto')
+            tipo = application_form.cleaned_data.get('tipo')
+
+            attrs = {'numero':numero, 'lt_kg':lt_kg,
+                        'producto':producto, 'lote':lote, 'tipo':tipo}
+
+            new_application = Applications(**attrs)
+            new_application.save()
+
+            return redirect(lote_view)
+        
+        if labors_form.is_valid():
+            numero = labors_form.cleaned_data.get('numero')
+            costo_ha = labors_form.cleaned_data.get('costo_ha')
+            nombre = labors_form.cleaned_data.get('nombre').lower()
+
+            attrs = {'numero':numero, 'costo_ha':costo_ha, 'nombre':nombre, 
+                        'lote':lote}
+            
+            new_labor = Labors(**attrs)
+            new_labor.save()
+            
+            return redirect(lote_view)
+
+    
+    else:
+        application_form = ApplicationForm()
+        labors_form = LaborsForm()
+    
+    applications = lote.applications_set.all()
+
+    application_numbers = list(map(int,applications.values_list('numero', flat=True)))
+    
+    applications_dict = {}
+    for number in application_numbers:
+        applications_dict[number] = {}
+        number_x_applications = applications.filter(numero=number)
+        for application in number_x_applications:
+            applications_dict[number][application] = []
+            applications_dict[number][application].append(application.calculate_sub_total(product_averages)[0])
+            applications_dict[number][application].append(application.calculate_sub_total(product_averages)[1])
+
+    application_totals_by_type = {}
+    applicaton_types = list(map(str,applications.values_list('tipo', flat=True)))
+    for type in applicaton_types:
+        type_applications = applications.filter(tipo=type)
+        type_total = 0
+
+        for application in type_applications:
+            application_sub_total = float(application.calculate_sub_total(product_averages)[0])
+            type_total = type_total + application_sub_total
+        
+    
+        application_totals_by_type[type] = type_total
+    
+    applications_total = sum(application_totals_by_type.values())
+
+    labors = lote.labors_set.all()
+    labors_numbers = list(map(int,labors.values_list('numero', flat=True)))
+    labors_dict = {}
+    for number in labors_numbers:
+        labors_dict[number] = {}
+        number_x_labors = labors.filter(numero=number)
+        for labor in number_x_labors:
+            labors_dict[number][labor] = labor.calculate_sub_total()
+
+    labors_totals_by_type = {}
+    labors_types = list(map(str,labors.values_list('nombre', flat=True)))
+    for type in labors_types:
+        type_labors = labors.filter(nombre=type)
+        type_total = 0
+
+        for labor in type_labors:
+            labor_sub_total = float(labor.calculate_sub_total())
+            type_total = type_total + labor_sub_total
+        
+    
+        labors_totals_by_type[type] = type_total
+
+    labors_total = sum(labors_totals_by_type.values())
+
+    lote_total = applications_total + labors_total
+
+    return render(request, 'sowing/lote_detail.html', {
+                                                        'lote':lote,
+                                                        'application_form':application_form,
+                                                        'applications_dict':applications_dict,
+                                                        'application_totals_by_type':application_totals_by_type,
+                                                        'labors_form':labors_form,
+                                                        'labors':labors,
+                                                        'labors_dict':labors_dict,
+                                                        'labors_totals_by_type':labors_totals_by_type,
+                                                        'applications_total':applications_total,
+                                                        'labors_total': labors_total,
+                                                        'lote_total':lote_total,
+                                                        })

@@ -2,68 +2,125 @@
 
 {% load purchase_extras %}
 
-{% block title %}Compras{% endblock %}
-
+{% block title %}Compras Hacienda{% endblock %}
 
 {% block content %}
 
-    <div id="top-buttons">
-        <div id="section-button">
-            <a href="{% url 'purchases:purchase_search' %}">
-                <h2 id="search-btn">Buscar compra <i class="fas fa-search"></i></h2>
-            </a>
-        </div>
-        <div id="section-button">
-            <a href="{% url 'purchases:purchase_create' %}">
-                <h2 id="add-btn">Agregar compra <i class="fas fa-plus"></i></h2>
-            </a>
+{% if query or date_query_end %}
+
+<div class="info-container">
+    <p><a href="{% url 'purchases:purchase_list' %}" id="search-btn" class="back-link"><i
+                class="fas fa-chevron-left"></i>Volver
+            a listado</a></p>
+    {% if query %}
+    <div id="list-title">
+        Filtrando por: "{{query}}"
+    </div>
+    {% endif %}
+    {% if date_query_start %}
+    <div id="list-title">
+        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+    </div>
+    {% endif %}
+    {% if purchases %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Proveedor:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Total compra:</h2>
         </div>
     </div>
-    <div class="info-container" >
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Compras totales:</h2>
-                    <h2 id="title-client-tag">Compras por pagar:</h2>
-                    <h2 id="title-total-tag">Monto por pagar:</h2>              
-                </div>
+    {% endif %}
+    {% for purchase in purchases %}
+    <a href="{{ purchase.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ purchase.client | capfirst}}</h2>
+                <h2 id="date-tag"> {{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
+                {% if purchase.status == 'por pagar' %}
+                <h2 id="status-tag">{{ purchase.status | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ purchase.status | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-tag">Total: {{ purchase.calculate_total | floatformat:2 | currency }}</h2>
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{ total_purchases }}</h2>
-                    <h2 id="client-tag">{{ total_unpayed_purchases }}</h2>
-                    <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>               
-                </div>
-            </div>
-        </div>        
-        <div id="list-title">
-            Historial de Compras:
         </div>
-            {% if purchases %}
-                <div class="title-movement-card">
-                    <div id="card-row-1">
-                        <h2 id="title-client-tag">Cliente:</h2>
-                        <h2 id="title-client-tag">Fecha:</h2>
-                        <h2 id="title-client-tag">Estado:</h2>              
-                        <h2 id="title-client-tag">Total compra:</h2>
-                    </div>
-                </div>
-            {% endif %}
-        {% for purchase in purchases %}
-            <a href="{{ purchase.get_absolute_url }}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{ purchase.client }}</h2>
-                        <h2 id="date-tag"> {{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
-                        {% if purchase.status == 'por pagar' %}
-                            <h2 id="status-tag">{{ purchase.status | capfirst}}</h2>
-                        {% else %}
-                            <h2 id="status-done-tag">{{ purchase.status | capfirst}}</h2>
-                        {% endif %}    
-                        <h2 id="total-tag">Total: {{ purchase.calculate_total | floatformat:2 | currency }}</h2>
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
+    </a>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda
     </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div id="top-forms">
+    <form action="." method="get" id="search-form" class="date-form">
+        {% csrf_token %}
+        <div id="search-label">
+            <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
+        </div>
+        {{date_form.date_query_start }}
+        {{date_form.date_query_end }}
+        <input type="submit" value="Buscar" id="search-btn">
+    </form>
+    <form action="." method="get" id="search-form">
+        {% csrf_token %}
+        <div id="search-label">
+            <i class="fas fa-search"></i> Buscar por Proveedor:
+        </div>
+        {{search_form.query}}
+        <input type="submit" value="Buscar" id="search-btn">
+    </form>
+</div>
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Compras totales:</h2>
+                <h2 id="title-client-tag">Compras por pagar:</h2>
+                <h2 id="title-total-tag">Monto por pagar:</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ total_purchases }}</h2>
+                <h2 id="client-tag">{{ total_unpayed_purchases }}</h2>
+                <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>
+            </div>
+        </div>
+    </div>
+    <div id="list-title">
+        Historial de Compras:
+    </div>
+    {% if purchases %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Proveedor:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Total compra:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for purchase in purchases %}
+    <a href="{{ purchase.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ purchase.client | capfirst}}</h2>
+                <h2 id="date-tag"> {{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
+                {% if purchase.status == 'por pagar' %}
+                <h2 id="status-tag">{{ purchase.status | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ purchase.status | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-tag">Total: {{ purchase.calculate_total | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% endblock %}

@@ -5,7 +5,10 @@ from purchases.models import Animal, Purchases
 from sales.models import SaleRow, Sales
 from stock.models import ManualMove
 from .forms import ManualMoveForm
+from sowing.models import Applications, SowingPurchases
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def stock_list(request):
 
     ANIMAL_CHOICES = (
@@ -58,6 +61,7 @@ def stock_list(request):
                                                         'choices_names':choices_names,
                                                      })
 
+@login_required
 def manualmove_detail(request, year, month, day, manualmove):
     manualmove = get_object_or_404(ManualMove, slug=manualmove,
                                                 date__year = year,
@@ -67,7 +71,8 @@ def manualmove_detail(request, year, month, day, manualmove):
     return render(request, 'stock/manualmove_detail.html',{'manualmove':manualmove
 
                                                             })                  
-                                                            
+
+@login_required                                                            
 def manualmove_create(request):
     if request.method == 'POST':
         move_form = ManualMoveForm(data=request.POST)
@@ -87,9 +92,26 @@ def manualmove_create(request):
                                                             'last_3_manual_moves':last_3_manual_moves,
                                                             }) 
 
-
+@login_required
 def manualmove_list(request):   
     manualmoves = ManualMove.objects.all()
     return render(request,'stock/manualmove_list.html',{'manualmoves':manualmoves
 
-                                                            })                                             
+                                                            })   
+                                                                                                      
+@login_required
+def products_stock_list(request):
+
+    products_lt_dict = SowingPurchases.calculate_lt_by_type()
+
+    applications_lt_dict = Applications.calculate_lt_by_type()
+
+    product_choices = list(map(str,SowingPurchases.objects.values_list('producto',flat=True)))
+
+    product_lt_kg = {}
+    for product in product_choices:
+        product = product.lower()
+        product_lt_kg[product] = products_lt_dict[product] - applications_lt_dict[product]
+
+
+    return render(request, 'stock/products_list.html',{ 'product_lt_kg':product_lt_kg })

@@ -2,53 +2,121 @@
 
 {% load purchase_extras %}
 
-{% block title %}Ventas{% endblock %}
+{% block title %}Ventas Hacienda{% endblock %}
 
 {% block content %}
-    <div class="info-container" >
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Ventas totales:</h2>
-                    <h2 id="title-client-tag">Ventas por pagar:</h2>
-                    <h2 id="title-client-tag">Monto por pagar:</h2>              
-                </div>
-            </div>
-            <div class="movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{ total_sales }}</h2>
-                    <h2 id="client-tag">{{ total_unpayed_sales }}</h2>
-                    <h2 id="client-total-tag">{{ amount_to_receive_total | currency }}</h2>               
-                </div>
-            </div>
-        </div>    
-        <h1 id="list-title">Historial de Ventas:</h1>    
-        {% if sales %}
-                    <div class="title-movement-card">
-                        <div id="card-row-1">
-                            <h2 id="title-client-tag">Cliente:</h2>
-                            <h2 id="title-date-tag">Fecha:</h2>
-                            <h2 id="title-state-tag">Estado:</h2>              
-                            <h2 id="title-total-tag">Total venta:</h2>
-                        </div>
-                    </div>
-        {% endif %}
-        {% for sale in sales %}
-            <a href="{{ sale.get_absolute_url }}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{ sale.client }}</h2>
-                        <h2 id="date-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
-                        {% if sale.status == 'por cobrar' %}
-                            <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
-                        {% else %}
-                            <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
-                        {% endif %}
-                        <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
 
+{% if query or date_query_end %}
+<div class="info-container">
+    <p><a href="{% url 'sales:sale_list' %}" id="search-btn" class="back-link"><i class="fas fa-chevron-left"></i>Volver
+            a listado</a></p>
+    {% if query %}
+    <div id="list-title">
+        Filtrando por: "{{query}}"
     </div>
+    {% endif %}
+    {% if date_query_start %}
+    <div id="list-title">
+        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+    </div>
+    {% endif %}
+    {% if sales %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Cliente:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Total venta:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for sale in sales %}
+    <a href="{{ sale.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ sale.client | capfirst}}</h2>
+                <h2 id="client-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
+                {% if sale.status == 'por cobrar' %}
+                <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div id="top-forms">
+    <form action="." method="get" id="search-form" class="date-form">
+        {% csrf_token %}
+        <div id="search-label">
+            <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
+        </div>
+        {{date_form.date_query_start }}
+        {{date_form.date_query_end }}
+        <input type="submit" value="Buscar" id="search-btn">
+    </form>
+    <form action="." method="get" id="search-form">
+        {% csrf_token %}
+        <div id="search-label">
+            <i class="fas fa-search"></i> Buscar por Proveedor:
+        </div>
+        {{search_form.query}}
+        <input type="submit" value="Buscar" id="search-btn">
+    </form>
+</div>
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Ventas totales:</h2>
+                <h2 id="title-client-tag">Ventas por pagar:</h2>
+                <h2 id="title-client-tag">Monto por pagar:</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ total_sales }}</h2>
+                <h2 id="client-tag">{{ total_unpayed_sales }}</h2>
+                <h2 id="client-total-tag">{{ amount_to_receive_total | currency }}</h2>
+            </div>
+        </div>
+    </div>
+    <h1 id="list-title">Historial de Ventas:</h1>
+    {% if sales %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Cliente:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Total venta:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for sale in sales %}
+    <a href="{{ sale.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ sale.client | capfirst}}</h2>
+                <h2 id="client-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
+                {% if sale.status == 'por cobrar' %}
+                <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% endblock %}

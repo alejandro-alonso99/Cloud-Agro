@@ -1,6 +1,15 @@
 @import url(http://fonts.googleapis.com/css?family=Muli);
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
 
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
 /* <------------------general--------------------> */
 
 body {
@@ -100,7 +109,7 @@ h6 {
 /* Links inside the navbar */
 .navbar a {
   float: left;
-  font-size: 1vw;
+  font-size: 0.9vw;
   font-weight: bold;
   color: white;
   text-align: center;
@@ -112,7 +121,7 @@ h6 {
 #nav-title {
   width: 15vw;
   text-align: center;
-  font-size: 1vw;
+  font-size: 0.9vw;
   font-weight: 600;
   color: #232230;
   background-color: #63ff9b;
@@ -129,7 +138,7 @@ h6 {
 
 /* Dropdown button */
 .dropdown .dropbtn {
-  font-size: 1vw;
+  font-size: 0.9vw;
   border: none;
   outline: none;
   color: white;
@@ -509,6 +518,18 @@ e {
   border-radius: 5px;
 }
 
+#wrapper-list-title {
+  text-align: center;
+  font-size: 1vw;
+  margin: 30px;
+  background-color: #fff;
+  color: #232230;
+  padding: 10px;
+  border: 2px solid rgb(177, 177, 177);
+  border-radius: 5px;
+}
+
+
 #total-list-title{
   text-align: center;
   font-size: 1vw;
@@ -547,6 +568,14 @@ e {
 
 #title-client-tag {
   width: 20%;
+  font-size: 1vw;
+  font-weight: bolder;
+  text-align: center;
+  padding: 5px 0;
+}
+
+#big-client-tag{
+  width: 40%;
   font-size: 1vw;
   font-weight: bolder;
   text-align: center;
@@ -602,7 +631,7 @@ e {
   align-items: center;
   text-align: left;
   width: 100%;
-  padding: 7px;
+  padding: 7px 0;
   border-bottom: 1px solid rgb(177, 177, 177);
 }
 
@@ -612,10 +641,9 @@ e {
   align-items: center;
   text-align: left;
   width: 100%;
-  padding-top: 10px;
   border-bottom: 1px solid rgb(177, 177, 177);
   background-color: rgb(177, 177, 177);
-  padding: 7px;
+  padding: 7px 0;
 }
 
 #total-tag {
@@ -644,7 +672,7 @@ e {
   float: right;
   color: rgb(2, 170, 2);
   font-size: 1vw;
-  width: 25%;
+  width: 20%;
   text-align: center;
 }
 
@@ -727,6 +755,16 @@ e {
   width: 100%;
   height: fit-content;
   margin: 20px 0px;
+  border: 2px solid rgb(177, 177, 177);
+  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
+  border-radius: 5px;
+  padding: 20px 0;
+}
+
+#litte-wrapper{
+  width: 60%;
+  height: fit-content;
+  margin: 20vh 0px;
   border: 2px solid rgb(177, 177, 177);
   box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
   border-radius: 5px;
@@ -1117,3 +1155,66 @@ select:focus{
 #form-create-btn:hover{
   background-color: rgb(177, 177, 177);
 }
+
+/* <-------------search forms----------------->*/
+
+#search-form{
+  margin-top: 20px;
+}
+
+#search-form div {
+  margin-bottom: 10px;
+}
+
+#search-btn{
+  font-size: 0.9vw !important;
+  border: none !important;
+  padding: 7px 10px;
+  background-color: #2445ff;
+  border-radius: 5px;
+  color: #fff;
+  transition: all 0.3s;
+  outline: none !important;
+}
+
+#search-btn:hover{
+  cursor: pointer;
+  background-color: #152792;
+  color: #fff;
+}
+
+#search-form input{
+  width: fit-content !important;
+  font-size: 0.9vw !important;
+  padding: 7px 10px;
+  border: 1px solid rgb(177, 177, 177);
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+#search-form input:valid{
+  outline: 1px solid var(--search-btn-color);
+}
+
+i{
+  font-size: 0.9vw;
+  margin-right: 5px;
+  text-align: center;
+}
+
+.back-link{
+  margin: 0 !important;
+}
+
+#top-forms{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+#search-label{
+  font-size: 1vw !important;
+}
+
+/* <-------------search forms----------------->*/

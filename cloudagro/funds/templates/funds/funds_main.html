@@ -7,106 +7,31 @@
 
 {% block content %}
 
-    <div id="top-buttons">
-        <div id="section-button">
-            <a href="{% url 'funds:funds_manualmove_create' %}">
-                <h2 id="add-btn">Modificar a mano <i class="fas fa-plus"></i></h2>
-            </a>
+<h1 id="list-title">Resúmen de fondos:</h1>
+
+<div class="info-container">
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Tipo:</h2>
+            <h2 id="title-client-tag"> Monto:</h2>
         </div>
     </div>
-
-    <div id="section-title">
-        <h1 id="list-title">Resúmen de fondos:</h1>
-    </div>
-
-    <div class="info-container">
-        <a href="{% url 'funds:funds_list' 'efectivo' %}">
-            <div class="movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">Fondos de caja:</h2>
-                    <h2 id="date-tag"> ---</h2>                    
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total ventas: </h2>
-                    <h2 id="total-sale-tag">{{ sale_cash_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total compras: </h2>
-                    <h2 id="total-tag">{{ purchase_cash_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total gastos: </h2>
-                    <h2 id="total-tag">{{ expense_cash_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Agregado a mano: </h2>
-                        <h2 id="total-sale-tag">{{ manualmoves_cash_add_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Quitado a mano: </h2>
-                        <h2 id="total-tag">{{ manualmoves_cash_remove_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total caja: </h2>
-                    {% if cash_total > 0 %}
-                        <h2 id="total-sale-tag">{{ cash_total | currency }}</h2>
-                    {% else %}
-                        <h2 id="total-tag">{{ cash_total | currency }}</h2>
-                    {% endif %}
-                </div>
-                <hr>                
+    <a href="{% url 'funds:funds_list' 'efectivo' %}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">Fondos caja:</h2>
+                <h2 id="client-total-tag"> {{ cash_total | floatformat:2 | currency}}</h2>
             </div>
-        </a>
-        
-        <a href="{% url 'funds:funds_list' 'transferencia' %}">
-            <div class="movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">Fondos banco:</h2>
-                    <h2 id="date-tag"> --- </h2>                    
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total ventas: </h2>
-                    <h2 id="total-sale-tag">{{ sale_trans_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total compras: </h2>
-                    <h2 id="total-tag">{{ purchase_trans_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total gastos: </h2>
-                    <h2 id="total-tag">{{ expense_trans_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Agregado a mano: </h2>
-                        <h2 id="total-sale-tag">{{ manualmoves_trans_add_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Quitado a mano: </h2>
-                        <h2 id="total-tag">{{ manualmoves_trans_remove_total | currency }}</h2>
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Total banco: </h2>
-                    {% if trans_total > 0 %}
-                        <h2 id="total-sale-tag">{{ trans_total | currency }}</h2>
-                    {% else %}
-                        <h2 id="total-tag">{{ trans_total | currency }}</h2>
-                    {% endif %}
-                </div>
-                <hr>
+        </div>
+    </a>
+    <a href="{% url 'funds:funds_list' 'transferencia' %}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">Fondos banco:</h2>
+                <h2 id="client-total-tag"> {{trans_total | floatformat:2 | currency}}</h2>
             </div>
-        </a>
-    </div>
+        </div>
+    </a>
+</div>
 
 {% endblock %}

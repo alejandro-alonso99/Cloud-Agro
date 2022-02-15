@@ -1,3 +1,4 @@
+import imp
 from django.shortcuts import get_object_or_404, render, redirect
 from expenses.models import Expenses
 from payments.models import Payments, ThirdPartyChecks, SelfChecks
@@ -6,12 +7,17 @@ from purchases.models import Purchases
 from sales.models import Sales
 from .forms import FundManualMoveForm
 from .models import FundManualMove
+from sowing.models import SowingPurchases
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def funds_main(request):
 
     purchases = Purchases.objects.all()
     sales = Sales.objects.all()
     expenses = Expenses.objects.all()
+    sowing_purchases = SowingPurchases.objects.all()
+
 
     purchase_cash_payed_totals = []
     purchase_trans_payed_totals = []
@@ -37,13 +43,23 @@ def funds_main(request):
         expense_cash_payed_totals.append(expense_cash_payed_total)
         expense_trans_payed_totals.append(expense_trans_payed_total)
 
+    sowing_purchase_cash_payed_totals = []
+    sowing_purchase_trans_payed_totals = []
+    for sowing_purchase in sowing_purchases:
+        sowing_purchase_cash_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
+        sowing_purchase_trans_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
+        sowing_purchase_cash_payed_totals.append(sowing_purchase_cash_payed_total)
+        sowing_purchase_trans_payed_totals.append(sowing_purchase_trans_payed_total)
+
     purchase_cash_total = sum(purchase_cash_payed_totals)
     sale_cash_total = sum(sale_cash_payed_totals)
     expense_cash_total = sum(expense_cash_payed_totals)
+    sowing_purchases_cash_total = sum(sowing_purchase_cash_payed_totals)
 
     purchase_trans_total = sum(purchase_trans_payed_totals)
     sale_trans_total = sum(sale_trans_payed_totals)
     expense_trans_total = sum(expense_trans_payed_totals)
+    sowing_purchases_trans_total = sum(sowing_purchase_trans_payed_totals)
 
     manualmoves_cash = FundManualMove.objects.filter(tipo='efectivo')
     manualmoves_cash_add_total = sum(list(map(int,manualmoves_cash.filter(action='agregar').values_list('monto',flat=True))))
@@ -54,24 +70,16 @@ def funds_main(request):
     manualmoves_trans_remove_total = sum(list(map(int,manualmoves_trans.filter(action='quitar').values_list('monto',flat=True))))
 
 
-    cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total
+    cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total
 
-    trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total
+    trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total
 
-    return render(request, 'funds/funds_main.html',{'purchase_cash_total':purchase_cash_total,
-                                                    'sale_cash_total':sale_cash_total,
-                                                    'expense_cash_total':expense_cash_total,
-                                                    'purchase_trans_total':purchase_trans_total,
-                                                    'sale_trans_total':sale_trans_total,
-                                                    'expense_trans_total':expense_trans_total,
+    return render(request, 'funds/funds_main.html',{
                                                     'cash_total':cash_total,
                                                     'trans_total':trans_total,
-                                                    'manualmoves_cash_add_total':manualmoves_cash_add_total,
-                                                    'manualmoves_cash_remove_total':manualmoves_cash_remove_total,
-                                                    'manualmoves_trans_add_total':manualmoves_trans_add_total,
-                                                    'manualmoves_trans_remove_total':manualmoves_trans_remove_total,
                                                     })
-
+                                                    
+@login_required
 def funds_list(request, type_id=''):
 
     if type_id !='':
@@ -89,7 +97,7 @@ def funds_list(request, type_id=''):
                                                     'total_payments':total_payments,
                                                     'total':total,
                                                     })
-
+@login_required
 def fund_manualmove_create(request):
 
     if request.method == 'POST':
@@ -109,7 +117,7 @@ def fund_manualmove_create(request):
                                                             'move_form': move_form,
                                                             'last_3_manual_moves':last_3_manual_moves,
                                                             })                                 
-
+@login_required
 def funds_third_party_checks(request):
     third_party_checks = ThirdPartyChecks.objects.all()
 
@@ -156,7 +164,7 @@ def funds_third_party_checks(request):
                                                             'more_months_checks':more_months_checks,
                                                             'total_to_pay_checks':total_to_pay_checks,
                                                             })
-
+@login_required
 def third_p_check_detail(request, year, month, day, third_p_check):
 
     third_p_check = get_object_or_404(ThirdPartyChecks, slug=third_p_check,
@@ -180,7 +188,7 @@ def third_p_check_detail(request, year, month, day, third_p_check):
                                                         'third_p_check' : third_p_check,
                                                         'change_state_form':change_state_form,
                                                             })
-
+@login_required
 def funds_self_checks(request):
 
     self_checks = SelfChecks.objects.all()
@@ -228,7 +236,7 @@ def funds_self_checks(request):
                                                             'more_months_checks':more_months_checks,
                                                             'total_to_pay_checks':total_to_pay_checks,
                                                                     })
-
+@login_required
 def self_check_detail(request, self_check):
 
     self_check = get_object_or_404(SelfChecks, slug=self_check)

@@ -5,59 +5,56 @@
 {% block title %}Historial de gastos {% endblock %}
 
 {% block content %}
-    <div id="top-buttons">
-        <div id="section-button">
-            <a href="{% url 'expenses:expenses_summary' %}">
-                <h2 id="search-btn">Ver Resúmen</i></h2>
-            </a>
+
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                {% if category_id != '' %}
+                <h2 id="title-client-tag">Gastos en: {{ category_id | capfirst }}</h2>
+                {% else %}
+                <h2 id="title-client-tag">Gastos totales</h2>
+                {% endif %}
+                <h2 id="title-client-tag">Gastos por pagar:</h2>
+                <h2 id="title-total-tag">Monto a pagar:</h2>
+            </div>
         </div>
-        <div id="section-button">
-            <a href="{% url 'expenses:expense_create' %}">
-                <h2 id="add-btn">Agregar Gasto <i class="fas fa-plus"></i></h2>
-            </a>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{total_expenses}}</h2>
+                <h2 id="client-tag">{{ total_unpayed_expenses }}</h2>
+                <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>
+            </div>
         </div>
     </div>
-    <div class="info-container">
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    {% if category_id != '' %}
-                    <h2 id="title-client-tag">Gastos en: {{ category_id | capfirst }}</h2>
-                    {% else %}
-                    <h2 id="title-client-tag">Gastos totales</h2>
-                    {% endif %}
-                    <h2 id="title-client-tag">Gastos por pagar:</h2>
-                    <h2 id="title-total-tag">Monto a pagar:</h2>          
-                </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{total_expenses}}</h2>
-                    <h2 id="client-tag">{{ total_unpayed_expenses }}</h2>                    
-                    <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>
-                </div>
-            </div>
-        </div>        
-        {% if category_id != '' %}
-            <h1 id="list-title">Historial de gastos por categoría: {{ category_id | capfirst }}</h1>
-        {% else %}
-            <h1 id="list-title">Historial de gastos:</h1>
-        {% endif %}
-        {% for expense in expenses %}
-            <a href="{{ expense.get_absolute_url }}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
-                        <h2 id="date-tag"> {{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }} </h2>
-                        {% if expense.status == 'por pagar' %}
-                            <h2 id="status-tag">{{ expense.status | capfirst}}</h2>
-                        {% else %}
-                            <h2 id="status-done-tag">{{ expense.status | capfirst}}</h2>
-                        {% endif %}    
-                        <h2 id="total-tag">Total: {{ expense.monto | floatformat:2 | currency }}</h2>
-                    </div>
-                </div>
-           </a>
-        {% endfor %}
+    {% if category_id != '' %}
+    <h1 id="list-title">Historial de gastos por categoría: {{ category_id | capfirst }}</h1>
+    {% else %}
+    <h1 id="list-title">Historial de gastos:</h1>
+    {% endif %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Concepto:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Total:</h2>
+        </div>
     </div>
+    {% for expense in expenses %}
+    <a href="{{ expense.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
+                <h2 id="client-tag"> {{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }} </h2>
+                {% if expense.status == 'por pagar' %}
+                <h2 id="status-tag">{{ expense.status | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ expense.status | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-tag">Total: {{ expense.monto | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 {% endblock %}

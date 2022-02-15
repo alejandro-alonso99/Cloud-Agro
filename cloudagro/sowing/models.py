@@ -1,5 +1,9 @@
+from email.policy import default
 from itertools import product
 from lib2to3.pgen2.pgen import DFAState
+from pyexpat import model
+from random import choices
+from urllib import request
 from django.db import models
 from land.models import Campaign, Land, Lote
 from cloudagro.utils import unique_slug_generator
@@ -8,7 +12,7 @@ from django.urls import reverse
 from payments.models import EndorsedChecks, SelfChecks, Payments
 from django.contrib.contenttypes.models import ContentType
 from django.utils.functional import lazy
-
+from decimal import Decimal
 
 class SowingPurchases(models.Model):
 
@@ -92,6 +96,63 @@ class SowingPurchases(models.Model):
 
         return amount_to_pay
 
+    def calculate_averages():
+        campaña = Campaign.objects.filter(estado = 'vigente').first()
+
+        sowing_purchases = SowingPurchases.objects.filter(campaña = campaña)
+
+        sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
+
+        #cálculo de precios promedi
+        #devuelve un dict producto -> [prom usd, prom peso]
+        product_dict = {}
+        for product in sowing_purchases_products: 
+            product_purchases = sowing_purchases.filter(producto = product)
+            product = product.lower()
+            product_totals_arg = []
+            product_totals_usd = []
+            product_avgs = []
+
+            for product_purchase in product_purchases:
+                purchase_peso_lt = float(product_purchase.precio_lt_kg_usd * product_purchase.tipo_cambio)
+                purchase_usd_lt = product_purchase.precio_lt_kg_usd
+                product_totals_usd.append(purchase_usd_lt)
+                product_totals_arg.append(purchase_peso_lt)
+                product_total_usd_lt = sum(product_totals_usd)
+                product_total_arg_lt = sum(product_totals_arg)
+                
+            
+            product_usd_avg = product_total_usd_lt / (product_purchases.count())
+            product_peso_avg = product_total_arg_lt / (product_purchases.count())
+            product_avgs.append(product_usd_avg)
+            product_avgs.append(product_peso_avg)
+            product_dict[product] = product_avgs
+
+
+        product_choices = []
+        for product in sowing_purchases_products:
+            product_tuple = (product, product.lower())
+            product_choices.insert(0, product_tuple)
+
+        product_choices = tuple(product_choices)
+        
+        return(product_dict,product_choices)
+
+    def calculate_lt_by_type():
+    
+        sowing_purchases = SowingPurchases.objects.all()
+
+        sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
+
+        product_lt_dict = {}
+        for product in sowing_purchases_products:
+            product_purchases = sowing_purchases.filter(producto = product)
+            product = product.lower()
+            product_total_lt_kg = sum(list(map(float, product_purchases.values_list('lt_kg',flat=True))))
+            product_lt_dict[product] = product_total_lt_kg
+
+        return product_lt_dict
+
     def change_status(self,val):
             
         STATUS_CHOICES = (
@@ -138,18 +199,78 @@ class SowingPurchases(models.Model):
 
 
 
-
 class Applications(models.Model):
 
+    TYPE_CHOICES = (
+        ('agroquímicos','Agroquímicos'),
+        ('fertilizante','Fertilizante'),
+        ('semillas','Semillas')
+    )
+    
     lote = models.ForeignKey(Lote, on_delete = models.CASCADE)
     slug = models.SlugField(max_length=250, unique_for_date='date')
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
     numero = models.IntegerField()
     lt_kg = models.DecimalField(max_digits=10, decimal_places=2)
     producto = models.CharField(max_length=30, default='glifosato')
-    
+    tipo = models.CharField(choices=TYPE_CHOICES, max_length=50, default='agroquímicos')
+
+
     def __str__(self):
         return 'Lote: ' + str(self.lote) + ' Aplicación nro: ' + str(self.numero)
+    
+    def save(self, *args, **kwargs):
+        self.slug = unique_slug_generator(self, self.producto, self.slug)
+        super(Applications, self).save(*args,**kwargs)
 
+    def calculate_sub_total(self, averages):
 
-                            
+        avg = averages[self.producto][0]
+
+        sub_total = Decimal(avg) * Decimal(self.lt_kg)
+
+        return [sub_total, avg]
+
+    def calculate_lt_by_type():
+
+        campaña = Campaign.objects.filter(estado = 'vigente').first()
+        
+        applications = Applications.objects.all()
+
+        applications_products = list(set(map(str,applications.values_list('producto',flat=True))))
+
+        application_product_lt_dict = {}
+        for product in applications_products:
+            product_applications = applications.filter(producto = product)
+            product = product.lower()
+            product_applications_total_lt_kg = sum(list(map(float, product_applications.values_list('lt_kg',flat=True))))
+            application_product_lt_dict[product] = product_applications_total_lt_kg
+
+        return application_product_lt_dict
+
+class Labors(models.Model):
+
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=250, unique_for_date='date')
+    numero = models.IntegerField()
+    costo_ha = models.FloatField(default=0)
+    nombre = models.CharField(max_length=50)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return 'Lote: ' + str(self.lote) + ' Labor nro: ' + str(self.numero)
+    
+    def save(self, *args, **kwargs):
+        self.slug = unique_slug_generator(self, self.nombre, self.slug)
+        super(Labors, self).save(*args,**kwargs)
+
+    def calculate_sub_total(self):
+
+        sub_total = self.costo_ha * self.lote.hectareas
+
+        return sub_total
+
+class Other_Expenses(models.Model):
+
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
+                                

@@ -5,50 +5,34 @@
 {% block title %} Crear Gasto {% endblock %}
 
 {% block content %}
-    <div class="info-container">
-        <div id="create-form-box">
-            <h2 id="step-text">Registro de gasto: </h2>
-            <form action="" method="post">
-                {% csrf_token %}
-                <div id="create-wrapper">
-                    <div class="create-element">
-                        <h3>Campo:</h3>
-                        {{expense_form.campo}}
-                    </div>
-                    <div class="create-element">
-                        <h3>Concepto:</h3>
-                        {{expense_form.concepto}}
-                    </div>
-                    <div class="create-element">
-                        <h3>Monto:</h3>
-                        {{expense_form.monto}}
-                    </div>
-                    <div class="create-element">
-                        <h3>Descripción:</h3>
-                        {{expense_form.descripcion}}
-                    </div>
-                    <div class="create-element">
-                        <h3>Categoría:</h3>
-                        {{expense_form.categoria}}
-                    </div>
-                </div>
-                <p><input type="submit" value="Crear" id="create-btn"/> </p> 
-            </form>
-        </div>
-        <h1 id="list-title">Últimos 3 gastos:</h1>
-        {% for object in last_3_expenses %}
-            <!--<a href="{{ object.get_absolute_url }}">-->
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{ object.categoria | capfirst}}</h2>
-                        <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
-                    </div>
-                    <div id="card-row-2">
-                        <h2 id="status-tag">{{ object.status | capfirst}}</h2>
-                        <h2 id="total-tag">Total: {{ object.monto | floatformat:2 | currency }}</h2>
-                    </div>
-                </div>
-            <!--</a>-->
-        {% endfor %}
+<div id="info-container">
+    <div id="list-title">
+        Agregar gasto:
     </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="wrapper">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">Campo:</h2>
+                    <h2 id="title-client-tag">Concepto:</h2>
+                    <h2 id="title-client-tag">Categoría:</h2>
+                    <h2 id="title-client-tag">Monto:</h2>
+                    <h2 id="title-client-tag">Descripción:</h2>
+                </div>
+            </div>
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="title-client-tag">{{expense_form.campo}}</h2>
+                    <h2 id="title-client-tag">{{expense_form.concepto}}</h2>
+                    <h2 id="title-client-tag">{{expense_form.categoria}}</h2>
+                    <h2 id="title-client-tag">{{expense_form.monto}}</h2>
+                    <h2 id="title-client-tag">{{expense_form.descripcion}}</h2>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Agregar" id="form-create-btn">
+    </form>
+</div>
+
 {% endblock %}

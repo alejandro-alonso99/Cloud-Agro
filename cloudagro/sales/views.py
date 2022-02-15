@@ -1,24 +1,44 @@
-from ast import NodeTransformer
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
 from .forms import SaleSearchForm, SaleForm, SaleRowForm
 from django.contrib.postgres.search import SearchVector
-from django.views.generic.edit import CreateView
-from django.db import transaction
 from payments.forms import PaymentForm, ThirdPartyChecksForm
 from django.forms.models import modelformset_factory
 from .models import Payments
-
+from purchases.forms import SearchForm, DateForm
 
 @login_required
 def sales_list(request):
+
+    search_form = SearchForm()
+
+    date_form = DateForm()
+
+    query = None
+
+    date_query_start = None
+    date_query_end = None
+
     sales = Sales.objects.all()
     total_sales = sales.count()
 
     unpayed_sales = Sales.objects.filter(status = 'por cobrar')
     total_unpayed_sales = unpayed_sales.count()
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            sales = Sales.objects.annotate(search=SearchVector('client'),).filter(search=query)
+        
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            sales = Sales.objects.filter(date__range=[date_query_start, date_query_end])
 
     amount_to_receive_total=[]
     for sale in unpayed_sales:
@@ -32,6 +52,11 @@ def sales_list(request):
                                     'total_sales':total_sales,
                                     'total_unpayed_sales':total_unpayed_sales,
                                     'amount_to_receive_total':amount_to_receive_total,
+                                    'search_form':search_form,
+                                    'query':query,
+                                    'date_form':date_form,
+                                    'date_query_start':date_query_start,
+                                    'date_query_end':date_query_end,
                                     })
 
 @login_required
@@ -174,7 +199,8 @@ def sales_detail(request, year, month, day, sale):
                                     'third_p_checks':third_p_checks,
                                     'sale_zip' : sale_zip,
                                     'money_zip': money_zip})
-
+                                    
+@login_required
 def sale_create(request):
     sale_form = SaleForm(request.POST or None)
     qs = SaleRow.objects.none()

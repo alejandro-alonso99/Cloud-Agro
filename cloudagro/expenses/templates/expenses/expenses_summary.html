@@ -6,69 +6,54 @@
 
 {% block content %}
 
-    <div id="top-buttons">
-        <div id="section-button">
-            <a href="{% url 'expenses:expenses_list' %}">
-                <h2 id="search-btn">Ver Historial</i></h2>
-            </a>
+<h1 id="list-title">Resúmen de gastos:</h1>
+
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Categoría:</h2>
+                {% for name in category_names %}
+                <h2 id="title-client-tag">{{ name | capfirst }}</h2>
+                {% endfor %}
+            </div>
         </div>
-        <div id="section-button">
-            <a href="{% url 'expenses:expense_create' %}">
-                <h2 id="add-btn">Agregar gasto <i class="fas fa-plus"></i></h2>
-            </a>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">Total:</h2>
+                {% for total in expense_category_totals %}
+                <h2 id="client-tag">{{ total | currency}}</h2>
+                {% endfor %}
+            </div>
         </div>
     </div>
-
+    <!--Diccionario de gastos por categoría y descripción-->
+    <h1 id="list-title">Resúmen por categoría:</h1>
+    {% for key1,value1 in expenses_dict.items %}
+    {% if value1 %}
     <div id="section-title">
-        <h1>Resúmen de gastos:</h1>
+        <h1> {{key1 | capfirst}}</h1>
     </div>
-
-    <div class="info-container" >
-        <div id="wrapper">
+    <a href="{% url 'expenses:expenses_list' key1 %}">
+        <div id="expense-wrapper">
             <div class="title-movement-card">
                 <div id="card-row-1">
-                    <h2 id="title-client-tag">Categoría:</h2>
-                    {% for name in category_names %}
-                    <h2 id="title-client-tag">{{ name | capfirst }}</h2>   
-                    {% endfor %}       
+                    <h2 id="title-client-tag">Tipo:</h2>
+                    <h2 id="title-total-tag"> Total: </h2>
                 </div>
             </div>
+            {% for key2,value2 in value1.items %}
             <div class="title-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag">Total:</h2>
-                    {% for total in expense_category_totals %}
-                    <h2 id="client-tag">{{ total | currency}}</h2>
-                    {% endfor %}               
+                    <h2 id="client-tag">{{key2 | capfirst}}</h2>
+                    <h2 id="total-tag"> {{ value2 | currency }} </h2>
                 </div>
             </div>
-        </div>        
-        <!--Diccionario de gastos por categoría y descripción-->
-        <h1 id="list-title">Resúmen por categoría:</h1>
-        {% for key1,value1 in expenses_dict.items %}
-            {% if value1 %}
-                <div id="section-title">
-                    <h1> {{key1 | capfirst}}</h1>
-                </div>                
-                <a href="{% url 'expenses:expenses_list' key1 %}">
-                    <div id="expense-wrapper">
-                        <div class="title-movement-card">
-                            <div id="card-row-1">
-                                <h2 id="title-client-tag">Tipo:</h2>
-                                <h2 id="title-total-tag"> Total: </h2>       
-                            </div>
-                        </div>
-                        {% for key2,value2 in value1.items %}
-                            <div class="title-movement-card">
-                                <div id="card-row-1">
-                                    <h2 id="client-tag">{{key2 | capfirst}}</h2>
-                                    <h2 id="total-tag"> {{ value2 | currency }} </h2>       
-                                </div>
-                            </div>
-                        {% endfor %}    
-                    </div>
-                </a>
-            {% endif %}
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
 
 {% endblock %}

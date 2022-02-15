@@ -1,6 +1,8 @@
+from email.mime import application
 from enum import unique
+from urllib import request
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 import datetime
 from django.utils.text import slugify
 from cloudagro.utils import unique_slug_generator
@@ -77,6 +79,7 @@ class Lote(models.Model):
         ('arroz','Arroz'),
     )
     
+    campaña = models.ForeignKey(Campaign, on_delete=models.CASCADE, default=None)
     campo = models.ForeignKey(Land, on_delete = models.CASCADE)
     numero = models.IntegerField()
     hectareas = models.IntegerField()
@@ -91,5 +94,19 @@ class Lote(models.Model):
         super(Lote, self).save(*args,**kwargs)
 
     def get_absolute_url(self):
-        return reverse ('land:lote_detail',
-                                    args=[self.id, self.slug])
+        return reverse_lazy('sowing:lote_detail', args=[self.id])
+
+    def calculate_total(self):
+
+        applications = self.applications_set.all()
+
+        labors = self.labors_set.all()
+
+        labor_totals = []
+        for labor in labors: 
+            labor_sub_total = labor.calculate_sub_total()
+            labor_totals.append(labor_sub_total)
+        
+        application_totals = []
+        for application in applications:
+            app_sub_total = application.calculate_

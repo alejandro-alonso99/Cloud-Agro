@@ -6,34 +6,40 @@
 
 {% block content %}
 
-    <div class="info-container">
-        <div id="purchase-main-info">
-            <div id="info-title">
-                <h1>Total pagos en {{type_id}}:</h1>
-                <div id="info-item">{{total_payments}}</div>
-            </div>
-            <div id="info-title">
-                <h1>Monto total: </h1>
-                <div id="info-item">{{total | currency}}</div>
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Total pagos en {{type_id}}:</h2>
+                <h2 id="title-client-tag">Monto total:</h2>
             </div>
         </div>
-        <h1 id="list-title">Listado de movimientos en {{type_id}}</h1>
-        {% for payment in payments%}
-        <a href="{{ payment.content_object.get_absolute_url }}">
-            <div class="movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
-                    <h2 id="date-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>                    
-                </div>
-                <hr>
-                <div id="card-row-2">
-                    <h2 id="category-tag">Orígen: {{ payment.content_type.model | spanishy}} </h2>
-                    <h2 id="total-tag">Total: {{ payment.monto | currency}}</h2>
-                </div>
-                <hr>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{total_payments}}</h2>
+                <h2 id="client-total-tag">{{total | floatformat:2 | currency}}</h2>
             </div>
-        </a>
-        {% endfor %}
+        </div>
     </div>
+
+    <div id="list-title">Historial de movimientos en {{type_id | capfirst}}</div>
+
+    {% for payment in payments%}
+    <a href="{{ payment.content_object.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
+                <h2 id="date-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
+            </div>
+            <hr>
+            <div id="card-row-2">
+                <h2 id="category-tag">Orígen: {{ payment.content_type.model | spanishy}} </h2>
+                <h2 id="total-tag">Total: {{ payment.monto | currency}}</h2>
+            </div>
+            <hr>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 
 {% endblock %}

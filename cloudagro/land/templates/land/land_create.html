@@ -3,21 +3,24 @@
 {% block title %} Agregar Campo {% endblock %}
 
 {% block content %}
-    <div id="center-content">
-        <div id="form-box">
-            <div class="login-form">
-                <form action="" method="post">
-                    {% csrf_token %}     
-                    <h1>Ingrese el nombre del campo:</h1>           
-                    <div class="form-element">
-                        <i class="fas fa-mountain"></i> {{ land_form.nombre }}
-                    </div>
-                    <div class="form-element">
-                        <i class="fas fa-mountain"></i> {{ land_form.tipo }}
-                    </div>
-                    <p><input type="submit" value="Crear" id="form-btn"></p>
-                </form>
+<div id="center-content">
+    <div id="litte-wrapper">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="big-client-tag">Nombre campo:</h2>
+                    <h2 id="big-client-tag">Tipo campo:</h2>
+                </div>
             </div>
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="big-client-tag">{{land_form.nombre}}</h2>
+                    <h2 id="big-client-tag">{{land_form.tipo}}</h2>
+                </div>
+            </div>
+            <p><input type="submit" value="Crear" id="form-create-btn"></p>
+        </form>
         <div>
-    </div>
-{% endblock %}
+        </div>
+        {% endblock %}

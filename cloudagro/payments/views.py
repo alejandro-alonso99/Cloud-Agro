@@ -1,9 +1,9 @@
 from django.shortcuts import redirect, render, get_object_or_404
-
 from .models import Payments
 from .forms import DestroyObjectForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def payment_detail(request, year, month, day, payment):
 
     payment = get_object_or_404(Payments, slug=payment,

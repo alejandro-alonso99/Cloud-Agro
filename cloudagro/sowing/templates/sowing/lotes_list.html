@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %} Listado de lotes {% endblock %}
+
+{% block content %}
+<div class="info-container">
+    <div id="list-title">
+        Listado de lotes para campaña: {{campaña | capfirst}}:
+    </div>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Campo:</h2>
+            <h2 id="title-client-tag">Número:</h2>
+            <h2 id="title-client-tag">Hectáreas:</h2>
+            <h2 id="title-client-tag">Tipo:</h2>
+        </div>
+    </div>
+    {% for lote in lotes %}
+    <a href="{{lote.get_absolute_url}}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{lote.campo}}</h2>
+                <h2 id="client-tag">{{lote.numero}}</h2>
+                <h2 id="client-tag">{{lote.hectareas}}</h2>
+                <h2 id="client-tag">{{lote.tipo | capfirst}}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -2,104 +2,127 @@
 <!DOCTYPE html>
 <html lang="es">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://kit.fontawesome.com/d743caab95.js" crossorigin="anonymous"></script>
-        <title>{% block title %}{% endblock %}</title>
-        <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
-        <link href="{% static 'css/base.css' %}" rel="stylesheet">
-        <link rel="icon" href="{% static 'images/Darklogo.svg' %}">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/d743caab95.js" crossorigin="anonymous"></script>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/Darklogo.svg' %}">
+</head>
 
-    <body>     
-        {% if request.get_full_path != '/account/login/' %}
+<body>
+    {% if request.get_full_path != '/account/login/' %}
 
-            <div class="navbar">
-                <a href="#home" id="nav-title">AgroCloud </a>
-                <div class="navbar-items">
-                    <a href="{% url 'land:land_main' %}">Resumen</a>
-                    <div class="dropdown">
-                        
-                            <button class="dropbtn">General
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                        <div class="dropdown-content">
-                            <a href="{% url 'land:campaign_create' %}">Crear campaña</a>
-                            <a href="{% url 'land:campaign_list' %}">Campañas</a>
-                            <a href="{% url 'land:land_main' %}">Campos</a>                        
-                            <a href="{% url 'land:land_create' %}">Agregar campo</a>
-                            <a href="{% url 'land:lotes_list' %}">Lotes</a>
-                            <a href="{% url 'land:lote_create' %}">Agregar Lote</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        
-                            <button class="dropbtn">Compras
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                        <div class="dropdown-content">
-                            <a href="{% url 'purchases:purchase_list' %}">Compras Hacienda</a>                        
-                            <a href="{% url 'purchases:purchase_create' %}">Agregar Compra Hacienda</a>
-                            <a href="{% url 'sowing:sowing_purchases_list' %}">Compras Siembra</a>
-                            <a href="{% url 'sowing:sowing_purchases_create' %}">Agregar Compra Siembra</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        
-                        <button class="dropbtn">Ventas
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="{% url 'sales:sale_list' %}">Ventas Hacienda</a>                        
-                            <a href="{% url 'sales:sale_create' %}">Agregar Venta Hacienda</a>
-                            <a href="">Ventas Siembra</a>
-                            <a href="">Agregar venta Siembra</a>
-                        </div>
-                    </div>
-                    <div class="dropdown">
-                        
-                        <button class="dropbtn">Siembra
-                            <i class="fa fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="{% url 'sowing:product_averages' %}">Precios promedio</a>                        
-                            <a href="{% url 'sales:sale_create' %}">Agregar Venta Hacienda</a>
-                            <a href="">Ventas Siembra</a>
-                            <a href="">Agregar venta Siembra</a>
-                        </div>
-                    </div>
-                    <a href="{% url 'expenses:expenses_summary' %}">Gastos</a>
-                    <a href="{% url 'stock:stock_list' %}">Stock</a>
-                    <div class="dropdown">
-                        
-                            <button class="dropbtn">Fondos
-                                <i class="fa fa-caret-down"></i>
-                            </button>
-                        <div class="dropdown-content">
-                            <a href="{% url 'funds:funds_main' %}">Resumen</a>
-                            <a href="#">Caja</a>
-                            <a href="#">Banco</a>
-                            <a href="#">Cheques Propios</a>
-                            <a href="{% url 'funds:funds_third_party_checks' %}">Cheques Terceros</a>
-                        </div>
-                    </div>
+    <div class="navbar">
+        <a href="#home" id="nav-title">AgroCloud </a>
+        <div class="navbar-items">
+            <a href="{% url 'land:land_main' %}">Resumen</a>
+            <div class="dropdown">
+
+                <button class="dropbtn">General
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'land:campaign_create' %}">Crear campaña</a>
+                    <a href="{% url 'land:campaign_list' %}">Campañas</a>
+                    <a href="{% url 'land:land_main' %}">Campos</a>
+                    <a href="{% url 'land:land_create' %}">Agregar campo</a>
+                    <a href="{% url 'sowing:lotes_list' %}">Lotes</a>
+                    <a href="{% url 'sowing:lote_create' %}">Agregar Lote</a>
                 </div>
             </div>
-            <div id="content">
-                {% block content %}
-                {% endblock %}
-            </div>
-        {% endif %}  
-        {% if request.get_full_path == '/account/login/' %}    
-            <div id="login-content">
-                {% block login %}
-                {% endblock %}
-            </div>
-        {% endif %}
+            <div class="dropdown">
 
-    </body>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+                <button class="dropbtn">Compras
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'purchases:purchase_list' %}">Compras Hacienda</a>
+                    <a href="{% url 'purchases:purchase_create' %}">Agregar Compra Hacienda</a>
+                    <a href="{% url 'sowing:sowing_purchases_list' %}">Compras Siembra</a>
+                    <a href="{% url 'sowing:sowing_purchases_create' %}">Agregar Compra Siembra</a>
+                </div>
+            </div>
+            <div class="dropdown">
+
+                <button class="dropbtn">Ventas
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'sales:sale_list' %}">Ventas Hacienda</a>
+                    <a href="{% url 'sales:sale_create' %}">Agregar Venta Hacienda</a>
+                    <a href="">Ventas Siembra</a>
+                    <a href="">Agregar venta Siembra</a>
+                </div>
+            </div>
+            <div class="dropdown">
+
+                <button class="dropbtn">Siembra
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'sowing:product_averages' %}">Precios promedio</a>
+                    <a href="{% url 'sales:sale_create' %}">Agregar Venta Hacienda</a>
+                    <a href="">Ventas Siembra</a>
+                    <a href="">Agregar venta Siembra</a>
+                </div>
+            </div>
+            <div class="dropdown">
+
+                <button class="dropbtn">Stock
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'stock:stock_list' %}">Stock hacienda</a>
+                    <a href="{% url 'stock:products_stock_list' %}">Stock siembra</a>
+                </div>
+            </div>
+            <div class="dropdown">
+
+                <button class="dropbtn">Gastos
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'expenses:expenses_summary' %}">Resumen de gastos</a>
+                    <a href="{% url 'expenses:expenses_list' %}">Historial de gastos</a>
+                    <a href="{% url 'expenses:expense_create' %}">Agregar gasto</a>
+                </div>
+            </div>
+            <div class="dropdown">
+
+                <button class="dropbtn">Fondos
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="{% url 'funds:funds_main' %}">Resumen</a>
+                    <a href="{% url 'funds:checks_self' %}">Cheques Propios</a>
+                    <a href="{% url 'funds:funds_third_party_checks' %}">Cheques Terceros</a>
+                    <a href="{% url 'funds:funds_manualmove_create' %}">Modificar a mano</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    {% endif %}
+    {% if request.get_full_path == '/account/login/' %}
+    <div id="login-content">
+        {% block login %}
+        {% endblock %}
+    </div>
+    {% endif %}
+
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+
 </html>

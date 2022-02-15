@@ -1,12 +1,12 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
-
+from django.contrib.auth.decorators import login_required
 from expenses.models import Expenses
 from .forms import ExpenseForm
-
 from payments.models import Payments, SelfChecks, ThirdPartyChecks, EndorsedChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 
+@login_required
 def expenses_list(request, category_id=''):
 
     if category_id != '':
@@ -32,7 +32,7 @@ def expenses_list(request, category_id=''):
                                                             'total_unpayed_expenses':total_unpayed_expenses,
                                                             'amount_to_pay_total':amount_to_pay_total,
                                                             })
-
+@login_required
 def expense_create(request):
 
     if request.method == 'POST':
@@ -52,7 +52,7 @@ def expense_create(request):
                                                             'expense_form': expense_form,
                                                             'last_3_expenses':last_3_expenses
                                                             }) 
-
+@login_required
 def expenses_summary(request):
 
     CATEGORY_CHOICES = (
@@ -102,7 +102,7 @@ def expenses_summary(request):
                                                                 'category_names':category_names,
                                                                 'expense_category_totals':expense_category_totals,
                                                                 })
-
+@login_required
 def expense_detail(request, year, month, day, expense):
     expense = get_object_or_404(Expenses, slug=expense,
                                                 date__year = year,

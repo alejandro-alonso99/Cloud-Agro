@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block tilte %} Stock de Siembra {% endblock %}
+
+{% block content %}
+<div class="info-container">
+    <div id="list-title">
+        Listado de stock:
+    </div>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Producto</h2>
+            <h2 id="title-client-tag">- - -</h2>
+            <h2 id="title-client-tag">- - -</h2>
+            <h2 id="title-client-tag"> Lt / Kg</h2>
+        </div>
+    </div>
+    {% for producto,total in product_lt_kg.items %}
+    <a href="{{lote.get_absolute_url}}">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{producto | capfirst}}</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">{{total | floatformat:2}}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

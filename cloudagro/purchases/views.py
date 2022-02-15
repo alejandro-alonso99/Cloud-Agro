@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Animal, Purchases
-from .forms import AnimalForm, SearchForm, PurchaseForm
+from .forms import AnimalForm, DateForm, SearchForm, PurchaseForm
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
@@ -12,12 +12,35 @@ from django.forms.models import modelformset_factory
 
 @login_required
 def purchase_list(request):
+
+    search_form = SearchForm()
+
+    date_form = DateForm()
+
+    query = None
+
+    date_query_start = None
+    date_query_end = None
+
     purchases = Purchases.objects.all()
+
     total_purchases = purchases.count()
 
     unpayed_purchases = Purchases.objects.filter(status='por pagar')
     total_unpayed_purchases = unpayed_purchases.count()
 
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            purchases = Purchases.objects.annotate(search=SearchVector('client'),).filter(search=query)
+        
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            purchases = Purchases.objects.filter(date__range=[date_query_start, date_query_end])
 
     amount_to_pay_total=[]
     for purchase in unpayed_purchases:
@@ -31,22 +54,13 @@ def purchase_list(request):
                                     'amount_to_pay_total':amount_to_pay_total,
                                     'total_unpayed_purchases':total_unpayed_purchases,
                                     'total_purchases':total_purchases,
+                                    'search_form':search_form,
+                                    'query':query,
+                                    'date_form':date_form,
+                                    'date_query_start':date_query_start,
+                                    'date_query_end':date_query_end,
                                     })
-
-@login_required
-def purchase_search(request): 
-    form = SearchForm()
-    query = None
-    results = []
-    if 'query' in request.GET:
-        form = SearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            results = Purchases.objects.annotate(search=SearchVector('client','date'),).filter(search=query)
-    return render(request, 'purchases/search.html', {'form':form,
-                                                            'query':query,
-                                                            'results':results})
-
+                                    
 
 @login_required
 def purchase_detail(request, year, month, day, purchase):
