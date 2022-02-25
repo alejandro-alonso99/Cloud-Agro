@@ -6,64 +6,66 @@
 
 {% block content %}
 
-    <div class="info-container">
-        <h1 id="list-title">A depositar</h1>
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Hoy</h2>
-                    <h2 id="title-client-tag">1-7 días:</h2>
-                    <h2 id="title-client-tag">8-15 días:</h2>
-                    <h2 id="title-client-tag">16-30 días:</h2>
-                    <h2 id="title-client-tag">31-60 días:</h2>
-                    <h2 id="title-client-tag">>60 días</h2>
-                    <h2 id="title-client-tag">Total:</h2>
-                </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="total-card-row">
-                    <h2 id="client-tag">{{today_checks | currency}}</h2>
-                    <h2 id="client-tag">{{week_checks | currency}}</h2>
-                    <h2 id="client-tag">{{two_week_checks | currency}}</h2>
-                    <h2 id="client-tag">{{month_checks | currency}}</h2>
-                    <h2 id="client-tag">{{two_month_checks | currency}}</h2>
-                    <h2 id="client-tag">{{more_months_checks | currency}}</h2>
-                    <h2 id="client-tag">{{total_to_pay_checks | currency}}</h2>
-                </div>
+<div class="info-container">
+    <h1 id="list-title">A depositar</h1>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Hoy</h2>
+                <h2 id="title-client-tag">1-7 días:</h2>
+                <h2 id="title-client-tag">8-15 días:</h2>
+                <h2 id="title-client-tag">16-30 días:</h2>
+                <h2 id="title-client-tag">31-60 días:</h2>
+                <h2 id="title-client-tag">>60 días</h2>
+                <h2 id="title-client-tag">Total:</h2>
             </div>
         </div>
-
-
-        {% if third_party_checks %}
-                <div class="title-movement-card">
-                    <div id="card-row-1">
-                        <h2 id="title-client-tag">Cliente:</h2>
-                        <h2 id="title-client-tag">Fecha ingreso:</h2>
-                        <h2 id="title-client-tag">Fecha depósito:</h2>
-                        <h2 id="title-state-tag">Estado:</h2>              
-                        <h2 id="title-total-tag">Monto:</h2>
-                    </div>
-                </div>
-            {% endif %}
-        {% for check in third_party_checks %}
-            <a href="{{ check.get_absolute_url }}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                        <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year }} </h2>
-                        <h2 id="client-tag"> {{ check.fecha_deposito.day }}/{{ check.fecha_deposito.month }}/{{ check.fecha_deposito.year }} </h2>
-                        {% if check.estado == 'a depositar' %}
-                            <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
-                        {% elif check.estado == 'endosado' %}
-                            <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
-                        {% else %}
-                            <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
-                        {% endif %}    
-                        <h2 id="total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
+        <div class="title-movement-card">
+            <div id="total-card-row">
+                <h2 id="client-tag">{{today_checks | currency}}</h2>
+                <h2 id="client-tag">{{week_checks | currency}}</h2>
+                <h2 id="client-tag">{{two_week_checks | currency}}</h2>
+                <h2 id="client-tag">{{month_checks | currency}}</h2>
+                <h2 id="client-tag">{{two_month_checks | currency}}</h2>
+                <h2 id="client-tag">{{more_months_checks | currency}}</h2>
+                <h2 id="client-tag">{{total_to_pay_checks | currency}}</h2>
+            </div>
+        </div>
     </div>
+
+
+    {% if third_party_checks %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Cliente:</h2>
+            <h2 id="title-client-tag">Fecha ingreso:</h2>
+            <h2 id="title-client-tag">Fecha depósito:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Monto:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for check in third_party_checks %}
+    <a href="{{ check.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
+                    {{check.fecha_ingreso.year }} </h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito.day }}/{{ check.fecha_deposito.month }}/
+                    {{check.fecha_deposito.year }} </h2>
+                {% if check.estado == 'a depositar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'endosado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 
 {% endblock %}

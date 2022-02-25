@@ -3,8 +3,9 @@ from django.db import models
 from django.db.models import fields
 from django.db.models.base import Model
 from django.forms import ModelForm, widgets
+from psycopg import Date
 from payments.models import Payments, ThirdPartyChecks, SelfChecks, EndorsedChecks
-
+from purchases.forms import DateInput
 
 class PaymentForm(ModelForm):
 
@@ -25,6 +26,7 @@ class ThirdPartyChecksForm(ModelForm):
         widgets = {
             'content_type':forms.HiddenInput,
             'object_id': forms.HiddenInput,
+            'fecha_deposito': DateInput,
         } 
 
 class SelfChecksForm(ModelForm):
@@ -36,6 +38,7 @@ class SelfChecksForm(ModelForm):
         widgets = {
             'content_type':forms.HiddenInput,
             'object_id': forms.HiddenInput,
+            'fecha_pago': DateInput,
         }
 
 class EndorsedChecksForm(ModelForm):

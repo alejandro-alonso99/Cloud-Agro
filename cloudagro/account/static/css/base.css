@@ -1,5 +1,9 @@
 @import url(http://fonts.googleapis.com/css?family=Muli);
 
+* {
+  box-sizing: border-box;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
@@ -9,6 +13,24 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
+}
+
+input[type=date] {
+  background-color: #0080ff;
+  padding: 10px;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  width: fit-content;
+}
+
+::-webkit-calendar-picker-indicator{
+  background-color: #fff;
+  padding: 3px;
+  cursor: pointer;
+  border-radius: 5px;
 }
 /* <------------------general--------------------> */
 
@@ -97,9 +119,11 @@ h6 {
 
 /* Navbar container */
 .navbar {
+  width: 100%;
   overflow: hidden;
-  background-color: #232230;
+  background-color: #fff;
   height: fit-content;
+  box-shadow: 1px 1px 20px gray;
 }
 
 .navbar-items {
@@ -111,7 +135,7 @@ h6 {
   float: left;
   font-size: 0.9vw;
   font-weight: bold;
-  color: white;
+  color: #232230;
   text-align: center;
   padding: 14px 30px;
   text-decoration: none;
@@ -123,8 +147,8 @@ h6 {
   text-align: center;
   font-size: 0.9vw;
   font-weight: 600;
-  color: #232230;
-  background-color: #63ff9b;
+  color: #fff;
+  background-color: #0080ff;
   text-align: center;
   padding: 14px 0;
   text-decoration: none;
@@ -139,9 +163,10 @@ h6 {
 /* Dropdown button */
 .dropdown .dropbtn {
   font-size: 0.9vw;
+  font-weight: bolder;
   border: none;
   outline: none;
-  color: white;
+  color: #232230;
   padding: 14px 16px;
   background-color: inherit;
   font-family: inherit; /* Important for vertical align on mobile phones */
@@ -151,15 +176,15 @@ h6 {
 /* Add a red background color to navbar links on hover */
 .navbar a:hover,
 .dropdown:hover .dropbtn {
-  background-color: #63ff9b;
-  color: #232230;
+  background-color: #0080ff;
+  color: #fff;
 }
 
 /* Dropdown content (hidden by default) */
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #CACACACA;
+  background-color: #fff;
   border: 1px solid #CACACACA;
   min-width: 160px;
   z-index: 1;
@@ -177,7 +202,7 @@ h6 {
 
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
-  background-color: rgb(177, 177, 177);
+  background-color: #0080ff;
 }
 
 /* Show the dropdown menu on hover */
@@ -514,8 +539,8 @@ e {
   background-color: #fff;
   color: #232230;
   padding: 10px;
-  border: 2px solid rgb(177, 177, 177);
   border-radius: 5px;
+  box-shadow: 1px 1px 20px gray;
 }
 
 #wrapper-list-title {
@@ -535,9 +560,9 @@ e {
   font-size: 1vw;
   margin: 30px 0;
   background-color: #fff;
-  color: #f50004;
+  color: #ff6961;
   padding: 10px;
-  border: 2px solid #f50004;
+  border: 2px solid #ff6961;
   border-radius: 5px;
 }
 
@@ -563,7 +588,7 @@ e {
 
 .movement-card:hover {
   cursor: pointer;
-  background-color: rgb(177, 177, 177);
+  background-color: #c4c4c4c4;
 }
 
 #title-client-tag {
@@ -627,7 +652,7 @@ e {
 
 #card-row-1 {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   text-align: left;
   width: 100%;
@@ -637,12 +662,12 @@ e {
 
 #total-card-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   text-align: left;
   width: 100%;
   border-bottom: 1px solid rgb(177, 177, 177);
-  background-color: rgb(177, 177, 177);
+  background-color: #c4c4c4c4;
   padding: 7px 0;
 }
 
@@ -670,7 +695,7 @@ e {
 
 #total-sale-tag {
   float: right;
-  color: rgb(2, 170, 2);
+  color: #6ed86e;
   font-size: 1vw;
   width: 20%;
   text-align: center;
@@ -678,14 +703,14 @@ e {
 
 #total-sale-remove-tag {
   float: right;
-  color: #f50004;
+  color: #fd3e41;
   font-size: 1vw;
   width: 25%;
 }
 
 #status-tag {
   text-align: center;
-  background-color: #f50004;
+  background-color: #fd3e41;
   font-size: 1vw;
   color: #fff;
   padding: 5px 0;
@@ -695,7 +720,7 @@ e {
 
 #endose-tag{
   text-align: center;
-  background-color: #2445ff;
+  background-color: #0080ff;
   font-size: 1vw;
   color: #fff;
   padding: 5px 0;
@@ -723,7 +748,7 @@ e {
 
 #status-done-tag {
   text-align: center;
-  background-color: rgb(2, 170, 2);
+  background-color: #77dd77;
   font-size: 1vw;
   color: #fff;
   padding: 5px 0;
@@ -755,18 +780,16 @@ e {
   width: 100%;
   height: fit-content;
   margin: 20px 0px;
-  border: 2px solid rgb(177, 177, 177);
-  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
-  border-radius: 5px;
+  box-shadow:  1px 1px 20px gray;
   padding: 20px 0;
 }
 
 #litte-wrapper{
   width: 60%;
   height: fit-content;
-  margin: 20vh 0px;
-  border: 2px solid rgb(177, 177, 177);
-  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
+  margin: auto;
+  margin-top: 60px;
+  box-shadow: 1px 1px 20px gray;
   border-radius: 5px;
   padding: 20px 0;
 }
@@ -1114,30 +1137,36 @@ e {
 
 input{
   width: 60%;
-  outline: none;
-  border: none;
-  border-bottom: 2px solid rgb(177, 177, 177);
-  padding: 5px;
+  min-width: 7vw;
+  border: 2px solid #0080ff;
+  padding: 10px;
   transition: all 0.5s;
-  text-align: center;
-}
-
-select {
-  outline: none;
-  border: none;
-  border-bottom: 2px solid rgb(177, 177, 177);
-  padding: 5px;
-  transition: all 0.5s;
-  text-align: center;
+  border-radius: 3px;
 }
 
 input:focus{
-  border-bottom: 2px solid  #63ff9b;
+  transform: translateY(-10%);
+  outline: #2445ff;
 }
 
-select:focus{
-  border-bottom: 2px solid #63ff9b;
+select {
+  background-color: #0080ff;
+  padding: 13px;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  width: fit-content;
+  min-width: 50%;
+  transition: all 0.2s;
 }
+
+
+select:focus{
+  transform: translateY(-10%);
+}
+
 
 #form-create-btn{
   width: fit-content;
@@ -1211,6 +1240,7 @@ i{
   display: flex;
   justify-content: space-between;
   margin-top: 5px;
+  margin-bottom: 50px;
 }
 
 #search-label{

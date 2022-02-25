@@ -153,4 +153,14 @@ class Animal(models.Model):
 
         return self.categoria
 
+    def delete_empty():
+        
+        animals = Animal.objects.all()
+
+        empty_animals = animals.filter(cantidad=0)
+
+        empty_animals.delete()
+
+        
+
 

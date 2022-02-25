@@ -241,6 +241,7 @@ def purchase_create(request):
             child = form.save(commit=False)
             child.purchase = parent
             child.save()
+            Animal.delete_empty()
         
         return redirect(parent.get_absolute_url())
 

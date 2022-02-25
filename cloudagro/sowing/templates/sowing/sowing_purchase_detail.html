@@ -26,8 +26,8 @@
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ sowing_purchase.date.day }} / {{ sowing_purchase.date.month }} / {{
-                    sowing_purchase.date.year }}</h2>
+                <h2 id="client-tag">{{ sowing_purchase.date.day }} / {{ sowing_purchase.date.month }} /
+                    {{sowing_purchase.date.year }}</h2>
                 <h2 id="client-tag">{{ sowing_purchase.campo }}</h2>
                 {% if sowing_purchase.factura %}
                 <h2 id="client-tag">{{ sowing_purchase.factura }}</h2>
@@ -117,7 +117,7 @@
     {% if sowing_purchase.estado == 'por pagar' %}
     <h1 id="list-title">Agregar Pagos:</h1>
     <form method="post" action=".">
-        <div id="wrapper">
+        <div id="litte-wrapper">
             {% csrf_token %}
             {{ payment_form.content_type.as_hidden }}
             {{ payment_form.object_id.as_hidden }}
@@ -187,8 +187,8 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{
-                    check.fecha_ingreso.year }} </h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
+                    {{check.fecha_ingreso.year }} </h2>
                 <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
                 <input type="submit" id="endose-tag" value="Endosar">
                 <input type="hidden" name="check_id" value="{{ check.id }}">

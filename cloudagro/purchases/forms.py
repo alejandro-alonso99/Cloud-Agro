@@ -1,6 +1,5 @@
 from django import forms
-from django.forms import models
-from django.forms.models import ModelForm, inlineformset_factory
+from django.forms.models import ModelForm
 
 from .models import Animal, Purchases
 
