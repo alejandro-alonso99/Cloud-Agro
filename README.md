@@ -10,3 +10,5 @@
 
 ## Detail views:
 ### Detail views give you information about the given object, some detail views include the option to add payments to the purchase/expense/sale, etc.
+![gif](detail_view.jpg)
+
