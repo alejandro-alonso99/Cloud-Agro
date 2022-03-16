@@ -53,6 +53,23 @@
 </div>
 
 {% else %}
+<div id="data-wrapper">
+    <div class="data total-sales">
+        <i class="fa-solid fa-tags"></i>
+        <h1> Ventas totales:</h1>
+        <h2>{{total_sales}}.</h2>
+    </div>
+    <div class="data sales-month">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <h1>Ventas por cobrar:</h1>
+        <h2>{{total_unpayed_sales}}.</h2>
+    </div>
+    <div class="data total-sales-month">
+        <i class="fa-solid fa-cash-register"></i>
+        <h1>Monto por cobrar:</h1>
+        <h2>{{ amount_to_receive_total | currency }}</h2>
+    </div>
+</div>
 <div id="top-forms">
     <form action="." method="get" id="search-form" class="date-form">
         {% csrf_token %}
@@ -73,22 +90,6 @@
     </form>
 </div>
 <div class="info-container">
-    <div id="wrapper">
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="title-client-tag">Ventas totales:</h2>
-                <h2 id="title-client-tag">Ventas por pagar:</h2>
-                <h2 id="title-client-tag">Monto por pagar:</h2>
-            </div>
-        </div>
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">{{ total_sales }}</h2>
-                <h2 id="client-tag">{{ total_unpayed_sales }}</h2>
-                <h2 id="client-total-tag">{{ amount_to_receive_total | currency }}</h2>
-            </div>
-        </div>
-    </div>
     <h1 id="list-title">Historial de Ventas:</h1>
     {% if sales %}
     <div class="title-movement-card">

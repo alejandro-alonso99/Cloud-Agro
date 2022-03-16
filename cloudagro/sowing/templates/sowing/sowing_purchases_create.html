@@ -7,47 +7,56 @@
     <div id="list-title">
         Agregar compra:
     </div>
-    <form action="" method="post">
+
+    <form action="." method="post">
         {% csrf_token %}
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Campo:</h2>
-                    <h2 id="title-client-tag">Factura (opcional):</h2>
-                    <h2 id="title-client-tag">Proveedor:</h2>
-                    <h2 id="title-client-tag">Producto:</h2>
+
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section-horizontal">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.campo}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-receipt"></i>Factura (opcional):</h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.factura}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-user"></i>Proveedor:
+                        </h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.proveedor}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-vial"></i>Producto:</h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.producto}}</h2>
+                    </div>
                 </div>
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{sowing_p_form.campo}}</h2>
-                    <h2 id="title-client-tag">{{sowing_p_form.factura}}</h2>
-                    <h2 id="title-client-tag">{{sowing_p_form.proveedor}}</h2>
-                    <h2 id="title-client-tag">{{sowing_p_form.producto}}</h2>
+            <div id="small-wrapper">
+                <div class="create-section-horizontal">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill-wave"></i>Precio lt/kg usd:</h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.precio_lt_kg_usd}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-weight-hanging"></i>Litros o Kg
+                        </h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.lt_kg}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-hand-holding-dollar"></i>Tipo cambio:</h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.tipo_cambio}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-percent"></i>IVA (opcional):
+                        </h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.iva}}</h2>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Precio lt/kg usd:</h2>
-                    <h2 id="title-client-tag">Litros o Kg:</h2>
-                    <h2 id="title-client-tag">Tipo cambio:</h2>
-                    <h2 id="title-client-tag">IVA (opcional):</h2>
-                </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{sowing_p_form.precio_lt_kg_usd}}</h2>
-                    <h2 id="title-client-tag">{{sowing_p_form.lt_kg}}</h2>
-                    <h2 id="title-client-tag">{{sowing_p_form.tipo_cambio}}</h2>
-                    <h2 id="title-client-tag">{{sowing_p_form.iva}}</h2>
-                </div>
-            </div>
-        </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
+        <input type="submit" value="Crear" id="create-btn">
     </form>
-    
-        
 </div>
 {% endblock %}

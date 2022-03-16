@@ -55,41 +55,42 @@
 </div>
 
 {% else %}
-<div id="top-forms">
-    <form action="." method="get" id="search-form" class="date-form">
-        {% csrf_token %}
-        <div id="search-label">
-            <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
-        </div>
-        {{date_form.date_query_start }}
-        {{date_form.date_query_end }}
-        <input type="submit" value="Buscar" id="search-btn">
-    </form>
-    <form action="." method="get" id="search-form">
-        {% csrf_token %}
-        <div id="search-label">
-            <i class="fas fa-search"></i> Buscar por Proveedor:
-        </div>
-        {{search_form.query}}
-        <input type="submit" value="Buscar" id="search-btn">
-    </form>
+<div id="data-wrapper">
+    <div class="data total-sales">
+        <i class="fa-solid fa-tags"></i>
+        <h1> Compras totales:</h1>
+        <h2>{{total_purchases}}.</h2>
+    </div>
+    <div class="data sales-month">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <h1>Compras por pagar:</h1>
+        <h2>{{total_unpayed_purchases}}.</h2>
+    </div>
+    <div class="data total-sales-month">
+        <i class="fa-solid fa-cash-register"></i>
+        <h1>Monto por pagar:</h1>
+        <h2>{{ amount_to_pay_total | currency }}</h2>
+    </div>
 </div>
 <div class="info-container">
-    <div id="wrapper">
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="title-client-tag">Compras totales:</h2>
-                <h2 id="title-client-tag">Compras por pagar:</h2>
-                <h2 id="title-total-tag">Monto por pagar:</h2>
+    <div id="top-forms">
+        <form action="." method="get" id="search-form" class="date-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
             </div>
-        </div>
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">{{ total_purchases }}</h2>
-                <h2 id="client-tag">{{ total_unpayed_purchases }}</h2>
-                <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>
+            {{date_form.date_query_start }}
+            {{date_form.date_query_end }}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+        <form action="." method="get" id="search-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-search"></i> Buscar por Proveedor:
             </div>
-        </div>
+            {{search_form.query}}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
     </div>
     <div id="list-title">
         Historial de Compras:

@@ -1,17 +1,25 @@
-from functools import reduce
-from operator import attrgetter
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy
 from .models import Applications, Labors, SowingPurchases
 from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm
 from land .models import Campaign, Lote
 from payments.models import EndorsedChecks, SelfChecks, Payments, ThirdPartyChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 from django.contrib.auth.decorators import login_required
+from purchases.forms import SearchForm, DateForm
+from django.contrib.postgres.search import SearchVector
+
 
 @login_required
 def sowing_purchases_list(request):
+    
+    search_form = SearchForm()
+
+    date_form = DateForm()
+
+    query = None
+
+    date_query_start = None
+    date_query_end = None
 
     campaña = Campaign.objects.filter(estado = 'vigente').first()
     
@@ -22,6 +30,20 @@ def sowing_purchases_list(request):
     unpayed_purchases = sowing_purchases.filter(estado='por pagar')
 
     total_unpayed_purchases = unpayed_purchases.count()
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            sowing_purchases = SowingPurchases.objects.annotate(search=SearchVector('proveedor'),).filter(search=query)
+        
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            sowing_purchases = SowingPurchases.objects.filter(date__range=[date_query_start, date_query_end])
+        
 
     total_amounts_to_pay = []
     for purchase in unpayed_purchases:
@@ -36,6 +58,11 @@ def sowing_purchases_list(request):
                                                                 'total_purchases':total_purchases,
                                                                 'total_unpayed_purchases':total_unpayed_purchases,
                                                                 'total_amount_to_pay':total_amount_to_pay,
+                                                                'search_form':search_form,
+                                                                'query':query,
+                                                                'date_form':date_form,
+                                                                'date_query_start':date_query_start,
+                                                                'date_query_end':date_query_end,
                                                                 })
 
 

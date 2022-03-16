@@ -3,24 +3,29 @@
 {% block title %} Agregar Campo {% endblock %}
 
 {% block content %}
-<div id="center-content">
-    <div id="litte-wrapper">
-        <form action="" method="post">
-            {% csrf_token %}
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="big-client-tag">Nombre campo:</h2>
-                    <h2 id="big-client-tag">Tipo campo:</h2>
+<div class="info-container">
+    <div id="list-title">
+        Agregar Campo:
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Nombre Campo:</h3>
+                        <h2 id="title-client-tag">{{land_form.nombre}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Tipo campo:</h3>
+                        <h2 id="title-client-tag">{{land_form.tipo}}</h2>
+                    </div>
                 </div>
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="big-client-tag">{{land_form.nombre}}</h2>
-                    <h2 id="big-client-tag">{{land_form.tipo}}</h2>
-                </div>
-            </div>
-            <p><input type="submit" value="Crear" id="form-create-btn"></p>
-        </form>
-        <div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        {% endblock %}
+    </form>
+</div>
+{% endblock %}

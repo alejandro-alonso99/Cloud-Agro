@@ -4,19 +4,25 @@
 
 {% block content %}
 
-<div id="center-content">
-    <div id="form-box">
-        <div class="login-form">
-            <form action="" method="post">
-                {% csrf_token %}     
-                <h1>Ingrese el nombre de la campaña:</h1>           
-                <div class="form-element">
-                    <i class="fas fa-mountain"></i> {{ campaign_form.nombre }}
+<div class="info-container">
+    <div id="list-title">
+        Agregar Campaña:
+    </div>
+    <form action="" method="post"
+        onsubmit="return confirm('Al crear una nueva campaña, la anterior se marcará como terminada.')">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-invoice"></i>Nombre Campaña:</h3>
+                        <h2 id="title-client-tag">{{campaign_form.nombre}}</h2>
+                    </div>
                 </div>
-                <p><input type="submit" value="Crear" id="form-btn"></p>
-            </form>
+            </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-    <div>
+    </form>
 </div>
 
 {% endblock %}

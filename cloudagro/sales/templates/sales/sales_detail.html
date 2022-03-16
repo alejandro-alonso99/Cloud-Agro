@@ -3,170 +3,174 @@
 {% load purchase_extras %}
 
 {% block content %}
-    <h1 id="list-title">Viendo venta: {{sale}}</h1>
-    {% if sale.status == 'por cobrar' %}
-        <h1 id="total-list-title">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h1>
-    {% endif %}
-    
-    <div class="info-container">
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Fecha:</h2>
-                    <h2 id="title-client-tag">Comprador:</h2>
-                    <h2 id="title-client-tag">Animales:</h2>
-                    <h2 id="title-client-tag">Kg brutos:</h2>
-                    <h2 id="title-client-tag">Desbaste:</h2>
-                    <h2 id="title-client-tag">Kg neto:</h2>
-                    <h2 id="title-client-tag">Estado:</h2>
-                </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{ sale.date.day }} / {{ sale.date.month }} / {{ sale.date.year }}</h2>
-                    <h2 id="client-tag">{{ sale.client | capfirst }}</h2>
-                    <h2 id="client-tag">{{ sale.total_animals }}</h2>
-                    <h2 id="client-tag">{{ sale.brute_kg }}</h2>
-                    <h2 id="client-tag">{{ sale.desbaste | percentage}}</h2>
-                    <h2 id="client-tag">{{ kg_neto }}</h2>
-                    {% if sale.status == 'por cobrar' %}
-                        <h2 id="client-tag">{{ sale.status | capfirst }}</h2>
-                    {% else %}
-                        <h2 id="client-tag">{{ sale.status | capfirst }}</h2>
-                    {% endif %}
-                </div>
+<h1 id="list-title">Viendo venta: {{sale}}</h1>
+{% if sale.status == 'por cobrar' %}
+<h1 id="total-list-title">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h1>
+{% endif %}
+
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Fecha:</h2>
+                <h2 id="title-client-tag">Comprador:</h2>
+                <h2 id="title-client-tag">Animales:</h2>
+                <h2 id="title-client-tag">Kg brutos:</h2>
+                <h2 id="title-client-tag">Desbaste:</h2>
+                <h2 id="title-client-tag">Kg neto:</h2>
+                <h2 id="title-client-tag">Estado:</h2>
             </div>
         </div>
-
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Categoría:</h2>
-                    <h2 id="title-client-tag">Precio por kg:</h2>
-                    <h2 id="title-client-tag">Cabezas:</h2>
-                    <h2 id="title-client-tag">Kg/cabeza:</h2>
-                    <h2 id="title-client-tag">Kg totales:</h2>
-                    <h2 id="title-client-tag">Sub total:</h2>
-                    <h2 id="title-client-tag">IVA:</h2>
-                    <h2 id="title-client-tag">Total:</h2>
-                </div>
-            </div>
-            {% for row,kg_total,sub_total,iva,total in sale_zip %}
-                {% if row.cantidad != 0 %}
-                <div class="title-movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">{{row.categoria | capfirst}}</h2>
-                        <h2 id="client-tag">{{row.precio_por_kg}}</h2>
-                        <h2 id="client-tag">{{row.cantidad}}</h2>
-                        <h2 id="client-tag">{{kg_cabeza | floatformat:2}}</h2>
-                        <h2 id="client-tag">{{kg_total | floatformat:2}}</h2>
-                        <h2 id="client-tag">{{sub_total | floatformat:2 | currency }}</h2>
-                        <h2 id="client-tag">{{ iva | floatformat:2 | currency }}</h2>
-                        <h2 id="client-tag">{{total | floatformat:2 | currency}}</h2>
-                    </div>
-                </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ sale.date.day }} / {{ sale.date.month }} / {{ sale.date.year }}</h2>
+                <h2 id="client-tag">{{ sale.client | capfirst }}</h2>
+                <h2 id="client-tag">{{ sale.total_animals }}</h2>
+                <h2 id="client-tag">{{ sale.brute_kg }}</h2>
+                <h2 id="client-tag">{{ sale.desbaste | percentage}}</h2>
+                <h2 id="client-tag">{{ kg_neto }}</h2>
+                {% if sale.status == 'por cobrar' %}
+                <h2 id="client-tag">{{ sale.status | capfirst }}</h2>
+                {% else %}
+                <h2 id="client-tag">{{ sale.status | capfirst }}</h2>
                 {% endif %}
-            {% endfor %}
-                <div class="title-movement-card">
-                    <div id="total-card-row"> 
-                        <h2 id="client-tag">Total: </h2>
-                        <h2 id="client-tag">- - -</h2>
-                        <h2 id="client-tag">{{ total_cabezas }}</h2>
-                        <h2 id="client-tag">- - -</h2>
-                        <h2 id="client-tag">{{total_kg_total |floatformat:2}}</h2>
-                        <h2 id="client-tag">{{ total_sub_totals | floatformat:2 | currency }}</h2>
-                        <h2 id="client-tag">{{ total_ivas | floatformat:2 | currency}}</h2>
-                        <h2 id="client-tag">{{ sale_total | floatformat:2 | currency}}</h2>
-                    </div>
-                </div>
+            </div>
         </div>
-
-        {%if payments or third_p_checks %}
-        <h1 id="list-title">Pagos:</h1>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Tipo:</h2>
-                    <h2 id="title-client-tag">Fecha:</h2>
-                    <h2 id="title-client-tag">Total:</h2>
-                </div>
-            </div>
-            {% for payment in payments %}
-            <div class="movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
-                    <h2 id="client-total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
-                </div>
-            </div>
-            {% endfor %}
-            {% for check in third_p_checks %}
-                <a href="{{ check.get_absolute_url }}">
-                    <div class="movement-card">
-                        <div id="card-row-1">
-                            <h2 id="client-tag"> Cheque </h2>
-                            <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year }} </h2>
-                            <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
-                        </div>
-                    </div>
-                </a>                
-            {% endfor %}
-        {% endif %}
-        
-        {% if sale.status == 'por cobrar' %}
-        <h1 id="list-title">Agregar Pagos:</h1>
-            <form method="post" action=".">
-                <div id="wrapper">
-                    {% csrf_token %}
-                    {{ payment_form.content_type.as_hidden }}
-                    {{ payment_form.object_id.as_hidden }}
-                    <div class="title-movement-card">
-                        <h1 id="payment-title">Efectivo o Transferencia:</h1>
-                    </div>
-                    <div class="title-movement-card">
-                        <div id="card-row-1">
-                            <h2 id="title-client-tag">Tipo:</h2>
-                            <h2 id="title-client-tag">Monto:</h2>
-                        </div>
-                    </div>
-                    <div class="title-movement-card">
-                        <div id="card-row-1">
-                            <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
-                            <h2 id="title-client-tag">{{payment_form.monto}}</h2>
-                        </div>
-                    </div>
-                </div>    
-                <input type="submit" value="Agregar" id="form-create-btn">
-            </form>
-            <form method="post" action=".">
-                <div id="wrapper">
-                    {% csrf_token %}
-                    {{ third_p_form.content_type.as_hidden }}
-                    {{ third_p_form.object_id.as_hidden }}
-                    <div class="title-movement-card">
-                        <h1 id="payment-title">Cheque:</h1>
-                    </div>
-                    <div class="title-movement-card">
-                        <div id="card-row-1">
-                            <h2 id="title-client-tag">Fecha pago:</h2>
-                            <h2 id="title-client-tag">Banco Emisión:</h2>
-                            <h2 id="title-client-tag">Número Cheque:</h2>
-                            <h2 id="title-client-tag">Titular Cheque:</h2>
-                            <h2 id="title-client-tag">Monto:</h2>
-                        </div>
-                    </div>
-                    <div class="title-movement-card">
-                        <div id="card-row-1">
-                            <h2 id="title-client-tag">{{third_p_form.fecha_deposito}}</h2>
-                            <h2 id="title-client-tag">{{third_p_form.banco_emision}}</h2>
-                            <h2 id="title-client-tag">{{third_p_form.numero_cheque}}</h2>
-                            <h2 id="title-client-tag">{{third_p_form.titular_cheque}}</h2>
-                            <h2 id="title-client-tag">{{third_p_form.monto}}</h2>
-                            {{third_p_form.errors}}
-                        </div>
-                    </div>
-                </div>
-                <input type="submit" value="Agregar" id="form-create-btn">
-            </form>
-        {% endif %}
     </div>
+
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Categoría:</h2>
+                <h2 id="title-client-tag">Precio por kg:</h2>
+                <h2 id="title-client-tag">Cabezas:</h2>
+                <h2 id="title-client-tag">Kg/cabeza:</h2>
+                <h2 id="title-client-tag">Kg totales:</h2>
+                <h2 id="title-client-tag">Sub total:</h2>
+                <h2 id="title-client-tag">IVA:</h2>
+                <h2 id="title-client-tag">Total:</h2>
+            </div>
+        </div>
+        {% for row,kg_total,sub_total,iva,total in sale_zip %}
+        {% if row.cantidad != 0 %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{row.categoria | capfirst}}</h2>
+                <h2 id="client-tag">{{row.precio_por_kg}}</h2>
+                <h2 id="client-tag">{{row.cantidad}}</h2>
+                <h2 id="client-tag">{{kg_cabeza | floatformat:2}}</h2>
+                <h2 id="client-tag">{{kg_total | floatformat:2}}</h2>
+                <h2 id="client-tag">{{sub_total | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag">{{ iva | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag">{{total | floatformat:2 | currency}}</h2>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="title-movement-card">
+            <div id="total-card-row">
+                <h2 id="client-tag">Total: </h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">{{ total_cabezas }}</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">{{total_kg_total |floatformat:2}}</h2>
+                <h2 id="client-tag">{{ total_sub_totals | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag">{{ total_ivas | floatformat:2 | currency}}</h2>
+                <h2 id="client-tag">{{ sale_total | floatformat:2 | currency}}</h2>
+            </div>
+        </div>
+    </div>
+
+    {%if payments or third_p_checks %}
+    <h1 id="list-title">Pagos:</h1>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Tipo:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Total:</h2>
+        </div>
+    </div>
+    {% for payment in payments %}
+    <div class="movement-card">
+        <div id="card-row-1">
+            <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
+            <h2 id="client-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
+            <h2 id="client-total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
+        </div>
+    </div>
+    {% endfor %}
+    {% for check in third_p_checks %}
+    <a href="{{ check.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> Cheque </h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
+                    {{check.fecha_ingreso.year }} </h2>
+                <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% endif %}
+
+    {% if sale.status == 'por cobrar' %}
+    <h1 id="list-title">Cheque:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ third_p_form.content_type.as_hidden }}
+        {{ third_p_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section-horizontal">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Fecha pago</h3>
+                        <h2 id="title-client-tag">{{third_p_form.fecha_deposito}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Banco Emisión:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.banco_emision}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Número Cheque:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.numero_cheque}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Titular Cheque:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.titular_cheque}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.monto}}</h2>
+                    </div>
+                    {{third_p_form.errors}}
+                </div>
+            </div>
+            <input type="submit" value="Crear" id="create-btn">
+        </div>
+    </form>
+    <h1 id="list-title">Pagos Efectivo o Transferencia:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ payment_form.content_type.as_hidden }}
+        {{ payment_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-invoice-dollar"></i>Tipo:</h3>
+                        <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{payment_form.monto}}</h2>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Agregar" id="create-btn">
+        </div>
+    </form>
+    {% endif %}
+</div>
 {% endblock %}

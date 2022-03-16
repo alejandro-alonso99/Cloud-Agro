@@ -1,5 +1,7 @@
 from pyexpat import model
 from django import forms
+
+from land.models import Campaign
 from .models import Labors, SowingPurchases, Applications
 from land.models import Lote
 from django.forms.models import ModelForm
@@ -42,3 +44,5 @@ class LaborsForm(ModelForm):
     class Meta:
         model = Labors
         exclude = ('slug','lote')
+
+campaigns = Campaign.objects.all()

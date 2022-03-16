@@ -1,10 +1,6 @@
-from email.mime import application
-from enum import unique
-from urllib import request
 from django.db import models
 from django.urls import reverse, reverse_lazy
 import datetime
-from django.utils.text import slugify
 from cloudagro.utils import unique_slug_generator
 
 class Campaign(models.Model):
@@ -24,9 +20,8 @@ class Campaign(models.Model):
                                 args=[self.slug,
                                         self.pk])
 
-
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.nombre) 
+        self.slug = unique_slug_generator(self, self.nombre, self.slug)
         super(Campaign, self).save(*args,**kwargs)
 
     def __str__(self):

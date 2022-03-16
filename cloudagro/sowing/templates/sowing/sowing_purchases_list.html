@@ -6,62 +6,138 @@
 
 {% block content %}
 
-<div class="info-container" >
+{% if query or date_query_end %}
+<div class="info-container">
+    <p><a href="{% url 'sowing:sowing_purchases_list' %}" id="search-btn" class="back-link"><i
+                class="fas fa-chevron-left"></i>Volver
+            a listado</a></p>
+    {% if query %}
     <div id="list-title">
-        Historial de Compras para la campaña: "{{campaña | capfirst}}"
+        Filtrando por: "{{query}}"
     </div>
-    <div id="wrapper">
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="title-client-tag">Compras totales:</h2>
-                <h2 id="title-client-tag">Compras por pagar:</h2>
-                <h2 id="title-client-tag">Monto por pagar:</h2>              
-            </div>
-        </div>
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">{{ total_purchases }}</h2>
-                <h2 id="client-tag">{{ total_unpayed_purchases }}</h2>
-                <h2 id="client-total-tag">{{ total_amount_to_pay | floatformat:2 | currency}}</h2>               
-            </div>
-        </div>
-    </div>        
+    {% endif %}
+    {% if date_query_start %}
+    <div id="list-title">
+        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+    </div>
+    {% endif %}
     {% if sowing_purchases %}
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="title-client-tag">Factura:</h2>
-                <h2 id="title-client-tag">Proveedor:</h2>
-                <h2 id="title-client-tag">Producto:</h2>
-                <h2 id="title-client-tag">Fecha:</h2>
-                <h2 id="title-client-tag">Total:</h2>
-                <h2 id="title-client-tag">Estado:</h2>              
-                <h2 id="title-client-tag">Por pagar:</h2>
-            </div>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Factura:</h2>
+            <h2 id="title-client-tag">Proveedor:</h2>
+            <h2 id="title-client-tag">Producto:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Total:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
         </div>
+    </div>
     {% endif %}
     {% for sowing_purchase in sowing_purchases %}
-        <a href="{{ sowing_purchase.get_absolute_url }}">
-            <div class="movement-card">
-                <div id="card-row-1">
-                    {% if sowing_purchase.factura %}
-                        <h2 id="client-tag">{{sowing_purchase.factura}}</h2>
-                    {% else %}
-                        <h2 id="title-client-tag">- - -</h2>
-                    {% endif %}
-                    <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
-                    <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>                    
-                    <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}/{{ sowing_purchase.date.year }} </h2>                    
-                    <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
-                    {% if sowing_purchase.estado == 'por pagar' %}
-                        <h2 id="status-tag">{{ sowing_purchase.estado | capfirst}}</h2>
-                    {% else %}
-                        <h2 id="status-done-tag">{{ sowing_purchase.estado | capfirst}}</h2>
-                    {% endif %}    
-                    <h2 id="total-tag">{{ sowing_purchase.calculate_amount_to_pay | floatformat:2 | currency }}</h2>
-                </div>
+    <a href="{{ sowing_purchase.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                {% if sowing_purchase.factura %}
+                <h2 id="client-tag">{{sowing_purchase.factura}}</h2>
+                {% else %}
+                <h2 id="title-client-tag">- - -</h2>
+                {% endif %}
+                <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
+                <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>
+                <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}
+                    /{{sowing_purchase.date.year }} </h2>
+                <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
+                {% if sowing_purchase.estado == 'por pagar' %}
+                <h2 id="status-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                {% endif %}
             </div>
-        </a>
+        </div>
+    </a>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda
+    </div>
     {% endfor %}
 </div>
 
+{% else %}
+<div class="info-container">
+    <div id="data-wrapper">
+        <div class="data total-sales">
+            <i class="fa-solid fa-tags"></i>
+            <h1> Compras totales:</h1>
+            <h2>{{total_purchases}}.</h2>
+        </div>
+        <div class="data sales-month">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <h1>Compras por pagar:</h1>
+            <h2>{{total_unpayed_purchases}}.</h2>
+        </div>
+        <div class="data total-sales-month">
+            <i class="fa-solid fa-cash-register"></i>
+            <h1>Monto por pagar:</h1>
+            <h2>{{ total_amount_to_pay | floatformat:2 | currency}}</h2>
+        </div>
+    </div>
+    <div id="top-forms">
+        <form action="." method="get" id="search-form" class="date-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
+            </div>
+            {{date_form.date_query_start }}
+            {{date_form.date_query_end }}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+        <form action="." method="get" id="search-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-search"></i> Buscar por Proveedor:
+            </div>
+            {{search_form.query}}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+    </div>
+    <div id="list-title">
+        Historial de Compras para la campaña: "{{campaña | capfirst}}"
+    </div>
+    {% if sowing_purchases %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Factura:</h2>
+            <h2 id="title-client-tag">Proveedor:</h2>
+            <h2 id="title-client-tag">Producto:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Total:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for sowing_purchase in sowing_purchases %}
+    <a href="{{ sowing_purchase.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                {% if sowing_purchase.factura %}
+                <h2 id="client-tag">{{sowing_purchase.factura}}</h2>
+                {% else %}
+                <h2 id="title-client-tag">- - -</h2>
+                {% endif %}
+                <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
+                <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>
+                <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}
+                    /{{sowing_purchase.date.year }} </h2>
+                <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
+                {% if sowing_purchase.estado == 'por pagar' %}
+                <h2 id="status-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

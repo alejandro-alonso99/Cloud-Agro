@@ -9,25 +9,32 @@
     </div>
     <form action="" method="post">
         {% csrf_token %}
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Campo:</h2>
-                    <h2 id="title-client-tag">Número de lote:</h2>
-                    <h2 id="title-client-tag">Hectáreas:</h2>
-                    <h2 id="title-client-tag">Tipo de lote</h2>
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
+                        <h2 id="title-client-tag">{{lote_form.campo}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Número de lote:</h3>
+                        <h2 id="title-client-tag">{{lote_form.numero}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Hectáreas:</h3>
+                        <h2 id="title-client-tag">{{lote_form.hectareas}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-image"></i>Tipo de lote:
+                        </h3>
+                        <h2 id="title-client-tag">{{lote_form.tipo}}</h2>
+                    </div>
                 </div>
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{lote_form.campo}}</h2>
-                    <h2 id="title-client-tag">{{lote_form.numero}}</h2>
-                    <h2 id="title-client-tag">{{lote_form.hectareas}}</h2>
-                    <h2 id="title-client-tag">{{lote_form.tipo}}</h2>
-                </div>
-            </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
     </form>
 </div>
 {% endblock %}

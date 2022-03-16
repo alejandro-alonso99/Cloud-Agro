@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+:root{
+  --main-color: #141a1e;
+  --main-lighter-color: #64646400;
+  --accent-color: #f9e9ec;
+  --blue-accent-color: #0080ff;
+  --red-accent-color:#f50004;
+  --green-acent-color: #04c404;
+  --orange-accent-color: #ff964f;
+}
+
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     /* display: none; <- Crashes Chrome on hover */
@@ -16,9 +27,9 @@ input[type=number] {
 }
 
 input[type=date] {
-  background-color: #0080ff;
+  background-color: #fff;
   padding: 10px;
-  color: #fff;
+  color: #232230;
   font-weight: 500;
   border-radius: 5px;
   border: none;
@@ -110,7 +121,6 @@ h6 {
   justify-content: center;
   width: 100%;
   height: 100%;
-  
 }
 
 /* <------------------general--------------------> */
@@ -133,7 +143,7 @@ h6 {
 /* Links inside the navbar */
 .navbar a {
   float: left;
-  font-size: 0.9vw;
+  font-size: 17px;
   font-weight: bold;
   color: #232230;
   text-align: center;
@@ -145,10 +155,10 @@ h6 {
 #nav-title {
   width: 15vw;
   text-align: center;
-  font-size: 0.9vw;
+  font-size: 17px;
   font-weight: 600;
-  color: #fff;
-  background-color: #0080ff;
+  color: #232230;
+  background-color: #80E080;
   text-align: center;
   padding: 14px 0;
   text-decoration: none;
@@ -162,7 +172,7 @@ h6 {
 
 /* Dropdown button */
 .dropdown .dropbtn {
-  font-size: 0.9vw;
+  font-size: 17px;
   font-weight: bolder;
   border: none;
   outline: none;
@@ -176,8 +186,8 @@ h6 {
 /* Add a red background color to navbar links on hover */
 .navbar a:hover,
 .dropdown:hover .dropbtn {
-  background-color: #0080ff;
-  color: #fff;
+  background-color: #80E080;
+  color: #232230;
 }
 
 /* Dropdown content (hidden by default) */
@@ -202,7 +212,7 @@ h6 {
 
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
-  background-color: #0080ff;
+  background-color: #80E080;
 }
 
 /* Show the dropdown menu on hover */
@@ -213,6 +223,112 @@ h6 {
 /* <------------------nav-------------------> */
 
 /* <-------------------Forms--------------------> */
+
+#form-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+#small-wrapper {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  margin: 20px 0;
+  border: 1px solid #c4c4c4;
+  box-shadow: 1px 1px 20px gray;
+  border-radius: 5px;
+  padding: 20px 0;
+}
+
+.create-section{
+  padding: 20px;
+  margin: 0 30px;
+}
+
+.create-section-horizontal{
+  display: flex;
+  padding: 20px;
+  margin: 0 30px;
+}
+
+.create-element{
+  padding: 5px;
+  margin: 5px;
+}
+
+#small-wrapper input{
+  width: 200px;
+  outline: none;
+  border: 1px solid #c4c4c4;
+  padding: 5px;
+  transition: all 0.2s;
+  text-align: left;
+  font-size: 17px;
+  border-radius: 3px;
+}
+
+#small-wrapper input:focus{
+  outline:1px solid var(--green-acent-color);
+}
+
+#small-wrapper select:focus{
+  outline:1px solid var(--green-acent-color);
+}
+
+#small-wrapper select {
+  width: 200px;
+  outline: none;
+  border: 1px solid rgb(177, 177, 177);
+  padding: 5px;
+  transition: all 0.2s;
+  text-align: center;
+  font-size: 17px;
+  border-radius: 3px;
+}
+
+#small-wrapper input:valid {
+  background-color: #fff !important;
+  outline:1px solid var(--green-acent-color);
+}
+
+#small-wrapper select:valid{
+  outline:1px solid var(--green-acent-color);
+
+}
+
+#small-wrapper h3{
+  font-weight: normal;
+  font-size: 17px;
+}
+
+#small-wrapper i{
+  color: var(--green-acent-color);
+  margin-right: 5px;
+  font-size: 17px;
+}
+
+#create-btn{
+  width: fit-content;
+  font-size: 15px;
+  border: none !important;
+  padding: 7px 15px;
+  text-transform: uppercase;
+  background-color: #80E080;
+  border-radius: 5px;
+  color: #232230;
+  transition: all 0.3s;
+  outline: none !important;
+}
+
+#create-btn:hover{
+  cursor: pointer;
+  background-color: rgb(177, 177, 177);
+  color: #232230;
+}
+
 
 #form-box {
   margin-top: 150px;
@@ -226,7 +342,7 @@ h6 {
 }
 
 #form-box h1{
-  font-size: 1vw
+  font-size: 17px
 }
 
 .form-element {
@@ -240,21 +356,10 @@ h6 {
   color: #fff;
 }
 
-.form-element select {
-  border: none;
-  font-size: 17px;
-  padding: 6px 10px;
-  margin: 10px 10px;
-  width: 300px;
-  height: 35px;
-  background: none;
-  color: #fff;
-}
-
 #form-btn {
   text-transform: uppercase;
   font-weight: bolder;
-  font-size: 15px;
+  font-size: 17px;
   border: none;
   padding: 6px 10px;
   border-radius: 20px;
@@ -448,7 +553,7 @@ e {
   align-items: center;
   justify-content: left;
   text-align: left;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 #section-button i {
@@ -462,6 +567,7 @@ e {
 
 #section-button a {
   text-decoration: none;
+  color: #80E080
 }
 
 #search-btn {
@@ -534,7 +640,7 @@ e {
 
 #list-title {
   text-align: center;
-  font-size: 1vw;
+  font-size: 17px;
   margin: 30px 0;
   background-color: #fff;
   color: #232230;
@@ -545,7 +651,7 @@ e {
 
 #wrapper-list-title {
   text-align: center;
-  font-size: 1vw;
+  font-size: 17px;
   margin: 30px;
   background-color: #fff;
   color: #232230;
@@ -557,7 +663,7 @@ e {
 
 #total-list-title{
   text-align: center;
-  font-size: 1vw;
+  font-size: 17px;
   margin: 30px 0;
   background-color: #fff;
   color: #ff6961;
@@ -593,7 +699,7 @@ e {
 
 #title-client-tag {
   width: 20%;
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: bolder;
   text-align: center;
   padding: 5px 0;
@@ -601,7 +707,7 @@ e {
 
 #big-client-tag{
   width: 40%;
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: bolder;
   text-align: center;
   padding: 5px 0;
@@ -609,34 +715,34 @@ e {
 
 #title-date-tag {
   width: 20%;
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: bolder;
   text-align: center;
 }
 
 #title-state-tag {
   width: 15%;
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: bolder;
   text-align: center;
 }
 
 #title-total-tag {
   width: 20%;
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: bolder;
   text-align: center;
 }
 
 #client-tag {
-  font-size: 1vw;
+  font-size: 17px;
   width: 20%;
   text-align: center;
   padding: 5px 0;
 }
 
 #client-total-tag{
-  font-size: 1vw;
+  font-size: 17px;
   width: 20%;
   text-align: center;
   color: #f50004;
@@ -645,7 +751,7 @@ e {
 }
 
 #date-tag {
-  font-size: 1vw;
+  font-size: 17px;
   width: 20%;
   text-align: center;
 }
@@ -673,8 +779,8 @@ e {
 
 #total-tag {
   float: right;
-  color: #f50004;
-  font-size: 1vw;
+  color: var(--red-accent-color);
+  font-size: 17px;
   width: 20%;
   text-align: center;
   padding: 5px 0;
@@ -683,20 +789,20 @@ e {
 #total-to-pay-tag {
   float: right;
   color: #f50004;
-  font-size: 1.2vw;
+  font-size: 17px;
   width: fit-content;
 }
 
 #detail-title{
   float: left;
-  font-size: 1.2vw;
+  font-size: 17px;
   width: fit-content;
 }
 
 #total-sale-tag {
   float: right;
-  color: #6ed86e;
-  font-size: 1vw;
+  color: var(--green-acent-color);
+  font-size: 17px;
   width: 20%;
   text-align: center;
 }
@@ -704,14 +810,14 @@ e {
 #total-sale-remove-tag {
   float: right;
   color: #fd3e41;
-  font-size: 1vw;
+  font-size: 17px;
   width: 25%;
 }
 
 #status-tag {
   text-align: center;
-  background-color: #fd3e41;
-  font-size: 1vw;
+  background-color: var(--red-accent-color);
+  font-size: 17px;
   color: #fff;
   padding: 5px 0;
   border-radius: 5px;
@@ -720,8 +826,8 @@ e {
 
 #endose-tag{
   text-align: center;
-  background-color: #0080ff;
-  font-size: 1vw;
+  background-color: #80E080;
+  font-size: 17px;
   color: #fff;
   padding: 5px 0;
   border-radius: 5px;
@@ -735,7 +841,7 @@ e {
   text-align: center;
   background-color: rgb(177, 177, 177);
   color: #232230;
-  font-size: 1vw;
+  font-size: 17px;
   padding: 5px 0;
   border-radius: 5px;
   width: 15%;
@@ -748,8 +854,8 @@ e {
 
 #status-done-tag {
   text-align: center;
-  background-color: #77dd77;
-  font-size: 1vw;
+  background-color: var(--green-acent-color);
+  font-size: 17px;
   color: #fff;
   padding: 5px 0;
   border-radius: 5px;
@@ -759,7 +865,7 @@ e {
 #category-tag {
   float: left;
   background-color: #232230;
-  font-size: 1vw;
+  font-size: 17px;
   color: #fff;
   padding: 5px 0;
   border-radius: 5px;
@@ -769,7 +875,7 @@ e {
 #manualmove-type-tag {
   float: left;
   background-color: rgb(2, 170, 2);
-  font-size: 1vw;
+  font-size: 17px;
   color: #fff;
   padding: 5px 0;
   border-radius: 5px;
@@ -812,6 +918,67 @@ e {
   box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
 }
 
+#data-wrapper{
+  width: 100%;
+  display: flex;
+  margin: 20px 0;
+  justify-content: space-between;
+}
+
+.data{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30%;
+  height: 170px;
+  border-radius: 7px;
+  box-shadow: 1px 1px 20px gray;
+  text-align: left;
+  padding: 20px;
+}
+
+.data i{
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 10px;
+  text-align: left;
+}
+
+.data h1{
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.data h2{
+  font-size: 17px;
+  font-weight: bolder;
+  margin-top: 10px;
+  margin-left: 10px;
+  color: var(--main-color);
+}
+
+.total-sales{
+  border: 1px solid var(--green-acent-color);
+  color: var(--green-acent-color);
+}
+
+.sales-month{
+  border: 1px solid var(--red-accent-color);
+  color: var(--red-accent-color);
+}
+
+.total-sales-month{
+  border: 1px solid var(--red-accent-color);
+  color: var(--red-accent-color);
+}
+
+.last-purchase{
+  border: 1px solid var(--green-acent-color);
+  color: var(--green-acent-color);
+}
+
 /* <--------------Movement-lists-----------------> */
 
 /* <---------------Search-view-------------------> */
@@ -838,7 +1005,7 @@ e {
 }
 
 #purchase-header {
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: bolder;
   margin-top: 40px;
 }
@@ -876,19 +1043,6 @@ e {
   border-right: 2px solid #232230;
 }
 
-#purchase-main-info select {
-  text-align: center;
-  border: none;
-  font-size: 17px;
-  padding: 6px 10px;
-  margin: 10px 10px;
-  width: 90%;
-  height: 35px;
-  background: none;
-  color: #232230;
-  border: 2px solid #232230;
-  border-radius: 5px;
-}
 
 #purchase-main-info textarea {
   text-align: center;
@@ -936,21 +1090,6 @@ e {
   font-size: 20px;
 }
 
-#create-wrapper select {
-  width: 15%;
-  height: 40px;
-  border: none;
-  font-weight: 400;
-  border-bottom: 2px solid rgb(177, 177, 177);
-  padding: 10px;
-  transition: border-bottom 0.5s;
-}
-
-#create-wrapper select:focus {
-  border-bottom: 2px solid #232230;
-  color: #232230;
-}
-
 #create-wrapper select:valid {
   border-bottom: 2px solid rgb(177, 177, 177);
   outline: none;
@@ -966,30 +1105,6 @@ e {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.create-element{
-  width: 15%;
-}
-
-#create-btn {
-  float: right;
-  background-color: #232230;
-  color: #fff;
-  text-transform: uppercase;
-  font-size: 15px;
-  font-weight: bolder;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  transition: background-color 0.2s;
-  width: fit-content;
-  cursor: pointer;
-}
-
-#create-btn:hover {
-  background-color: #63ff9b;
-  color: #232230;
 }
 
 #step-text {
@@ -1016,7 +1131,7 @@ e {
 #form-title-box{
   width: 15%;
   padding: 10px;
-  font-size: 16px;
+  font-size: 17px;
   text-align: left;
 }
 
@@ -1032,7 +1147,7 @@ e {
   background-color: #63ff9b;
   color: #232230;
   text-transform: uppercase;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: bolder;
   border-radius: 5px;
   padding: 10px 10px;
@@ -1097,7 +1212,7 @@ e {
 #payment-title {
   text-align: center;
   margin-bottom: 20px;
-  font-size: 1vw;
+  font-size: 17px;
 }
 
 #payment-section {
@@ -1106,7 +1221,7 @@ e {
 }
 
 #payment-section select {
-  font-size: 1vw;
+  font-size: 17px;
   font-weight: normal;
   border: 1px solid rgb(177, 177, 177);
   border-radius: 5px;
@@ -1115,7 +1230,7 @@ e {
 }
 
 #payment-btn {
-  font-size: 1vw;
+  font-size: 17px;
   transition: all 0.3s;
   padding: 5px;
   margin: auto;
@@ -1129,61 +1244,12 @@ e {
 }
 
 #payment-label {
-  font-size: 1vw;
+  font-size: 17px;
   margin-bottom: 20px;
 }
 
 /* <----------------Payments---------------------> */
 
-input{
-  width: 60%;
-  min-width: 7vw;
-  border: 2px solid #0080ff;
-  padding: 10px;
-  transition: all 0.5s;
-  border-radius: 3px;
-}
-
-input:focus{
-  transform: translateY(-10%);
-  outline: #2445ff;
-}
-
-select {
-  background-color: #0080ff;
-  padding: 13px;
-  color: #fff;
-  font-weight: 500;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  width: fit-content;
-  min-width: 50%;
-  transition: all 0.2s;
-}
-
-
-select:focus{
-  transform: translateY(-10%);
-}
-
-
-#form-create-btn{
-  width: fit-content;
-  border: none;
-  background-color: #CACACACA;
-  font-size: 0.9vw;
-  cursor: pointer;
-  text-transform: uppercase;
-  padding: 10px;
-  border-radius: 3px;
-  transition: all 0.2s;
-  margin: 20px;
-}
-
-#form-create-btn:hover{
-  background-color: rgb(177, 177, 177);
-}
 
 /* <-------------search forms----------------->*/
 
@@ -1199,7 +1265,7 @@ select:focus{
   font-size: 0.9vw !important;
   border: none !important;
   padding: 7px 10px;
-  background-color: #2445ff;
+  background-color: var(--blue-accent-color);
   border-radius: 5px;
   color: #fff;
   transition: all 0.3s;
@@ -1208,7 +1274,7 @@ select:focus{
 
 #search-btn:hover{
   cursor: pointer;
-  background-color: #152792;
+  background-color: #2445ff;
   color: #fff;
 }
 
@@ -1222,6 +1288,19 @@ select:focus{
 }
 
 #search-form input:valid{
+  outline: 1px solid var(--search-btn-color);
+}
+
+#search-form select{
+  width: fit-content !important;
+  font-size: 0.9vw !important;
+  padding: 7px 10px;
+  border: 1px solid rgb(177, 177, 177);
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+#search-form select:valid{
   outline: 1px solid var(--search-btn-color);
 }
 
@@ -1244,7 +1323,7 @@ i{
 }
 
 #search-label{
-  font-size: 1vw !important;
+  font-size: 17px !important;
 }
 
 /* <-------------search forms----------------->*/
