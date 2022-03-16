@@ -16,3 +16,8 @@
 ### List views include all objects of a give type, you can also easily see unpayed purchases/sales/expenses, etc., as well as querying the objects by a date range or by the name of the costumer or provider.
 ![list_view](list_view.png)
 
+## Payments:
+## Certain objects allow you to register payments in their detail-views, payments in cash or bank transfer and cheques are all coded using generic foreign-keys so that the models can be related to multiple other models on demand.
+
+
+
