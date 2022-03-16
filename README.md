@@ -12,3 +12,7 @@
 ### Detail views give you information about the given object, some detail views include the option to add payments to the purchase/expense/sale, etc.
 ![detail_view](detail_view.jpeg)
 
+## List views:
+### List views include all objects of a give type, you can also easily see unpayed purchases/sales/expenses, etc.
+![list_view](list_view.png)
+
