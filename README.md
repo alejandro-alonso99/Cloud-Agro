@@ -17,7 +17,7 @@
 ![list_view](list_view.png)
 
 ## Payments:
-## Certain objects allow you to register payments in their detail-views, payments in cash or bank transfer and cheques are all coded using generic foreign-keys so that the models can be related to multiple other models on demand. Once the payment is registered, it discounts 
+## Certain objects allow you to register payments in their detail-views, payments in cash or bank transfer and cheques are all coded using generic foreign-keys so that the models can be related to multiple other models on demand. Once the payment is registered, it discounts the amount to pay or to receive.
 ![payments](payments.gif)
 
 
