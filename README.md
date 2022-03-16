@@ -13,6 +13,6 @@
 ![detail_view](detail_view.jpeg)
 
 ## List views:
-### List views include all objects of a give type, you can also easily see unpayed purchases/sales/expenses, etc.
+### List views include all objects of a give type, you can also easily see unpayed purchases/sales/expenses, etc., as well as querying the objects by a date range or by the name of the costumer or provider.
 ![list_view](list_view.png)
 
