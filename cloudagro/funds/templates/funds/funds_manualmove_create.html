@@ -2,28 +2,33 @@
 
 {% block content %}
 <div id="info-container">
-    <div id="list-title">
-        Modificar fondos a mano:
-    </div>
+    <h1 id="list-title">Cheque:</h1>
     <form action="" method="post">
         {% csrf_token %}
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Acción:</h2>
-                    <h2 id="title-client-tag">Tipo:</h2>
-                    <h2 id="title-client-tag">Monto:</h2>
+        {{ third_p_form.content_type.as_hidden }}
+        {{ third_p_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Acción:</h3>
+                        <h2 id="title-client-tag">{{move_form.action}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Tipo:</h3>
+                        <h2 id="title-client-tag">{{move_form.tipo}}</h2>
+                    </div>
                 </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{move_form.action}}</h2>
-                    <h2 id="title-client-tag">{{move_form.tipo}}</h2>
-                    <h2 id="title-client-tag">{{move_form.monto}}</h2>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{move_form.monto}}</h2>
+                    </div>
                 </div>
+                {{third_p_form.errors}}
             </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        <input type="submit" value="Modificar" id="form-create-btn">
     </form>
 </div>
 {% endblock %}

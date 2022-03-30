@@ -16,22 +16,18 @@
             <h2 id="title-client-tag"> Monto:</h2>
         </div>
     </div>
-    <a href="{% url 'funds:funds_list' 'efectivo' %}">
-        <div class="movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">Fondos caja:</h2>
-                <h2 id="client-total-tag"> {{ cash_total | floatformat:2 | currency}}</h2>
-            </div>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="client-tag">Fondos caja:</h2>
+            <h2 id="client-total-tag"> {{ cash_total | floatformat:2 | currency}}</h2>
         </div>
-    </a>
-    <a href="{% url 'funds:funds_list' 'transferencia' %}">
-        <div class="movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">Fondos banco:</h2>
-                <h2 id="client-total-tag"> {{trans_total | floatformat:2 | currency}}</h2>
-            </div>
+    </div>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="client-tag">Fondos banco:</h2>
+            <h2 id="client-total-tag"> {{trans_total | floatformat:2 | currency}}</h2>
         </div>
-    </a>
+    </div>
 </div>
 
 {% endblock %}
