@@ -117,6 +117,7 @@
     {% if sowing_purchase.estado == 'por pagar' %}
     <h1 id="list-title">Agregar Pagos:</h1>
     <form method="post" action=".">
+
         <div id="litte-wrapper">
             {% csrf_token %}
             {{ payment_form.content_type.as_hidden }}
@@ -144,6 +145,7 @@
             {% csrf_token %}
             {{ self_check_form.content_type.as_hidden }}
             {{ self_check_form.object_id.as_hidden }}
+
             <div class="title-movement-card">
                 <h1 id="payment-title">Cheque:</h1>
             </div>
@@ -180,7 +182,7 @@
         </div>
     </div>
     {% for check in third_p_checks %}
-    <form method="post" onsubmit="return confirm('Confirme el endoso del cheque')">
+    <form method="post" onsubmit="confirm('Confirme el endoso del cheque')">
         {% csrf_token %}
         {{ endorsed_checks_form.content_type.as_hidden }}
         {{ endorsed_checks_form.object_id.as_hidden }}

@@ -121,7 +121,7 @@
         {{ third_p_form.object_id.as_hidden }}
         <div id="form-wrapper">
             <div id="small-wrapper">
-                <div class="create-section-horizontal">
+                <div class="create-section">
                     <div class="create-element">
                         <h3><i class="fa-solid fa-tractor"></i>Fecha pago</h3>
                         <h2 id="title-client-tag">{{third_p_form.fecha_deposito}}</h2>
@@ -134,16 +134,19 @@
                         <h3><i class="fa-solid fa-list-ol"></i>Número Cheque:</h3>
                         <h2 id="title-client-tag">{{third_p_form.numero_cheque}}</h2>
                     </div>
+                </div>
+                <div class="create-section">
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-list-ol"></i>Titular Cheque:</h3>
+                        <h3><i class="fa-solid fa-mountain"></i>Titular Cheque:</h3>
                         <h2 id="title-client-tag">{{third_p_form.titular_cheque}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-list-ol"></i>Monto:</h3>
+                        <h3><i class="fa-solid fa-file-image"></i>Monto:
+                        </h3>
                         <h2 id="title-client-tag">{{third_p_form.monto}}</h2>
                     </div>
-                    {{third_p_form.errors}}
                 </div>
+                {{third_p_form.errors}}
             </div>
             <input type="submit" value="Crear" id="create-btn">
         </div>

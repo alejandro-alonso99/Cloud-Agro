@@ -85,10 +85,10 @@ h6 {
 }
 
 #content {
-  margin-left: 15vw;
-  margin-right: 15vw;
+  margin-left: 10vw;
+  margin-right: 10vw;
   padding: 10px 0;
-  width: 70vw;
+  width: 80vw;
   height: 100vh;
 }
 
@@ -629,7 +629,7 @@ e {
 }
 
 .info-container {
-  width: 70vw;
+  width: 100%;
   padding-bottom: 50px;
 }
 
@@ -826,7 +826,7 @@ e {
 
 #endose-tag{
   text-align: center;
-  background-color: #80E080;
+  background-color: #0080ff;
   font-size: 17px;
   color: #fff;
   padding: 5px 0;
@@ -844,7 +844,7 @@ e {
   font-size: 17px;
   padding: 5px 0;
   border-radius: 5px;
-  width: 15%;
+  width: 20%;
 }
 
 #endose-tag:hover{

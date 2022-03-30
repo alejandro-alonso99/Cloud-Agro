@@ -219,5 +219,12 @@ class SelfChecks(models.Model):
         self.slug = unique_slug_generator(self, self.numero_cheque, self.slug)
         super(SelfChecks, self).save(*args,**kwargs)
 
+    def change_state(self):
+        if self.estado == 'a pagar':
+            self.estado = 'pagado'
+            self.save()
 
+        else:
+            self.estado = 'a pagar'
+            self.save()
 

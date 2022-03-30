@@ -164,6 +164,7 @@ def funds_third_party_checks(request):
                                                             'more_months_checks':more_months_checks,
                                                             'total_to_pay_checks':total_to_pay_checks,
                                                             })
+
 @login_required
 def third_p_check_detail(request, year, month, day, third_p_check):
 
@@ -241,7 +242,19 @@ def self_check_detail(request, self_check):
 
     self_check = get_object_or_404(SelfChecks, slug=self_check)
 
+    if request.method == 'POST':
+
+        change_state_form = ChangeStateForm(request.POST)
+
+        if change_state_form.is_valid():
+            self_check.change_state()
+
+            return redirect('funds:checks_self')
+
+    else:
+        change_state_form = ChangeStateForm()
+
     return render(request, 'funds/self_check_detail.html',{
-                                                            'self_check':self_check
-                                                            
+                                                            'self_check':self_check,
+                                                            'change_state_form':change_state_form,
                                                             })                                                            
