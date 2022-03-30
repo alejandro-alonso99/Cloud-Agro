@@ -7,31 +7,40 @@
 {% block content %}
 <div id="info-container">
     <div id="list-title">
-        Agregar gasto:
+        Agregar gasto
     </div>
     <form action="" method="post">
         {% csrf_token %}
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Campo:</h2>
-                    <h2 id="title-client-tag">Concepto:</h2>
-                    <h2 id="title-client-tag">Categoría:</h2>
-                    <h2 id="title-client-tag">Monto:</h2>
-                    <h2 id="title-client-tag">Descripción:</h2>
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
+                        <h2 id="title-client-tag">{{expense_form.campo}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Concepto:</h3>
+                        <h2 id="title-client-tag">{{expense_form.concepto}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Categoría:</h3>
+                        <h2 id="title-client-tag">{{expense_form.categoria}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Descripción:</h3>
+                        <h2 id="title-client-tag">{{expense_form.descripcion}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-image"></i>Monto:
+                        </h3>
+                        <h2 id="title-client-tag">{{expense_form.monto}}</h2>
+                    </div>
                 </div>
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{expense_form.campo}}</h2>
-                    <h2 id="title-client-tag">{{expense_form.concepto}}</h2>
-                    <h2 id="title-client-tag">{{expense_form.categoria}}</h2>
-                    <h2 id="title-client-tag">{{expense_form.monto}}</h2>
-                    <h2 id="title-client-tag">{{expense_form.descripcion}}</h2>
-                </div>
-            </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
     </form>
 </div>
 

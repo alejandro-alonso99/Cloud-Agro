@@ -75,59 +75,65 @@
     {% endif %}
 
     {% if expense.status == 'por pagar' %}
-    <h1 id="list-title">Agregar Pagos:</h1>
-    <form method="post" action=".">
-        <div id="wrapper">
-            {% csrf_token %}
-            {{ payment_form.content_type.as_hidden }}
-            {{ payment_form.object_id.as_hidden }}
-            <div class="title-movement-card">
-                <h1 id="payment-title">Efectivo o Transferencia:</h1>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Tipo:</h2>
-                    <h2 id="title-client-tag">Monto:</h2>
+    <h1 id="list-title">Pagos Efectivo o Transferencia:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ payment_form.content_type.as_hidden }}
+        {{ payment_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-invoice-dollar"></i>Tipo:</h3>
+                        <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{payment_form.monto}}</h2>
+                    </div>
                 </div>
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
-                    <h2 id="title-client-tag">{{payment_form.monto}}</h2>
-                </div>
-            </div>
+            <input type="submit" value="Agregar" id="create-btn">
         </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
     </form>
-    <form method="post" action=".">
-        <div id="wrapper">
-            {% csrf_token %}
-            {{ self_check_form.content_type.as_hidden }}
-            {{ self_check_form.object_id.as_hidden }}
-            <div class="title-movement-card">
-                <h1 id="payment-title">Cheque:</h1>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Fecha pago:</h2>
-                    <h2 id="title-client-tag">Banco Emisión:</h2>
-                    <h2 id="title-client-tag">Número Cheque:</h2>
-                    <h2 id="title-client-tag">Titular Cheque:</h2>
-                    <h2 id="title-client-tag">Monto:</h2>
+    <h1 id="list-title">Cheque:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ self_check_form.content_type.as_hidden }}
+        {{ self_check_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Fecha pago</h3>
+                        <h2 id="title-client-tag">{{self_check_form.fecha_pago}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Banco Emisión:</h3>
+                        <h2 id="title-client-tag">{{self_check_form.banco_emision}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Número Cheque:</h3>
+                        <h2 id="title-client-tag">{{self_check_form.numero_cheque}}</h2>
+                    </div>
                 </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{self_check_form.fecha_pago}}</h2>
-                    <h2 id="title-client-tag">{{self_check_form.banco_emision}}</h2>
-                    <h2 id="title-client-tag">{{self_check_form.numero_cheque}}</h2>
-                    <h2 id="title-client-tag">{{self_check_form.titular_cheque}}</h2>
-                    <h2 id="title-client-tag">{{self_check_form.monto}}</h2>
-                    {{self_check_form.errors}}
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Titular Cheque:</h3>
+                        <h2 id="title-client-tag">{{self_check_form.titular_cheque}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-image"></i>Monto:
+                        </h3>
+                        <h2 id="title-client-tag">{{self_check_form.monto}}</h2>
+                    </div>
                 </div>
+                {{third_p_form.errors}}
             </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
     </form>
     {% if third_p_checks %}
     <h1 id="list-title">Endosar Cheques:</h1>
@@ -140,15 +146,15 @@
         </div>
     </div>
     {% for check in third_p_checks %}
-    <form method="post" onsubmit="return confirm('Confirme el endoso del cheque')">
+    <form method="post" onsubmit="confirm('Confirme el endoso del cheque')">
         {% csrf_token %}
         {{ endorsed_checks_form.content_type.as_hidden }}
         {{ endorsed_checks_form.object_id.as_hidden }}
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{
-                    check.fecha_ingreso.year }} </h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
+                    {{check.fecha_ingreso.year }} </h2>
                 <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
                 <input type="submit" id="endose-tag" value="Endosar">
                 <input type="hidden" name="check_id" value="{{ check.id }}">

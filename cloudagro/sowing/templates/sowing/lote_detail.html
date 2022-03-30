@@ -156,55 +156,65 @@
         {% endfor %}
     </div>
 
-
-    <div id="list-title">
-        Agregar aplicación:
-    </div>
-    <form method="post" action=".">
+    <h1 id="list-title">Agregar aplicación:</h1>
+    <form action="" method="post">
         {% csrf_token %}
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Número de aplicación:</h2>
-                    <h2 id="title-client-tag">Producto:</h2>
-                    <h2 id="title-client-tag">Litros / Kg:</h2>
-                    <h2 id="title-client-tag">Tipo:</h2>
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Número de aplicación:</h3>
+                        <h2 id="title-client-tag">{{application_form.numero}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Producto:</h3>
+                        <h2 id="title-client-tag">{{application_form.producto}}</h2>
+                    </div>
+
                 </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{application_form.numero}}</h2>
-                    <h2 id="title-client-tag">{{application_form.producto}}</h2>
-                    <h2 id="title-client-tag">{{application_form.lt_kg}}</h2>
-                    <h2 id="title-client-tag">{{application_form.tipo}}</h2>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Litros / Kg:</h3>
+                        <h2 id="title-client-tag">{{application_form.lt_kg}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-image"></i>Tipo:
+                        </h3>
+                        <h2 id="title-client-tag">{{application_form.tipo}}</h2>
+                    </div>
                 </div>
+                {{application_form.errors}}
             </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
     </form>
 
-    <div id="list-title">
-        Agregar labor:
-    </div>
-    <form method="post" action=".">
+    <h1 id="list-title">Agregar labor:</h1>
+    <form action="" method="post">
         {% csrf_token %}
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Número de aplicación:</h2>
-                    <h2 id="title-client-tag">Costo x ha USD:</h2>
-                    <h2 id="title-client-tag">Nombre labor:</h2>
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Número de aplicación:</h3>
+                        <h2 id="title-client-tag">{{labors_form.numero}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Costo x ha USD:</h3>
+                        <h2 id="title-client-tag">{{labors_form.costo_ha}}</h2>
+                    </div>
+
                 </div>
-            </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">{{labors_form.numero}}</h2>
-                    <h2 id="title-client-tag">{{labors_form.costo_ha}}</h2>
-                    <h2 id="title-client-tag">{{labors_form.nombre}}</h2>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Nombre labor:</h3>
+                        <h2 id="title-client-tag">{{labors_form.nombre}}</h2>
+                    </div>
                 </div>
+                {{labors_form.errors}}
             </div>
+            <input type="submit" value="Crear" id="create-btn">
         </div>
-        <input type="submit" value="Agregar" id="form-create-btn">
     </form>
 </div>
 
