@@ -1,102 +1,10 @@
-import imp
 from django.shortcuts import get_object_or_404, render, redirect
-from expenses.models import Expenses
-from payments.models import Payments, ThirdPartyChecks, SelfChecks
+from payments.models import ThirdPartyChecks, SelfChecks
 from payments.forms import ChangeStateForm
-from purchases.models import Purchases
-from sales.models import Sales
 from .forms import FundManualMoveForm
 from .models import FundManualMove
-from sowing.models import SowingPurchases
 from django.contrib.auth.decorators import login_required
 
-@login_required
-def funds_main(request):
-
-    purchases = Purchases.objects.all()
-    sales = Sales.objects.all()
-    expenses = Expenses.objects.all()
-    sowing_purchases = SowingPurchases.objects.all()
-
-
-    purchase_cash_payed_totals = []
-    purchase_trans_payed_totals = []
-    for purchase in purchases:
-        purchase_cash_payed_total = sum(list(map(int,purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-        purchase_trans_payed_total = sum(list(map(int,purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
-        purchase_cash_payed_totals.append(purchase_cash_payed_total)
-        purchase_trans_payed_totals.append(purchase_trans_payed_total)
-
-    sale_cash_payed_totals = []
-    sale_trans_payed_totals = []
-    for sale in sales:
-        sale_cash_payed_total = sum(list(map(int,sale.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-        sale_trans_payed_total = sum(list(map(int,sale.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
-        sale_cash_payed_totals.append(sale_cash_payed_total)
-        sale_trans_payed_totals.append(sale_trans_payed_total)
-
-    expense_cash_payed_totals = []
-    expense_trans_payed_totals = []
-    for expense in expenses:
-        expense_cash_payed_total = sum(list(map(int,expense.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-        expense_trans_payed_total = sum(list(map(int,expense.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
-        expense_cash_payed_totals.append(expense_cash_payed_total)
-        expense_trans_payed_totals.append(expense_trans_payed_total)
-
-    sowing_purchase_cash_payed_totals = []
-    sowing_purchase_trans_payed_totals = []
-    for sowing_purchase in sowing_purchases:
-        sowing_purchase_cash_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-        sowing_purchase_trans_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
-        sowing_purchase_cash_payed_totals.append(sowing_purchase_cash_payed_total)
-        sowing_purchase_trans_payed_totals.append(sowing_purchase_trans_payed_total)
-
-    purchase_cash_total = sum(purchase_cash_payed_totals)
-    sale_cash_total = sum(sale_cash_payed_totals)
-    expense_cash_total = sum(expense_cash_payed_totals)
-    sowing_purchases_cash_total = sum(sowing_purchase_cash_payed_totals)
-
-    purchase_trans_total = sum(purchase_trans_payed_totals)
-    sale_trans_total = sum(sale_trans_payed_totals)
-    expense_trans_total = sum(expense_trans_payed_totals)
-    sowing_purchases_trans_total = sum(sowing_purchase_trans_payed_totals)
-
-    manualmoves_cash = FundManualMove.objects.filter(tipo='efectivo')
-    manualmoves_cash_add_total = sum(list(map(int,manualmoves_cash.filter(action='agregar').values_list('monto',flat=True))))
-    manualmoves_cash_remove_total = sum(list(map(int,manualmoves_cash.filter(action='quitar').values_list('monto',flat=True))))
-
-    manualmoves_trans = FundManualMove.objects.filter(tipo='transferencia')
-    manualmoves_trans_add_total = sum(list(map(int,manualmoves_trans.filter(action='agregar').values_list('monto',flat=True))))
-    manualmoves_trans_remove_total = sum(list(map(int,manualmoves_trans.filter(action='quitar').values_list('monto',flat=True))))
-
-
-    cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total
-
-    trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total
-
-    return render(request, 'funds/funds_main.html',{
-                                                    'cash_total':cash_total,
-                                                    'trans_total':trans_total,
-                                                    })
-                                                    
-@login_required
-def funds_list(request, type_id=''):
-
-    if type_id !='':
-        payments = Payments.objects.filter(tipo = str(type_id))
-
-    else:
-        payments = Payments.objects.all()
-
-    total_payments = payments.count()
-
-    total = sum(map(int,payments.values_list('monto', flat=True)))
-
-    return render(request, 'funds/funds_list.html',{'payments':payments,
-                                                    'type_id':type_id,
-                                                    'total_payments':total_payments,
-                                                    'total':total,
-                                                    })
 @login_required
 def fund_manualmove_create(request):
 

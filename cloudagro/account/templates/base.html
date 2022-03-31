@@ -73,8 +73,6 @@
                     <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="{% url 'stock:stock_list' %}">Stock hacienda</a>
-                    <a href="{% url 'stock:products_stock_list' %}">Stock insumos</a>
                     <a href="{% url 'stock:manualmove_create' %}">Modificar</a>
                     <a href="{% url 'stock:manualmove_list' %}">Historial movimientos a mano</a>
                 </div>
@@ -96,7 +94,6 @@
                     <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="{% url 'funds:funds_main' %}">Resumen</a>
                     <a href="{% url 'funds:checks_self' %}">Cheques Propios</a>
                     <a href="{% url 'funds:funds_third_party_checks' %}">Cheques Terceros</a>
                     <a href="{% url 'funds:funds_manualmove_create' %}">Modificar a mano</a>
