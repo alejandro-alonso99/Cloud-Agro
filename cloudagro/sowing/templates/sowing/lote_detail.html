@@ -35,8 +35,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="title-client-tag">Tipo:</h2>
-                <h2 id="title-client-tag">- - -</h2>
-                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag">USD / ha</h2>
                 <h2 id="title-client-tag">Total USD:</h2>
             </div>
         </div>
@@ -44,8 +43,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{tipo | capfirst}}</h2>
-                <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-total-tag">{{ total | divide:lote.hectareas | floatformat:2 | usd_currency }} </h2>
                 <h2 id="client-total-tag">{{ total | floatformat:2 | usd_currency }}</h2>
             </div>
         </div>
@@ -53,8 +51,8 @@
         <div class="title-movement-card">
             <div id="total-card-row">
                 <h2 id="title-client-tag">Total aplicaciones:</h2>
-                <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-total-tag">
+                    {{ applications_total | divide:lote.hectareas | floatformat:2 | usd_currency}}</h2>
                 <h2 id="client-total-tag">{{ applications_total | usd_currency}}</h2>
             </div>
         </div>
@@ -68,8 +66,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="title-client-tag">Tipo:</h2>
-                <h2 id="title-client-tag">- - -</h2>
-                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag">USD / ha</h2>
                 <h2 id="title-client-tag">Total USD:</h2>
             </div>
         </div>
@@ -77,8 +74,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{tipo | capfirst}}</h2>
-                <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-total-tag">{{ total | divide:lote.hectareas | floatformat:2 | usd_currency }}</h2>
                 <h2 id="client-total-tag">{{ total | floatformat:2 | usd_currency }}</h2>
             </div>
         </div>
@@ -86,8 +82,7 @@
         <div class="title-movement-card">
             <div id="total-card-row">
                 <h2 id="title-client-tag">Total Labores:</h2>
-                <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-total-tag">{{ labors_total | divide:lote.hectareas | floatformat:2 | usd_currency}}</h2>
                 <h2 id="client-total-tag">{{ labors_total | usd_currency}}</h2>
             </div>
         </div>

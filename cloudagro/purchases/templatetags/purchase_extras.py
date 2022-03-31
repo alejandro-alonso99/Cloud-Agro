@@ -47,4 +47,7 @@ def get_index_tuple(tuple):
     tuple = list(tuple)
     return [i[0] for i in tuple]
 
+def divide(a, b):
+    return a / b
 
+register.filter('divide',divide)
