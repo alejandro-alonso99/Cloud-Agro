@@ -1,44 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div id="section-title">
-        <h1>Movimiento manual de ganado:</h1>
-    </div>
-    <div class="info-container">
-        <div id="create-form-box">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div id="create-wrapper">
-                    <div class="create-element">
-                        <h3>Acción:</h3>
-                        {{move_form.tipo}}
-                    </div>
-                    <div class="create-element">
-                        <h3>Categoría:</h3>
-                        {{move_form.categoria}}
-                    </div>
-                    <div class="create-element">
-                        <h3>Cantidad:</h3>
-                        {{move_form.cantidad}}
-                    </div>
+
+<div id="list-title">
+    Modificar stock hacienda
+</div>
+<form action="" method="post">
+    {% csrf_token %}
+    <div id="form-wrapper">
+        <div id="small-wrapper">
+            <div class="create-section">
+                <div class="create-element">
+                    <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
+                    <h2 id="title-client-tag">{{move_form.campo}}</h2>
                 </div>
-                <p><input type="submit" value="Crear" id="create-btn"/> </p>  
-            </form>
-        </div>
-        <h1 id="list-title">Últimos 3 gastos:</h1>
-        {% for object in last_3_manual_moves %}
-        <a href="{{ object.get_absolute_url }}">
-            <div class="movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">{{ object.categoria | capfirst}}</h2>
-                    <h2 id="date-tag"> {{ object.date.day }}/{{ object.date.month }}/{{ object.date.year }} </h2>
-                </div>
-                <div id="card-row-2">
-                    <h2 id="status-tag">{{ object.tipo | capfirst}}</h2>
-                    <h2 id="total-tag">Total: {{ object.cantidad }}</h2>
+                <div class="create-element">
+                    <h3><i class="fa-solid fa-mountain"></i>Cantidad:</h3>
+                    <h2 id="title-client-tag">{{move_form.cantidad}}</h2>
                 </div>
             </div>
-        </a>
-        {% endfor %}
+            <div class="create-section">
+                <div class="create-element">
+                    <h3><i class="fa-solid fa-list-ol"></i>Acción:</h3>
+                    <h2 id="title-client-tag">{{move_form.tipo}}</h2>
+                </div>
+                <div class="create-element">
+                    <h3><i class="fa-solid fa-list-ol"></i>Categoría:</h3>
+                    <h2 id="title-client-tag">{{move_form.categoria}}</h2>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Crear" id="create-btn">
     </div>
+</form>
+</div>
 {% endblock %}

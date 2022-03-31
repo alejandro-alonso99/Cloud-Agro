@@ -5,38 +5,35 @@
 {% block title %}Movimientos a mano de Stock{% endblock %}
 
 {% block content %}
+<div class="info-container">
+    <div id="list-title">
+        Historial movimientos a mano
+    </div>
 
-    <div id="top-buttons">
-        <div id="section-button">
-            <a href="{% url 'stock:stock_list' %}">
-                <h2 id="search-btn"><i class="fas fa-chevron-left" id="back-arrow"></i>Volver a Stock </h2>
-            </a>
+    {% if manualmoves %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Campo:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Acción:</h2>
+            <h2 id="title-client-tag">Animal:</h2>
+            <h2 id="title-client-tag">Cantidad:</h2>
         </div>
     </div>
-    <div id="section-title">
-        <h1 id="list-title">Historial de movimientos a mano:</h1>
-    </div>
-    <div class="list-container" >
-        
-        {% for manualmove in manualmoves %}
-            <a href="{{ manualmove.get_absolute_url }}">
-                <div class="movement-card">
-                    <div id="card-row-1">
-                        <h2 id="client-tag">Movimiento a mano</h2>
-                        <h2 id="date-tag"> {{ manualmove.date.day }}/{{ manualmove.date.month }}/{{ manualmove.date.year }} </h2>
-                    </div>
-                    <div id="card-row-2">
-                        <h2 id="status-tag">{{ manualmove.tipo | capfirst}}</h2>
-                        {% if manualmove.tipo == 'agregado' %}
-                            <h2 id="total-sale-tag">{{ manualmove.categoria | capfirst }}</h2>
-                        {% else %}
-                            <h2 id="total-sale-remove-tag"> {{ manualmove.categoria | capfirst }} </h2>
-                        {% endif %}
+    {% endif %}
+    {% for move in manualmoves %}
+    <a href="{{ move.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ move.campo}}</h2>
+                <h2 id="client-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+                <h2 id="client-tag">{{ move.tipo }}</h2>
+                <h2 id="client-tag">{{ move.categoria }}</h2>
+                <h2 id="client-tag">{{ move.cantidad }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
 
-                    </div>
-                </div>
-            </a>
-        {% endfor %}
-
-    </div>
 {% endblock %}
