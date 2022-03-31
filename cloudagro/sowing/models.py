@@ -162,7 +162,7 @@ class SowingPurchases(models.Model):
 
         status_dict = dict(STATUS_CHOICES)
 
-        self.estadp = status_dict[val][:]
+        self.estado = status_dict[val][:]
         self.save(update_fields=['estado'])
 
     @property

@@ -4,12 +4,12 @@
   box-sizing: border-box;
 }
 
-:root{
+:root {
   --main-color: #141a1e;
   --main-lighter-color: #64646400;
   --accent-color: #f9e9ec;
   --blue-accent-color: #0080ff;
-  --red-accent-color:#f50004;
+  --red-accent-color: #f50004;
   --green-acent-color: #04c404;
   --orange-accent-color: #ff964f;
 }
@@ -17,13 +17,15 @@
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 }
 
 input[type=date] {
@@ -37,12 +39,13 @@ input[type=date] {
   width: fit-content;
 }
 
-::-webkit-calendar-picker-indicator{
+::-webkit-calendar-picker-indicator {
   background-color: #fff;
   padding: 3px;
   cursor: pointer;
   border-radius: 5px;
 }
+
 /* <------------------general--------------------> */
 
 body {
@@ -116,7 +119,7 @@ h6 {
   height: 100vh;
 }
 
-#center-content{
+#center-content {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -137,7 +140,7 @@ h6 {
 }
 
 .navbar-items {
-  margin-left: 15vw;
+  margin-left: 10vw;
 }
 
 /* Links inside the navbar */
@@ -153,7 +156,7 @@ h6 {
 }
 
 #nav-title {
-  width: 15vw;
+  width: 10vw;
   text-align: center;
   font-size: 17px;
   font-weight: 600;
@@ -179,8 +182,10 @@ h6 {
   color: #232230;
   padding: 14px 16px;
   background-color: inherit;
-  font-family: inherit; /* Important for vertical align on mobile phones */
-  margin: 0; /* Important for vertical align on mobile phones */
+  font-family: inherit;
+  /* Important for vertical align on mobile phones */
+  margin: 0;
+  /* Important for vertical align on mobile phones */
 }
 
 /* Add a red background color to navbar links on hover */
@@ -224,7 +229,7 @@ h6 {
 
 /* <-------------------Forms--------------------> */
 
-#form-wrapper{
+#form-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -243,23 +248,23 @@ h6 {
   padding: 20px 0;
 }
 
-.create-section{
+.create-section {
   padding: 20px;
   margin: 0 30px;
 }
 
-.create-section-horizontal{
+.create-section-horizontal {
   display: flex;
   padding: 20px;
   margin: 0 30px;
 }
 
-.create-element{
+.create-element {
   padding: 5px;
   margin: 5px;
 }
 
-#small-wrapper input{
+#small-wrapper input {
   width: 200px;
   outline: none;
   border: 1px solid #c4c4c4;
@@ -270,12 +275,12 @@ h6 {
   border-radius: 3px;
 }
 
-#small-wrapper input:focus{
-  outline:1px solid var(--green-acent-color);
+#small-wrapper input:focus {
+  outline: 1px solid var(--green-acent-color);
 }
 
-#small-wrapper select:focus{
-  outline:1px solid var(--green-acent-color);
+#small-wrapper select:focus {
+  outline: 1px solid var(--green-acent-color);
 }
 
 #small-wrapper select {
@@ -291,26 +296,26 @@ h6 {
 
 #small-wrapper input:valid {
   background-color: #fff !important;
-  outline:1px solid var(--green-acent-color);
+  outline: 1px solid var(--green-acent-color);
 }
 
-#small-wrapper select:valid{
-  outline:1px solid var(--green-acent-color);
+#small-wrapper select:valid {
+  outline: 1px solid var(--green-acent-color);
 
 }
 
-#small-wrapper h3{
+#small-wrapper h3 {
   font-weight: normal;
   font-size: 17px;
 }
 
-#small-wrapper i{
+#small-wrapper i {
   color: var(--green-acent-color);
   margin-right: 5px;
   font-size: 17px;
 }
 
-#create-btn{
+#create-btn {
   width: fit-content;
   font-size: 15px;
   border: none !important;
@@ -323,7 +328,7 @@ h6 {
   outline: none !important;
 }
 
-#create-btn:hover{
+#create-btn:hover {
   cursor: pointer;
   background-color: rgb(177, 177, 177);
   color: #232230;
@@ -341,7 +346,7 @@ h6 {
   z-index: 1000;
 }
 
-#form-box h1{
+#form-box h1 {
   font-size: 17px
 }
 
@@ -604,7 +609,7 @@ e {
   cursor: pointer;
 }
 
-#change-state-btn{
+#change-state-btn {
   font-size: 0.9vw;
   width: fit-content;
   color: #232230;
@@ -661,7 +666,7 @@ e {
 }
 
 
-#total-list-title{
+#total-list-title {
   text-align: center;
   font-size: 17px;
   margin: 30px 0;
@@ -705,7 +710,7 @@ e {
   padding: 5px 0;
 }
 
-#big-client-tag{
+#big-client-tag {
   width: 40%;
   font-size: 17px;
   font-weight: bolder;
@@ -741,7 +746,7 @@ e {
   padding: 5px 0;
 }
 
-#client-total-tag{
+#client-total-tag {
   font-size: 17px;
   width: 20%;
   text-align: center;
@@ -793,7 +798,7 @@ e {
   width: fit-content;
 }
 
-#detail-title{
+#detail-title {
   float: left;
   font-size: 17px;
   width: fit-content;
@@ -824,7 +829,7 @@ e {
   width: 20%;
 }
 
-#endose-tag{
+#endose-tag {
   text-align: center;
   background-color: #0080ff;
   font-size: 17px;
@@ -837,7 +842,7 @@ e {
   border: none;
 }
 
-#endosed-tag{
+#endosed-tag {
   text-align: center;
   background-color: rgb(177, 177, 177);
   color: #232230;
@@ -847,9 +852,9 @@ e {
   width: 20%;
 }
 
-#endose-tag:hover{
-   background-color: rgb(177, 177, 177);
-   color: #232230;
+#endose-tag:hover {
+  background-color: rgb(177, 177, 177);
+  color: #232230;
 }
 
 #status-done-tag {
@@ -886,11 +891,11 @@ e {
   width: 100%;
   height: fit-content;
   margin: 20px 0px;
-  box-shadow:  1px 1px 20px gray;
+  box-shadow: 1px 1px 20px gray;
   padding: 20px 0;
 }
 
-#litte-wrapper{
+#litte-wrapper {
   width: 60%;
   height: fit-content;
   margin: auto;
@@ -900,7 +905,7 @@ e {
   padding: 20px 0;
 }
 
-#expense-wrapper{
+#expense-wrapper {
   width: 100%;
   height: fit-content;
   margin: 0;
@@ -913,19 +918,19 @@ e {
   transition: all 0.3s;
 }
 
-#expense-wrapper:hover{
+#expense-wrapper:hover {
   transform: translateY(-7%);
   box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
 }
 
-#data-wrapper{
+#data-wrapper {
   width: 100%;
   display: flex;
   margin: 20px 0;
   justify-content: space-between;
 }
 
-.data{
+.data {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -937,21 +942,21 @@ e {
   padding: 20px;
 }
 
-.data i{
+.data i {
   font-size: 20px;
   margin-top: 10px;
   margin-left: 10px;
   text-align: left;
 }
 
-.data h1{
+.data h1 {
   font-size: 18px;
   font-weight: 400;
   margin-top: 10px;
   margin-left: 10px;
 }
 
-.data h2{
+.data h2 {
   font-size: 17px;
   font-weight: bolder;
   margin-top: 10px;
@@ -959,22 +964,22 @@ e {
   color: var(--main-color);
 }
 
-.total-sales{
+.total-sales {
   border: 1px solid var(--green-acent-color);
   color: var(--green-acent-color);
 }
 
-.sales-month{
+.sales-month {
   border: 1px solid var(--red-accent-color);
   color: var(--red-accent-color);
 }
 
-.total-sales-month{
+.total-sales-month {
   border: 1px solid var(--red-accent-color);
   color: var(--red-accent-color);
 }
 
-.last-purchase{
+.last-purchase {
   border: 1px solid var(--green-acent-color);
   color: var(--green-acent-color);
 }
@@ -1116,26 +1121,26 @@ e {
   color: #000;
 }
 
-.formset_row{
+.formset_row {
   display: flex;
   justify-content: space-between;
   width: 70vw;
   margin-bottom: 20px;
 }
 
-#form-titles{
+#form-titles {
   display: flex;
   justify-content: space-between;
 }
 
-#form-title-box{
+#form-title-box {
   width: 15%;
   padding: 10px;
   font-size: 17px;
   text-align: left;
 }
 
-#form-row-item{
+#form-row-item {
   width: 15%;
 }
 
@@ -1253,7 +1258,7 @@ e {
 
 /* <-------------search forms----------------->*/
 
-#search-form{
+#search-form {
   margin-top: 20px;
 }
 
@@ -1261,7 +1266,7 @@ e {
   margin-bottom: 10px;
 }
 
-#search-btn{
+#search-btn {
   font-size: 0.9vw !important;
   border: none !important;
   padding: 7px 10px;
@@ -1272,13 +1277,13 @@ e {
   outline: none !important;
 }
 
-#search-btn:hover{
+#search-btn:hover {
   cursor: pointer;
   background-color: #2445ff;
   color: #fff;
 }
 
-#search-form input{
+#search-form input {
   width: fit-content !important;
   font-size: 0.9vw !important;
   padding: 7px 10px;
@@ -1287,11 +1292,11 @@ e {
   margin-right: 10px;
 }
 
-#search-form input:valid{
+#search-form input:valid {
   outline: 1px solid var(--search-btn-color);
 }
 
-#search-form select{
+#search-form select {
   width: fit-content !important;
   font-size: 0.9vw !important;
   padding: 7px 10px;
@@ -1300,21 +1305,21 @@ e {
   margin-right: 10px;
 }
 
-#search-form select:valid{
+#search-form select:valid {
   outline: 1px solid var(--search-btn-color);
 }
 
-i{
+i {
   font-size: 0.9vw;
   margin-right: 5px;
   text-align: center;
 }
 
-.back-link{
+.back-link {
   margin: 0 !important;
 }
 
-#top-forms{
+#top-forms {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -1322,7 +1327,7 @@ i{
   margin-bottom: 50px;
 }
 
-#search-label{
+#search-label {
   font-size: 17px !important;
 }
 

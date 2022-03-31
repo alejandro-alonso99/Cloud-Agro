@@ -36,6 +36,7 @@
     {% if self_checks %}
     <div class="title-movement-card">
         <div id="card-row-1">
+            <h2 id="title-client-tag">Número:</h2>
             <h2 id="title-client-tag">Proveedor:</h2>
             <h2 id="title-client-tag">Fecha ingreso:</h2>
             <h2 id="title-client-tag">Fecha depósito:</h2>
@@ -48,6 +49,7 @@
     <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
             <div id="card-row-1">
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                 <h2 id="client-tag"> {{ check.fecha_salida.day }}/{{ check.fecha_salida.month}}
                     /{{check.fecha_salida.year }} </h2>
@@ -58,7 +60,7 @@
                 {% else %}
                 <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
             </div>
         </div>
     </a>
