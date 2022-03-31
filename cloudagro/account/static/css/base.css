@@ -915,12 +915,6 @@ e {
   border-width: 2px 2px;
   border-radius: 5px;
   padding: 20px 0;
-  transition: all 0.3s;
-}
-
-#expense-wrapper:hover {
-  transform: translateY(-7%);
-  box-shadow: rgba(0, 0, 0, 0.4) 1px 5px 15px;
 }
 
 #data-wrapper {

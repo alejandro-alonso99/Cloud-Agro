@@ -6,32 +6,94 @@
 
 {% block content %}
 
+{% if filter_query or date_query_end %}
 <div class="info-container">
-    <div id="wrapper">
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                {% if category_id != '' %}
-                <h2 id="title-client-tag">Gastos en: {{ category_id | capfirst }}</h2>
-                {% else %}
-                <h2 id="title-client-tag">Gastos totales</h2>
-                {% endif %}
-                <h2 id="title-client-tag">Gastos por pagar:</h2>
-                <h2 id="title-total-tag">Monto a pagar:</h2>
-            </div>
-        </div>
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">{{total_expenses}}</h2>
-                <h2 id="client-tag">{{ total_unpayed_expenses }}</h2>
-                <h2 id="total-tag">{{ amount_to_pay_total | currency }}</h2>
-            </div>
+    <p><a href="{% url 'expenses:expenses_list' %}" id="search-btn" class="back-link"><i
+                class="fas fa-chevron-left"></i>Volver
+            a listado</a></p>
+
+
+    {% if filter_query %}
+    <div id="list-title">
+        Viendo gastos en: "{{filter_query}}"
+    </div>
+    {% endif %}
+    {% if date_query_start %}
+    <div id="list-title">
+        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+    </div>
+    {% endif %}
+    {% if expenses %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Concepto:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Total:</h2>
         </div>
     </div>
-    {% if category_id != '' %}
-    <h1 id="list-title">Historial de gastos por categoría: {{ category_id | capfirst }}</h1>
-    {% else %}
-    <h1 id="list-title">Historial de gastos:</h1>
     {% endif %}
+    {% for expense in expenses %}
+
+    <a href="{{ expense.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
+                <h2 id="client-tag"> {{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }} </h2>
+                {% if expense.status == 'por pagar' %}
+                <h2 id="status-tag">{{ expense.status | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ expense.status | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-tag">Total: {{ expense.monto | floatformat:2 | currency }}</h2>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda.
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="info-container">
+    <div id="data-wrapper">
+        <div class="data total-sales">
+            <i class="fa-solid fa-tags"></i>
+            <h1> Gastos totales</h1>
+            <h2>{{total_expenses}}.</h2>
+        </div>
+        <div class="data sales-month">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <h1>Gastos por pagar:</h1>
+            <h2>{{ total_unpayed_expenses }}.</h2>
+        </div>
+        <div class="data total-sales-month">
+            <i class="fa-solid fa-cash-register"></i>
+            <h1>Monto por pagar:</h1>
+            <h2>{{ amount_to_pay_total | currency }}</h2>
+        </div>
+    </div>
+    <div id="top-forms">
+        <form action="." method="get" id="search-form" class="date-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
+            </div>
+            {{date_form.date_query_start }}
+            {{date_form.date_query_end }}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+        <form action="." method="get" id="search-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-search"></i> Buscar por Categoría:
+            </div>
+            {{filter_expense.filter_query}}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+    </div>
+    <h1 id="list-title">Historial de gastos:</h1>
     <div class="title-movement-card">
         <div id="card-row-1">
             <h2 id="title-client-tag">Concepto:</h2>
@@ -57,4 +119,5 @@
     </a>
     {% endfor %}
 </div>
+{% endif %}
 {% endblock %}

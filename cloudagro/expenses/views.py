@@ -1,19 +1,24 @@
-from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from expenses.models import Expenses
-from .forms import ExpenseForm
+from .forms import ExpenseForm, FilterExpenseForm
 from payments.models import Payments, SelfChecks, ThirdPartyChecks, EndorsedChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
+from purchases.forms import DateForm
 
 @login_required
 def expenses_list(request, category_id=''):
 
-    if category_id != '':
-        expenses = Expenses.objects.filter(categoria = str(category_id))
-    
-    else:
-        expenses = Expenses.objects.all()
+    date_form = DateForm()
+
+    filter_expense = FilterExpenseForm()
+
+    date_query_start = None
+    date_query_end = None
+
+    filter_query = None
+
+    expenses = Expenses.objects.all()
 
     total_expenses = expenses.count()
     unpayed_expenses = expenses.filter(status = 'por pagar')
@@ -26,11 +31,33 @@ def expenses_list(request, category_id=''):
     
     amount_to_pay_total = sum(amount_to_pay_total)
 
+
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            expenses = expenses.filter(date__range=[date_query_start, date_query_end])
+
+    if 'filter_query' in  request.GET:
+        form = FilterExpenseForm(request.GET)
+        if form.is_valid():
+            filter_query = form.cleaned_data['filter_query']
+            expenses = expenses.filter(categoria = filter_query)
+
+
+
+
     return render(request, 'expenses/expenses_list.html',{'expenses':expenses,
                                                             'category_id':category_id,
                                                             'total_expenses':total_expenses,
                                                             'total_unpayed_expenses':total_unpayed_expenses,
                                                             'amount_to_pay_total':amount_to_pay_total,
+                                                            'date_form':date_form,
+                                                            'date_query_start':date_query_start,
+                                                            'date_query_end':date_query_end,
+                                                            'filter_expense':filter_expense,
+                                                            'filter_query':filter_query
                                                             })
 @login_required
 def expense_create(request):

@@ -1,11 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
-
 from .models import Animal, Purchases
 from .forms import AnimalForm, DateForm, SearchForm, PurchaseForm
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView
-from django.db import models, transaction
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 from payments.models import Payments, SelfChecks, EndorsedChecks, ThirdPartyChecks
 from django.forms.models import modelformset_factory
