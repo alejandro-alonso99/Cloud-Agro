@@ -1,6 +1,76 @@
 {% extends "base.html" %}
-{% block title %}Dashboard{% endblock %}
+{% load purchase_extras %}
+{% block title %}Resumen{% endblock %}
 {% block content %}
-    <h1>Dashboard</h1>
-    <p>Welcome to your dashboard.</p>
+<div class="info-container">
+
+    <div id="wrapper">
+        <h1 id="wrapper-list-title">Resúmen de fondos:</h1>
+
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Categoría:</h2>
+                <h2 id="title-client-tag"> Caja:</h2>
+                <h2 id="title-client-tag"> Banco:</h2>
+                <h2 id="title-client-tag"> Cheques terceros:</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">Total:</h2>
+                <h2 id="client-total-tag"> {{ cash_total | floatformat:2 | currency}}</h2>
+                <h2 id="client-total-tag"> {{ bank_total | floatformat:2 | currency}}</h2>
+                <h2 id="client-total-tag"> {{ third_p_checks_total | floatformat:2 | currency}}</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="wrapper">
+        <h1 id="wrapper-list-title">Listado de Stock de Ganado:</h1>
+
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Categoría:</h2>
+                {% for i in totals_len|loop_maker %}
+                <h2 id="title-client-tag">{% get_index choices_names i %}</h2>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">Total:</h2>
+                {% for i in totals_len|loop_maker %}
+                <h2 id="client-tag">{% get_index category_totals i %}</h2>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <div id="wrapper-list-title">
+            Stock de insumos:
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Producto</h2>
+                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag"> Lt / Kg</h2>
+            </div>
+        </div>
+        {% for producto,total in product_lt_kg.items %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{producto | capfirst}}</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">{{total | floatformat:2}}</h2>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
 {% endblock %}

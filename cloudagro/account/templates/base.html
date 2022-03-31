@@ -17,9 +17,9 @@
     {% if request.get_full_path != '/account/login/' %}
 
     <div class="navbar">
-        <a href="#home" id="nav-title">AgroCloud </a>
+        <a href="{% url 'account:dashboard' %}" id="nav-title">AgroCloud </a>
         <div class="navbar-items">
-            <a href="{% url 'land:land_main' %}">Resumen</a>
+            <a href="{% url 'account:dashboard' %}">Resumen</a>
             <div class="dropdown">
 
                 <button class="dropbtn">General
