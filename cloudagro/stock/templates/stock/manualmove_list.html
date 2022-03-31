@@ -27,8 +27,8 @@
             <div id="card-row-1">
                 <h2 id="client-tag">{{ move.campo}}</h2>
                 <h2 id="client-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
-                <h2 id="client-tag">{{ move.tipo }}</h2>
-                <h2 id="client-tag">{{ move.categoria }}</h2>
+                <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
+                <h2 id="client-tag">{{ move.categoria | capfirst}}</h2>
                 <h2 id="client-tag">{{ move.cantidad }}</h2>
             </div>
         </div>

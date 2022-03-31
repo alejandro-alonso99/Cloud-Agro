@@ -1,31 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <div id="section-title">
-        <h1>Viendo Movimiento: {{ manualmove }}</h1>
-    </div>
-    <div class="info-container">
-        <div id="purchase-main-info">
-
-            <div id="info-title">
-                <h1>Acción:</h1>
-                <div id="info-item">{{ manualmove.tipo | capfirst}}</div>
+<div class="info-container">
+    <h1 id="list-title">Viendo Movimiento: {{ manualmove }}</h1>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Campo:</h2>
+                <h2 id="title-client-tag">Fecha:</h2>
+                <h2 id="title-client-tag">Acción:</h2>
+                <h2 id="title-client-tag">Animal:</h2>
+                <h2 id="title-client-tag">Cantidad:</h2>
             </div>
-            <div id="info-title">
-                <h1>Categoría:</h1>
-                <div id="info-item"> {{ manualmove.categoria | capfirst}}</div>
-            </div>
-            <div id="info-title">
-                <h1>Cantidad:</h1>
-                <div id="info-item"> {{ manualmove.cantidad }}</div>
-            </div>
-            <div id="info-title">
-                <h1>Fecha</h1>
-                <div id="info-item">{{ manualmove.date.day }} / {{ manualmove.date.month }} / {{ manualmove.date.year }}</div>
-            </div>
-
         </div>
-    </div>  
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ manualmove.campo | capfirst}}</h2>
+                <h2 id="client-tag">{{ manualmove.date.day }} / {{ manualmove.date.month }} / {{ manualmove.date.year }}
+                </h2>
+                <h2 id="client-tag">{{ manualmove.tipo | capfirst}}</h2>
+                <h2 id="client-tag">{{ manualmove.categoria | capfirst}}</h2>
+                <h2 id="client-tag">{{ manualmove.cantidad }}</h2>
+            </div>
+        </div>
+    </div>
+    <div id="top-buttons">
+        <form method="post" onsubmit="return confirm('Confirme para eliminar el movimiento')">
+            {% csrf_token %}
+            {{ detroy_object_form.field.as_hidden }}
+            <input type="submit" id="change-state-btn" value="Eliminar">
+        </form>
+    </div>
+</div>
 
 {% endblock %}

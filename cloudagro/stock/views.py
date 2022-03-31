@@ -1,12 +1,11 @@
-from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from itertools import chain
-from purchases.models import Animal, Purchases
-from sales.models import SaleRow, Sales
+from purchases.models import Animal
+from sales.models import SaleRow
 from stock.models import ManualMove
 from .forms import ManualMoveForm
 from sowing.models import Applications, SowingPurchases
 from django.contrib.auth.decorators import login_required
+from payments.forms import DestroyObjectForm
 
 @login_required
 def stock_list(request):
@@ -68,8 +67,17 @@ def manualmove_detail(request, year, month, day, manualmove):
                                                 date__month = month,
                                                 date__day= day)       
 
-    return render(request, 'stock/manualmove_detail.html',{'manualmove':manualmove
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(request.POST)
+        manualmove.delete()
 
+        return redirect('stock:manualmove_list')
+
+    else:
+        destroy_object_form = DestroyObjectForm()
+
+    return render(request, 'stock/manualmove_detail.html',{'manualmove':manualmove,
+                                                            'destroy_object_form':destroy_object_form
                                                             })                  
 
 @login_required                                                            

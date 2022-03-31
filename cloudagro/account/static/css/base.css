@@ -618,11 +618,11 @@ e {
   border-radius: 5px;
   border: none;
   transition: all 0.5s;
-  background-color: rgb(177, 177, 177);
+  background-color: #63ff9b;
 }
 
 #change-state-btn:hover {
-  background-color: #63ff9b;
+  background-color: rgb(177, 177, 177);
   color: #232230;
   cursor: pointer;
 }

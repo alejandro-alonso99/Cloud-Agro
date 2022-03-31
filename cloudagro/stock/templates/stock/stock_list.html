@@ -3,42 +3,26 @@
 {% load purchase_extras %}
 
 {% block content %}
+<h1 id="list-title">Listado de Stock de Ganado:</h1>
 
-    <div id="top-buttons">
-        <div id="section-button">
-            <a href="{% url 'stock:manualmove_list' %}">
-                <h2 id="search-btn">Ver movimientos a mano </h2>
-            </a>
-        </div>
-        <div id="section-button">
-            <a href="{% url 'stock:manualmove_create' %}">
-                <h2 id="add-btn">Movimiento a mano <i class="fas fa-plus"></i></h2>
-            </a>
-        </div>
-    </div>
-
-    <div id="section-title">
-        <h1>Listado de Stock de Ganado:</h1>
-    </div>
-
-    <div class="info-container" >
-        <div id="wrapper">
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="title-client-tag">Categoría:</h2>
-                    {% for i in totals_len|loop_maker %}
-                    <h2 id="title-client-tag">{% get_index choices_names i %}</h2>
-                    {% endfor %}          
-                </div>
+<div class="info-container">
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Categoría:</h2>
+                {% for i in totals_len|loop_maker %}
+                <h2 id="title-client-tag">{% get_index choices_names i %}</h2>
+                {% endfor %}
             </div>
-            <div class="title-movement-card">
-                <div id="card-row-1">
-                    <h2 id="client-tag">Total:</h2>
-                    {% for i in totals_len|loop_maker %}
-                    <h2 id="client-tag">{% get_index category_totals i %}</h2>
-                    {% endfor %}               
-                </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">Total:</h2>
+                {% for i in totals_len|loop_maker %}
+                <h2 id="client-tag">{% get_index category_totals i %}</h2>
+                {% endfor %}
             </div>
-        </div>        
+        </div>
     </div>
+</div>
 {% endblock %}
