@@ -192,6 +192,7 @@
     <h1 id="list-title">Endosar Cheques:</h1>
     <div class="title-movement-card">
         <div id="card-row-1">
+            <h2 id="title-client-tag">Número:</h2>
             <h2 id="title-client-tag">Cliente:</h2>
             <h2 id="title-client-tag">Fecha:</h2>
             <h2 id="title-client-tag">Total:</h2>
@@ -205,6 +206,7 @@
         {{ endorsed_checks_form.object_id.as_hidden }}
         <div class="title-movement-card">
             <div id="card-row-1">
+                <h2 id="client-tag">{{ check.numero_cheque }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                 <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
                     {{check.fecha_ingreso.year }} </h2>
