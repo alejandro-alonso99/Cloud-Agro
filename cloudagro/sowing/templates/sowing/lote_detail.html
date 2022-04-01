@@ -5,9 +5,54 @@
 {% block content %}
 
 <div class="info-container">
-
-    <h1 id="list-title">Viendo Lote: {{lote}}</h1>
-    <h1 id="total-list-title">Margen Bruto Lote: {{lote_total | floatformat:2 | usd_currency}}</h1>
+    <div id="delete-forms">
+        {% if lote.estado == 'no cosechado' %}
+        <form action="." method="post" id="search-form" class="date-form"
+            onsubmit="confirm('Confirme la cosecha del lote')">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-calendar-alt"></i> Registrar cosecha:
+            </div>
+            {{harvest_form.kg_totales }}
+            <input type="submit" value="Cosechar" id="search-btn">
+        </form>
+        {% else %}
+        <form method="post"
+            onsubmit="return confirm('Si elimina la cosecha el lote se cambiará a estado de no cosechado y la cosecha registrada se elimina')">
+            {% csrf_token %}
+            {{ change_state_form.field.as_hidden }}
+            <input type="submit" id="change-state-btn" value="Eliminar cosecha">
+        </form>
+        {% endif %}
+    </div>
+    <div id="data-wrapper">
+        <div class="data sales-month">
+            <i class="fa-solid fa-tags"></i>
+            <h1> Margen bruto lote:</h1>
+            <h2>{{lote_total | floatformat:2 | usd_currency}}.</h2>
+        </div>
+        <div class="data total-sales">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <h1>Kg cosechados:</h1>
+            {% if lote.estado == 'cosechado' %}
+            <h2>{{kg_totales | floatformat:2 }}.</h2>
+            {% else %}
+            <h2>No cosechado</h2>
+            {% endif %}
+        </div>
+        <div class="data total-sales">
+            <i class="fa-solid fa-cash-register"></i>
+            <h1>Quintales por hectárea:</h1>
+            {% if lote.estado == 'cosechado' %}
+            <h2>{{quintales_ha | floatformat:2 }}</h2>
+            {% else %}
+            <h2>No cosechado</h2>
+            {% endif %}
+        </div>
+    </div>
+    <div id="list-title">
+        Viendo lote: {{lote}}
+    </div>
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -152,7 +197,7 @@
         {% endfor %}
         {% endfor %}
     </div>
-
+    {% if lote.estado == 'no cosechado' %}
     <h1 id="list-title">Agregar aplicación:</h1>
     <form action="" method="post">
         {% csrf_token %}
@@ -213,6 +258,7 @@
             <input type="submit" value="Crear" id="create-btn">
         </div>
     </form>
+    {% endif %}
 </div>
 
 {% endblock %}

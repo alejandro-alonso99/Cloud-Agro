@@ -1256,8 +1256,8 @@ e {
   margin-top: 20px;
 }
 
-#search-form div {
-  margin-bottom: 10px;
+#delete-form {
+  float: right;
 }
 
 #search-btn {
@@ -1319,6 +1319,14 @@ i {
   justify-content: space-between;
   margin-top: 5px;
   margin-bottom: 50px;
+}
+
+#delete-forms {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+  margin-bottom: 20px;
 }
 
 #search-label {

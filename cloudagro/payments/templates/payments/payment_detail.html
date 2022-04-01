@@ -24,7 +24,7 @@
         </div>
     </div>
     <div id="top-buttons">
-        <form method="post" onsubmit="return confirm('Confirme para eliminar el pago')">
+        <form method="post" onsubmit="confirm('Confirme para eliminar el pago')">
             {% csrf_token %}
             {{ detroy_object_form.field.as_hidden }}
             <input type="submit" id="change-state-btn" value="Eliminar pago">

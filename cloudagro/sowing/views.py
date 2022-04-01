@@ -1,4 +1,7 @@
+from tkinter.messagebox import NO
 from django.shortcuts import get_object_or_404, render, redirect
+
+from harvest.models import Harvest
 from .models import Applications, Labors, SowingPurchases
 from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm
 from land .models import Campaign, Lote
@@ -7,7 +10,8 @@ from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
 from django.contrib.auth.decorators import login_required
 from purchases.forms import SearchForm, DateForm
 from django.contrib.postgres.search import SearchVector
-
+from harvest.forms import HarvestForm
+from payments.forms import ChangeStateForm
 
 @login_required
 def sowing_purchases_list(request):
@@ -311,6 +315,8 @@ def lote_detail(request,  lote_id):
     if request.method == 'POST':
         application_form = ApplicationForm(data=request.POST)
         labors_form = LaborsForm(data=request.POST)
+        harvest_form = HarvestForm(data=request.POST)
+        change_state_form = ChangeStateForm(data=request.POST)
 
         if application_form.is_valid():
             
@@ -341,12 +347,30 @@ def lote_detail(request,  lote_id):
             return redirect(lote_view)
 
         if harvest_form.is_valid():
-            pass
+            kg_totales = harvest_form.cleaned_data.get('kg_totales')
+            attrs = {'kg_totales':kg_totales, 'lote':lote}
+            print(attrs)
+            new_harvest = Harvest(**attrs)
+            new_harvest.save()
+            lote.estado = 'cosechado'
+            lote.save()
 
+            return redirect(lote_view)
+
+        
+        if change_state_form.is_valid():            
+            cosecha = Harvest.objects.filter(lote=lote)
+            cosecha.delete()
+            lote.estado = 'no cosechado'
+            lote.save()
+
+            return redirect(lote_view)
 
     else:
         application_form = ApplicationForm()
         labors_form = LaborsForm()
+        harvest_form = HarvestForm()
+        change_state_form = ChangeStateForm()
     
     applications = lote.applications_set.all()
 
@@ -402,6 +426,14 @@ def lote_detail(request,  lote_id):
 
     lote_total = applications_total + labors_total
 
+    if lote.estado == 'cosechado':
+        cosecha = Harvest.objects.filter(lote=lote).first()
+        kg_totales = cosecha.kg_totales
+        quintales_ha = (kg_totales/lote.hectareas)/100
+    else:
+        kg_totales = None
+        quintales_ha = None
+
     return render(request, 'sowing/lote_detail.html', {
                                                         'lote':lote,
                                                         'application_form':application_form,
@@ -414,4 +446,8 @@ def lote_detail(request,  lote_id):
                                                         'applications_total':applications_total,
                                                         'labors_total': labors_total,
                                                         'lote_total':lote_total,
+                                                        'harvest_form': harvest_form,
+                                                        'change_state_form':change_state_form,
+                                                        'kg_totales':kg_totales,
+                                                        'quintales_ha':quintales_ha,
                                                         })

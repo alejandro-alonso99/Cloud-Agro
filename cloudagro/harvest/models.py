@@ -3,8 +3,8 @@ from land.models import Lote
 
 class Harvest(models.Model):
 
-    kg_totals = models.PositiveIntegerField
+    kg_totales = models.PositiveIntegerField(default=0)
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.lote) + str(self.kg_totales)
+        return str(self.lote) + ', kg: ' + str(self.kg_totales)
