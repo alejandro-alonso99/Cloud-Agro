@@ -340,7 +340,10 @@ def lote_detail(request,  lote_id):
             
             return redirect(lote_view)
 
-    
+        if harvest_form.is_valid():
+            pass
+
+
     else:
         application_form = ApplicationForm()
         labors_form = LaborsForm()

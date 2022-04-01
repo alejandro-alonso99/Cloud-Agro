@@ -1,3 +1,4 @@
+from random import choices
 from django.db import models
 from django.urls import reverse, reverse_lazy
 import datetime
@@ -74,12 +75,18 @@ class Lote(models.Model):
         ('arroz','Arroz'),
     )
     
+    STATE_CHOICES = (
+        ('cosechado','Cosechado'),
+        ('no cosechado','No cosechado'),
+    )
+
     campaña = models.ForeignKey(Campaign, on_delete=models.CASCADE, default=None)
     campo = models.ForeignKey(Land, on_delete = models.CASCADE)
     numero = models.IntegerField()
     hectareas = models.IntegerField()
     tipo = models.CharField(choices=TYPE_CHOICES, max_length=7)
     slug = models.SlugField(unique=True)
+    estado = models.CharField(choices=STATE_CHOICES, default='no cosechado', max_length=12)
 
     def __str__(self):
         return  'Campo: ' + str(self.campo) + ', ' ' Lote número: ' +  str(self.numero)

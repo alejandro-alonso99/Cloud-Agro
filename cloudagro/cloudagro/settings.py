@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'funds.apps.FundsConfig',
     'land.apps.LandConfig',
     'sowing.apps.SowingConfig',
+    'harvest.apps.HarvestConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

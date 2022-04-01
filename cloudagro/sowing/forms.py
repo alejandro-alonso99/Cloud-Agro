@@ -46,3 +46,7 @@ class LaborsForm(ModelForm):
         exclude = ('slug','lote')
 
 campaigns = Campaign.objects.all()
+
+class HarvestForm(forms.Form):
+
+    kg_totales = forms.IntegerField()
