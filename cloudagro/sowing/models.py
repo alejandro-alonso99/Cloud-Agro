@@ -30,7 +30,7 @@ class SowingPurchases(models.Model):
     producto = models.CharField(max_length=100)
     precio_lt_kg_usd = models.FloatField(default=0)
     lt_kg = models.FloatField(default=0)
-    estado = models.CharField(choices=STATUS_CHOICES, max_length=50, default='por pagar')
+    status = models.CharField(choices=STATUS_CHOICES, max_length=50, default='por pagar')
     tipo_cambio = models.FloatField( default=0)
     iva = models.FloatField(default=0)
 

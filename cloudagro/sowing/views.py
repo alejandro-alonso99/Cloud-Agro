@@ -31,7 +31,7 @@ def sowing_purchases_list(request):
 
     total_purchases = sowing_purchases.count()
 
-    unpayed_purchases = sowing_purchases.filter(estado='por pagar')
+    unpayed_purchases = sowing_purchases.filter(status='por pagar')
 
     total_unpayed_purchases = unpayed_purchases.count()
 
@@ -146,7 +146,7 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
     endorsed_checks_form = EndorsedChecksForm(request.POST or None, initial=initial_payment_data)
 
     if sowing_purchase.calculate_amount_to_pay() <= 0:
-        sowing_purchase.estado = 'pagado'
+        sowing_purchase.status = 'pagado'
         sowing_purchase.save()
     
 
@@ -222,7 +222,7 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
         new_endorsed_check = EndorsedChecks(**attrs)
         new_endorsed_check.save()
 
-        third_p_check.estado = 'endosado'
+        third_p_check.status = 'endosado'
         third_p_check.save()
 
         return redirect(sowing_purchase.get_absolute_url())
@@ -352,7 +352,7 @@ def lote_detail(request,  lote_id):
             print(attrs)
             new_harvest = Harvest(**attrs)
             new_harvest.save()
-            lote.estado = 'cosechado'
+            lote.status = 'cosechado'
             lote.save()
 
             return redirect(lote_view)
@@ -361,7 +361,7 @@ def lote_detail(request,  lote_id):
         if change_state_form.is_valid():            
             cosecha = Harvest.objects.filter(lote=lote)
             cosecha.delete()
-            lote.estado = 'no cosechado'
+            lote.status = 'no cosechado'
             lote.save()
 
             return redirect(lote_view)
@@ -426,7 +426,7 @@ def lote_detail(request,  lote_id):
 
     lote_total = applications_total + labors_total
 
-    if lote.estado == 'cosechado':
+    if lote.status == 'cosechado':
         cosecha = Harvest.objects.filter(lote=lote).first()
         kg_totales = cosecha.kg_totales
         quintales_ha = (kg_totales/lote.hectareas)/100

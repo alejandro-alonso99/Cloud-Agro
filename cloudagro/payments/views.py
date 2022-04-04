@@ -12,12 +12,21 @@ def payment_detail(request, year, month, day, payment):
                                                 date__day = day )
     
     if request.method == 'POST':
-        purchase = payment.content_object
+        parent = payment.content_object
+        parent_model = parent.__class__.__name__
+        if parent_model == 'Purchases' or parent_model == 'SowingPurchases' or parent_model == 'Expenses':
+            parent.status = 'por pagar'
+            parent.save()
+
+        elif parent_model == 'Sales':
+            parent.status = 'por cobrar'
+            parent.save()
+
+
         destroy_object_form = DestroyObjectForm(request.POST)
         payment.delete()
-        purchase.save()
         
-        return redirect(purchase.get_absolute_url())
+        return redirect(parent.get_absolute_url())
         
     else:
         destroy_object_form = DestroyObjectForm()

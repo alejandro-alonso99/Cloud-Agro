@@ -47,10 +47,10 @@
                 <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}
                     /{{sowing_purchase.date.year }} </h2>
                 <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
-                {% if sowing_purchase.estado == 'por pagar' %}
-                <h2 id="status-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                {% if sowing_purchase.status == 'por pagar' %}
+                <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% else %}
-                <h2 id="status-done-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                <h2 id="status-done-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% endif %}
             </div>
         </div>
@@ -129,10 +129,10 @@
                 <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}
                     /{{sowing_purchase.date.year }} </h2>
                 <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
-                {% if sowing_purchase.estado == 'por pagar' %}
-                <h2 id="status-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                {% if sowing_purchase.status == 'por pagar' %}
+                <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% else %}
-                <h2 id="status-done-tag">{{ sowing_purchase.estado | capfirst}}</h2>
+                <h2 id="status-done-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% endif %}
             </div>
         </div>
