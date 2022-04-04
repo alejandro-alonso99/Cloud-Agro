@@ -193,6 +193,7 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
     
     if endorsed_checks_form.is_valid() and request.POST.get("check_id"):
         third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
+        print(third_p_check)
 
         content_type = endorsed_checks_form.cleaned_data.get('content_type')
         obj_id = endorsed_checks_form.cleaned_data.get('object_id')
@@ -207,22 +208,21 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
         third_p_id = third_p_check.id   
 
         attrs = {'content_type':content_type, 'object_id':obj_id,
-                                     'cliente':cliente,
-                                     'descripcion': descripcion,                                      
-                                     'fecha_deposito':fecha_deposito,
-                                     'banco_emision':banco_emision,
-                                     'numero_cheque':numero_cheque,
-                                     'titular_cheque':titular_cheque,
-                                     'monto':monto,
-                                     'observacion':observacion,    
+                                    'cliente':cliente,
+                                    'descripcion': descripcion,                                      
+                                    'fecha_deposito':fecha_deposito,
+                                    'banco_emision':banco_emision,
+                                    'numero_cheque':numero_cheque,
+                                    'titular_cheque':titular_cheque,
+                                    'monto':monto,
+                                    'observacion':observacion,    
                                     'third_p_id':third_p_id,
-
-                                     }
+                                    }
 
         new_endorsed_check = EndorsedChecks(**attrs)
         new_endorsed_check.save()
 
-        third_p_check.status = 'endosado'
+        third_p_check.estado = 'endosado'
         third_p_check.save()
 
         return redirect(sowing_purchase.get_absolute_url())
