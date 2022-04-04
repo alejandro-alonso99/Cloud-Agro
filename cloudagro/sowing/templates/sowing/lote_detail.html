@@ -135,6 +135,7 @@
         </div>
 
     </div>
+    {% if applications_dict %}
     <div id="list-title">
         Aplicaciones:
     </div>
@@ -168,8 +169,8 @@
         {% endfor %}
         {% endfor %}
     </div>
-
-
+    {% endif %}
+    {% if labors_dict %}
     <div id="list-title">
         Labores
     </div>
@@ -197,6 +198,7 @@
         {% endfor %}
         {% endfor %}
     </div>
+    {% endif %}
     {% if lote.estado == 'no cosechado' %}
     <h1 id="list-title">Agregar aplicación:</h1>
     <form action="" method="post">

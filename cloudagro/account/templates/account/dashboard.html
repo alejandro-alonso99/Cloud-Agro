@@ -48,6 +48,29 @@
     </div>
     <div id="wrapper">
         <div id="wrapper-list-title">
+            Stock de cereales:
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Tipo:</h2>
+                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag">Kg</h2>
+            </div>
+        </div>
+        {% for cereal,kg in cereal_dict.items %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{cereal | capfirst}}</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">{{kg | floatformat:2}}</h2>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div id="wrapper">
+        <div id="wrapper-list-title">
             Stock de insumos:
         </div>
         <div class="title-movement-card">
@@ -69,6 +92,8 @@
         </div>
         {% endfor %}
     </div>
+
+
 
 </div>
 

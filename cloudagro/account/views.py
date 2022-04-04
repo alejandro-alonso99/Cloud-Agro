@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from harvest.models import Harvest
 from purchases.models import Purchases, Animal
 from sales.models import Sales, SaleRow
 from expenses.models import Expenses
@@ -8,6 +9,7 @@ from funds.models import FundManualMove
 from payments.models import ThirdPartyChecks
 from stock.models import ManualMove
 from sowing.models import SowingPurchases, Applications
+from land.models import Lote
 
 @login_required
 def dashboard(request):
@@ -145,6 +147,23 @@ def dashboard(request):
         
         return product_lt_kg
 
+    def calculate_cereal_stock():
+        harvests = Harvest.objects.all()
+        
+        cereal_dict = {}
+        for harvest in harvests:
+            lote = harvest.lote
+            lote_type = lote.tipo
+            
+            if lote_type in cereal_dict:
+                cereal_dict[lote_type] += harvest.kg_totales
+
+            else:
+                cereal_dict[lote_type] = harvest.kg_totales
+        
+        return cereal_dict
+
+
     cash_total = calculate_funds()[0]
     bank_total = calculate_funds()[1]
     third_p_checks_total = calculate_funds()[2]
@@ -155,6 +174,8 @@ def dashboard(request):
 
     product_lt_kg = calculate_products_stock()
 
+    cereal_dict = calculate_cereal_stock()
+
     return render(request, 'account/dashboard.html',{
                                                     'cash_total':cash_total,
                                                     'bank_total':bank_total,
@@ -163,4 +184,5 @@ def dashboard(request):
                                                     'totals_len':totals_len,
                                                     'third_p_checks_total':third_p_checks_total,
                                                     'product_lt_kg':product_lt_kg,
+                                                    'cereal_dict':cereal_dict,
                                                     })

@@ -24,7 +24,7 @@ class LoteForm(ModelForm):
 
     class Meta:
         model = Lote
-        exclude = ('slug','campaña')
+        exclude = ('slug','campaña','estado')
 
 sowing_purchases = SowingPurchases.objects.all()
 class ApplicationForm(ModelForm):
