@@ -19,12 +19,14 @@
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ third_p_check.fecha_ingreso.day }} / {{ third_p_check.fecha_ingreso.month }} / {{ third_p_check.fecha_ingreso.year }}</h2>
+                <h2 id="client-tag">{{ third_p_check.fecha_ingreso.day }} / {{ third_p_check.fecha_ingreso.month }} /
+                    {{third_p_check.fecha_ingreso.year }}</h2>
                 <h2 id="client-tag">{{ third_p_check.cliente | capfirst }}</h2>
-                <h2 id="client-tag">{{ third_p_check.fecha_deposito.day }} / {{ third_p_check.fecha_deposito.month }} / {{ third_p_check.fecha_deposito.year }}</h2>
+                <h2 id="client-tag">{{ third_p_check.fecha_deposito.day }} / {{ third_p_check.fecha_deposito.month }} /
+                    {{ third_p_check.fecha_deposito.year }}</h2>
                 <h2 id="client-total-tag">{{third_p_check.monto | currency}}</h2>
             </div>
-        </div>        
+        </div>
     </div>
     <div id="wrapper">
         <div class="title-movement-card">
@@ -40,18 +42,50 @@
                 <h2 id="client-tag">{{ third_p_check.numero_cheque}}</h2>
                 <h2 id="client-tag">{{ third_p_check.banco_emision | capfirst}}</h2>
                 <h2 id="client-tag">{{third_p_check.titular_cheque | capfirst}}</h2>
-                <h2 id="client-tag">{{third_p_check.estado | capfirst}}</h2>        
+                <h2 id="client-tag">{{third_p_check.estado | capfirst}}</h2>
             </div>
         </div>
     </div>
     {% if third_p_check.estado != 'endosado' %}
     <div id="top-buttons">
-        <form method="post" onsubmit="return confirm('Confirme el cambio de estado.')">
+        <form method="post" id="change-state-form">
             {% csrf_token %}
             {{ change_state_form.field.as_hidden }}
             <input type="submit" id="change-state-btn" value="Cambiar estado">
         </form>
+        {% endif %}
+        {% if third_p_check.estado != 'endosado' %}
+
+
+
+        {% endif %}
+        <form method="post" id="delete-form" action="">
+            {% csrf_token %}
+            {{ detroy_object_form.field.as_hidden }}
+            <input type="button" id="delete-btn" value="Eliminar cheque">
+            <input type="hidden" name="delete_token" value="1">
+        </form>
     </div>
-    {% endif %}
-</div>    
+
+</div>
+<script>
+
+    var inputElement = document.getElementById("delete-btn")
+    inputElement.addEventListener("click", function () {
+        if (confirm('Si elimina el cheque se descontará su total del pago de la venta así como el endoso en una compra/gasto si existe. Será redireccionado a la venta vinculada.')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    })
+
+    var changeInput = document.getElementById("change-state-btn")
+    changeInput.addEventListener("click", function () {
+        if (confirm('Marcar el cheque como depositado?')) {
+            document.getElementById("change-state-form").submit()
+        } else {
+            return false;
+        }
+    })
+</script>
 {% endblock %}

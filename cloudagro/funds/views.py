@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks, SelfChecks
 from payments.forms import ChangeStateForm
 from .forms import FundManualMoveForm
@@ -129,7 +130,7 @@ def third_p_check_detail(request, year, month, day, third_p_check):
                                                             fecha_ingreso__month = month,
                                                             fecha_ingreso__day = day)                                                            
 
-
+    '''
     if request.method == 'POST':
 
         change_state_form = ChangeStateForm(request.POST)
@@ -140,11 +141,40 @@ def third_p_check_detail(request, year, month, day, third_p_check):
             return redirect(third_p_check.get_absolute_url())
     else:
         change_state_form = ChangeStateForm()
+    '''
+
+    if request.method == 'POST' and request.POST.get("delete_token"):
+        parent = third_p_check.content_object
+        parent_model = parent.__class__.__name__
+
+        #acá va a ir el modelo de las ventas de granos también
+        if parent_model == 'Sales':
+            parent.status = 'por cobrar'
+            parent.save()
+
+        if third_p_check.estado == 'endosado':
+            endosed_check = EndorsedChecks.objects.filter(third_p_id=third_p_check.id).first()
+
+            endosed_parent = endosed_check.content_object
+
+            endosed_parent.status = 'por pagar'
+            endosed_parent.save()
+            endosed_check.delete()
+
+        destroy_object_form = DestroyObjectForm(request.POST)
+        third_p_check.delete()
+
+        return redirect(parent.get_absolute_url())
+
+    else:
+        destroy_object_form = DestroyObjectForm()
 
     return render(request, 'funds/third_p_check_detail.html',{
                                                         'third_p_check' : third_p_check,
-                                                        'change_state_form':change_state_form,
+                                                        #'change_state_form':change_state_form,
+                                                        'destroy_object_form':destroy_object_form,
                                                             })
+
 @login_required
 def funds_self_checks(request):
 
