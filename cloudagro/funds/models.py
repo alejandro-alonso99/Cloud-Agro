@@ -1,4 +1,4 @@
-from datetime import date
+from django.urls import reverse
 from django.db import models
 
 class FundManualMove(models.Model):
@@ -24,3 +24,6 @@ class FundManualMove(models.Model):
 
     def __str__(self):
         return self.date.strftime("%d-%m-%Y") + ' ' + str(self.monto)
+    
+    def get_absolute_url(self):
+        return reverse ('funds:funds_manualmove_detail', args=[self.id])

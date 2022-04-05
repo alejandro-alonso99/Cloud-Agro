@@ -54,6 +54,26 @@ def funds_manualmove_list(request):
                                                          })
 
 @login_required
+def funds_manualmove_detail(request, move):
+
+    manualmove = get_object_or_404(FundManualMove, id=move)
+
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(request.POST)
+        manualmove.delete()
+
+        return redirect('funds:funds_manualmoves')
+
+    else:
+        destroy_object_form = DestroyObjectForm()        
+
+    return render(request, 'funds/manualmove_detail.html',{
+                                                            'manualmove':manualmove,
+                                                            'destroy_object_form':destroy_object_form,
+                                                            })                                                     
+
+
+@login_required
 def funds_third_party_checks(request):
     third_party_checks = ThirdPartyChecks.objects.all()
 

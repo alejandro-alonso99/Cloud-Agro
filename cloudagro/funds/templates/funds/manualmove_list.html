@@ -25,14 +25,16 @@
     </div>
     {% endif %}
     {% for move in manual_moves %}
-    <div class="movement-card">
-        <div id="card-row-1">
-            <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
-            <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
-            <h2 id="client-tag">{{ move.action | capfirst}}</h2>
-            <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+    <a href="{{move.get_absolute_url}}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+                <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
+                <h2 id="client-tag">{{ move.action | capfirst}}</h2>
+                <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+            </div>
         </div>
-    </div>
+    </a>
     {% empty %}
     <div id="list-title">
         No hay resultados para la búsqueda
@@ -72,14 +74,16 @@
     </div>
     {% endif %}
     {% for move in manual_moves %}
-    <div class="movement-card">
-        <div id="card-row-1">
-            <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
-            <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
-            <h2 id="client-tag">{{ move.action | capfirst}}</h2>
-            <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+    <a href="{{move.get_absolute_url}}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+                <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
+                <h2 id="client-tag">{{ move.action | capfirst}}</h2>
+                <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+            </div>
         </div>
-    </div>
+    </a>
     {% endfor %}
 </div>
 {% endif %}
