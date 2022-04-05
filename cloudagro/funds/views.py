@@ -5,6 +5,7 @@ from .forms import FundManualMoveForm
 from .models import FundManualMove
 from django.contrib.auth.decorators import login_required
 from payments.forms import DestroyObjectForm
+from purchases.forms import DateForm
 
 @login_required
 def fund_manualmove_create(request):
@@ -15,7 +16,7 @@ def fund_manualmove_create(request):
         if move_form.is_valid:
            move_form.save()
 
-        return redirect('funds:funds_main')
+        return redirect('account:dashboard')
     
     else:
         move_form = FundManualMoveForm()
@@ -26,6 +27,32 @@ def fund_manualmove_create(request):
                                                             'move_form': move_form,
                                                             'last_3_manual_moves':last_3_manual_moves,
                                                             })                                 
+
+@login_required
+def funds_manualmove_list(request):
+
+    date_form = DateForm()
+
+    date_query_start = None
+    date_query_end = None
+
+    manual_moves = FundManualMove.objects.all()
+
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            manual_moves = manual_moves.filter(date__range=[date_query_start, date_query_end])
+
+
+    return render(request, 'funds/manualmove_list.html',{
+                                                        'manual_moves':manual_moves,
+                                                        'date_form':date_form,
+                                                        'date_query_start':date_query_start,
+                                                        'date_query_end':date_query_end,                                                                                                                
+                                                         })
+
 @login_required
 def funds_third_party_checks(request):
     third_party_checks = ThirdPartyChecks.objects.all()

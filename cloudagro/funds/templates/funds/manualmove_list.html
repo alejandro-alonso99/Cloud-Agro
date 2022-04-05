@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %} Movimientos a mano {% endblock %}
+
+{% block content %}
+{% if date_query_end %}
+<div class="info-container">
+
+    <p><a href="{% url 'funds:funds_manualmoves' %}" id="search-btn" class="back-link"><i
+                class="fas fa-chevron-left"></i>Volver
+            a listado</a></p>
+    <div id="list-title">
+        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+    </div>
+    {% if manual_moves %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Tipo:</h2>
+            <h2 id="title-client-tag">Acción:</h2>
+            <h2 id="title-client-tag">Monto:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for move in manual_moves %}
+    <div class="movement-card">
+        <div id="card-row-1">
+            <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+            <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
+            <h2 id="client-tag">{{ move.action | capfirst}}</h2>
+            <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+        </div>
+    </div>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda
+    </div>
+    {% endfor %}
+
+</div>
+
+{% else %}
+<div class="info-container">
+    <div id="top-forms">
+        <form action="." method="get" id="search-form" class="date-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
+            </div>
+            {{date_form.date_query_start }}
+            {{date_form.date_query_end }}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+    </div>
+    <div id="list-title">
+        Historial de movimientos a mano de fondos:
+    </div>
+    {% if manual_moves %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Tipo:</h2>
+            <h2 id="title-client-tag">Acción:</h2>
+            <h2 id="title-client-tag">Monto:</h2>
+        </div>
+    </div>
+    {%else%}
+    <div id="list-title">
+        Aún no hay modificaciones a mano:
+    </div>
+    {% endif %}
+    {% for move in manual_moves %}
+    <div class="movement-card">
+        <div id="card-row-1">
+            <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+            <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
+            <h2 id="client-tag">{{ move.action | capfirst}}</h2>
+            <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
