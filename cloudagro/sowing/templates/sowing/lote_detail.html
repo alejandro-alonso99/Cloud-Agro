@@ -74,11 +74,12 @@
         </div>
     </div>
 
-    <div id="list-title">
-        Costos por tipo de aplicación:
-    </div>
+
 
     <div id="wrapper">
+        <div id="gray-list-title">
+            Costos por tipo de aplicación:
+        </div>
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="title-client-tag">Tipo:</h2>
@@ -105,11 +106,12 @@
         </div>
 
     </div>
-    <div id="list-title">
-        Costos por labores:
-    </div>
 
     <div id="wrapper">
+        <div id="gray-list-title">
+            Costos por labores:
+        </div>
+
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="title-client-tag">Tipo:</h2>
@@ -136,11 +138,11 @@
 
     </div>
     {% if applications_dict %}
-    <div id="list-title">
-        Aplicaciones:
-    </div>
-    <div id="wrapper">
 
+    <div id="wrapper">
+        <div id="gray-list-title">
+            Aplicaciones:
+        </div>
         {% for key1,value1 in applications_dict.items %}
 
         <div id="wrapper-list-title">
@@ -171,11 +173,12 @@
     </div>
     {% endif %}
     {% if labors_dict %}
-    <div id="list-title">
-        Labores
-    </div>
+
 
     <div id="wrapper">
+        <div id="gray-list-title">
+            Labores
+        </div>
         {% for key1,value1 in labors_dict.items %}
         <div id="wrapper-list-title">
             Aplicación nro {{key1}}:

@@ -650,8 +650,18 @@ e {
   background-color: #fff;
   color: #232230;
   padding: 10px;
-  border-radius: 5px;
   box-shadow: 1px 1px 20px gray;
+  border-radius: 5px;
+}
+
+#gray-list-title {
+  text-align: center;
+  font-size: 17px;
+  margin: 30px;
+  background-color: #c4c4c4;
+  color: #232230;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 #wrapper-list-title {
