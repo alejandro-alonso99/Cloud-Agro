@@ -215,7 +215,7 @@
     var inputs = document.querySelectorAll('.endose-btn')
     inputs.forEach(input => {
         input.addEventListener("click", function () {
-            if (confirm('Quiere eliminar este pago?')) {
+            if (confirm('Quiere endosar el cheque?')) {
                 document.getElementById("endose-form").submit()
             } else {
                 return false;

@@ -47,7 +47,7 @@
             <div id="card-row-1">
                 <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
                 <h2 id="date-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
-                <h2 id="total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">{{ payment.monto | floatformat:2 | currency }}</h2>
             </div>
         </div>
     </a>
@@ -58,7 +58,7 @@
             <h2 id="client-tag"> Cheque </h2>
             <h2 id="date-tag"> {{ check.fecha_salida.day }}/{{ check.fecha_salida.month }}/{{ check.fecha_salida.year }}
             </h2>
-            <h2 id="total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
+            <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
         </div>
     </div>
     {% endfor %}
@@ -68,7 +68,7 @@
             <h2 id="client-tag"> Endosado </h2>
             <h2 id="date-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year
                 }} </h2>
-            <h2 id="total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
+            <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
         </div>
     </div>
     {% endfor %}
@@ -147,7 +147,7 @@
         </div>
     </div>
     {% for check in third_p_checks %}
-    <form method="post" onsubmit="confirm('Confirme el endoso del cheque')">
+    <form method="post" id="endose-form" action="">
         {% csrf_token %}
         {{ endorsed_checks_form.content_type.as_hidden }}
         {{ endorsed_checks_form.object_id.as_hidden }}
@@ -157,8 +157,8 @@
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                 <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
                     {{check.fecha_ingreso.year }} </h2>
-                <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
-                <input type="submit" id="endose-tag" value="Endosar">
+                <h2 id="client-total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
+                <input type="button" id="endose-tag" value="Endosar" class="endose-btn">
                 <input type="hidden" name="check_id" value="{{ check.id }}">
             </div>
         </div>
@@ -167,4 +167,19 @@
     {% endif %}
     {% endif %}
 </div>
+
+<script type="text/javascript">
+    var inputs = document.querySelectorAll('.endose-btn')
+    inputs.forEach(input => {
+        input.addEventListener("click", function () {
+            if (confirm('Quiere endosar el cheque?')) {
+                document.getElementById("endose-form").submit()
+            } else {
+                return false;
+            }
+        })
+    }
+    )
+</script>
+
 {% endblock %}

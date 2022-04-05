@@ -200,7 +200,7 @@
         </div>
     </div>
     {% for check in third_p_checks %}
-    <form method="post" onsubmit="confirm('Confirme el endoso del cheque')">
+    <form method="post" id="endose-form" action="">
         {% csrf_token %}
         {{ endorsed_checks_form.content_type.as_hidden }}
         {{ endorsed_checks_form.object_id.as_hidden }}
@@ -211,7 +211,7 @@
                 <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
                     {{check.fecha_ingreso.year }} </h2>
                 <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
-                <input type="submit" id="endose-tag" value="Endosar">
+                <input type="button" id="endose-tag" value="Endosar" class="endose-btn">
                 <input type="hidden" name="check_id" value="{{ check.id }}">
             </div>
         </div>
@@ -221,4 +221,19 @@
     {% endif %}
 
 </div>
+
+<script type="text/javascript">
+    var inputs = document.querySelectorAll('.endose-btn')
+    inputs.forEach(input => {
+        input.addEventListener("click", function () {
+            if (confirm('Quiere endosar el cheque?')) {
+                document.getElementById("endose-form").submit()
+            } else {
+                return false;
+            }
+        })
+    }
+    )
+</script>
+
 {% endblock %}
