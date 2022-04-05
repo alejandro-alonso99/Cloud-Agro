@@ -4,6 +4,7 @@ from payments.forms import ChangeStateForm
 from .forms import FundManualMoveForm
 from .models import FundManualMove
 from django.contrib.auth.decorators import login_required
+from payments.forms import DestroyObjectForm
 
 @login_required
 def fund_manualmove_create(request):
@@ -150,19 +151,41 @@ def self_check_detail(request, self_check):
 
     self_check = get_object_or_404(SelfChecks, slug=self_check)
 
-    if request.method == 'POST':
-
+    if request.method == 'POST' and request.POST.get("change_token"):
         change_state_form = ChangeStateForm(request.POST)
+
+        destroy_object_form = DestroyObjectForm(request.POST)
 
         if change_state_form.is_valid():
             self_check.change_state()
 
-            return redirect('funds:checks_self')
-
+            return redirect(self_check.get_absolute_url())
     else:
         change_state_form = ChangeStateForm()
+
+
+    if request.method == 'POST' and request.POST.get("delete_token"):
+        parent = self_check.content_object
+        parent_model = parent.__class__.__name__
+        if parent_model == 'Purchases' or parent_model == 'SowingPurchases' or parent_model == 'Expenses':
+            parent.status = 'por pagar'
+            parent.save()
+
+        elif parent_model == 'Sales':
+            parent.status = 'por cobrar'
+            parent.save()
+
+
+        destroy_object_form = DestroyObjectForm(request.POST)
+        self_check.delete()
+
+        return redirect(parent.get_absolute_url())
+
+    else:
+        destroy_object_form = DestroyObjectForm()
 
     return render(request, 'funds/self_check_detail.html',{
                                                             'self_check':self_check,
                                                             'change_state_form':change_state_form,
+                                                            'destroy_object_form':destroy_object_form,
                                                             })                                                            
