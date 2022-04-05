@@ -53,24 +53,31 @@
     </a>
     {% endfor %}
     {% for check in self_checks %}
-    <div class="title-movement-card">
-        <div id="card-row-1">
-            <h2 id="client-tag"> Cheque </h2>
-            <h2 id="date-tag"> {{ check.fecha_salida.day }}/{{ check.fecha_salida.month }}/{{ check.fecha_salida.year }}
-            </h2>
-            <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
+    <a href="{{check.get_absolute_url}}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> Cheque </h2>
+                <h2 id="date-tag"> {{ check.fecha_salida.day }}/{{ check.fecha_salida.month }}/
+                    {{check.fecha_salida.year }}
+                </h2>
+                <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
+            </div>
         </div>
-    </div>
+    </a>
+
     {% endfor %}
     {% for check in endorsed_checks %}
-    <div class="title-movement-card">
-        <div id="card-row-1">
-            <h2 id="client-tag"> Endosado </h2>
-            <h2 id="date-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{ check.fecha_ingreso.year
-                }} </h2>
-            <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
+    <a href="{{check.get_absolute_url}}">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> Endosado </h2>
+                <h2 id="date-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{
+                    check.fecha_ingreso.year
+                    }} </h2>
+                <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
+            </div>
         </div>
-    </div>
+    </a>
     {% endfor %}
     {% endif %}
 
