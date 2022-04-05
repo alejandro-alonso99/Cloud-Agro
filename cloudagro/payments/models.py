@@ -4,7 +4,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.urls import reverse
 from cloudagro.utils import unique_slug_generator
 import datetime
-from django.utils.timezone import utc
 
 
 class PaymentManager(models.Manager):

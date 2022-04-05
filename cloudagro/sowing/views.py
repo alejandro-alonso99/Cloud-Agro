@@ -352,7 +352,7 @@ def lote_detail(request,  lote_id):
             print(attrs)
             new_harvest = Harvest(**attrs)
             new_harvest.save()
-            lote.status = 'cosechado'
+            lote.estado = 'cosechado'
             lote.save()
 
             return redirect(lote_view)
@@ -361,7 +361,7 @@ def lote_detail(request,  lote_id):
         if change_state_form.is_valid():            
             cosecha = Harvest.objects.filter(lote=lote)
             cosecha.delete()
-            lote.status = 'no cosechado'
+            lote.estado = 'no cosechado'
             lote.save()
 
             return redirect(lote_view)
@@ -426,7 +426,7 @@ def lote_detail(request,  lote_id):
 
     lote_total = applications_total + labors_total
 
-    if lote.status == 'cosechado':
+    if lote.estado == 'cosechado':
         cosecha = Harvest.objects.filter(lote=lote).first()
         kg_totales = cosecha.kg_totales
         quintales_ha = (kg_totales/lote.hectareas)/100

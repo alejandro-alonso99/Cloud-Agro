@@ -1,9 +1,3 @@
-from email.policy import default
-from itertools import product
-from lib2to3.pgen2.pgen import DFAState
-from pyexpat import model
-from random import choices
-from urllib import request
 from django.db import models
 from land.models import Campaign, Land, Lote
 from cloudagro.utils import unique_slug_generator

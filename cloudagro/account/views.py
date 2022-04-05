@@ -140,11 +140,18 @@ def dashboard(request):
 
         product_choices = list(map(str,SowingPurchases.objects.values_list('producto',flat=True)))
 
+        product_choices = [x.lower() for x in product_choices]
+
+        product_choices = list(dict.fromkeys(product_choices))
+
         product_lt_kg = {}
         for product in product_choices:
-            product = product.lower()
-            product_lt_kg[product] = products_lt_dict[product] - applications_lt_dict[product]
-        
+            if product in applications_lt_dict.keys():
+                product = product.lower()
+                product_lt_kg[product] = products_lt_dict[product] - applications_lt_dict[product]
+            else:
+                product_lt_kg[product] = products_lt_dict[product]
+
         return product_lt_kg
 
     def calculate_cereal_stock():
