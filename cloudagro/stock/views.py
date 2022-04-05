@@ -35,7 +35,7 @@ def manualmove_create(request):
         if move_form.is_valid:
            move_form.save()
 
-        return redirect('stock:stock_list')
+        return redirect('account:dashboard')
     
     else:
         move_form = ManualMoveForm()
