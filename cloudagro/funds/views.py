@@ -142,6 +142,26 @@ def third_p_check_detail(request, year, month, day, third_p_check):
     else:
         change_state_form = ChangeStateForm()
     
+    if request.method == 'POST' and request.POST.get('del_endose_token'):
+
+        change_state_form = ChangeStateForm(request.POST)
+
+        if change_state_form.is_valid():
+            endosed_check = EndorsedChecks.objects.filter(third_p_id=third_p_check.id).first()
+
+            endosed_parent = endosed_check.content_object
+
+            endosed_parent.status = 'por pagar'
+            endosed_parent.save()
+            endosed_check.delete()
+
+            third_p_check.estado = 'a depositar'
+            third_p_check.save()
+
+            return redirect(third_p_check.get_absolute_url())
+    else:
+        change_state_form = ChangeStateForm()
+    
 
     if request.method == 'POST' and request.POST.get("delete_token"):
         parent = third_p_check.content_object

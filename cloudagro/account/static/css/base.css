@@ -633,6 +633,25 @@ e {
   background-color: #f50004;
 }
 
+#del-endose-btn {
+  font-size: 0.9vw;
+  width: fit-content;
+  color: #232230;
+  padding: 10px 20px;
+  font-weight: bolder;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.5s;
+  background-color: #80E080;
+}
+
+#del-endose-btn:hover {
+  background-color: rgb(177, 177, 177);
+  color: #232230;
+  cursor: pointer;
+}
+
+
 #delete-btn:hover {
   background-color: rgb(177, 177, 177);
   color: #232230;

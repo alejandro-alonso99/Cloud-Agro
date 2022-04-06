@@ -56,12 +56,17 @@
             <input type="hidden" name="change_state_token" value="1">
         </form>
         {% endif %}
-        {% if third_p_check.estado != 'endosado' %}
+        {% if third_p_check.estado == 'endosado' %}
 
-
+        <form method="post" id="delete-endose-form" action="">
+            {% csrf_token %}
+            {{ change_state_form.field.as_hidden }}
+            <input type="button" id="del-endose-btn" value="Eliminar endoso">
+            <input type="hidden" name="del_endose_token" value="1">
+        </form>
 
         {% endif %}
-        <form method="post" id="delete-form" action="">
+        <form method="post" id="change-state-form" action="">
             {% csrf_token %}
             {{ detroy_object_form.field.as_hidden }}
             <input type="button" id="delete-btn" value="Eliminar cheque">
@@ -76,6 +81,15 @@
     inputElement.addEventListener("click", function () {
         if (confirm('Si elimina el cheque se descontará su total del pago de la venta así como el endoso en una compra/gasto si existe. Será redireccionado a la venta vinculada.')) {
             document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    })
+
+    var endoseElement = document.getElementById("del-endose-btn")
+    endoseElement.addEventListener("click", function () {
+        if (confirm('Si elimina el endoso se descontará el pago de la compra/gasto y el cheque pasará a estado "a depositar"')) {
+            document.getElementById("delete-endose-form").submit()
         } else {
             return false;
         }
