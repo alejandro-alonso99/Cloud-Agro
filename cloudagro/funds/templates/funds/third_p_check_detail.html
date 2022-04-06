@@ -7,6 +7,7 @@
 {% block content %}
 
 <div class="info-container">
+
     <h1 id="list-title">Viendo cheque: {{third_p_check}}</h1>
     <div id="wrapper">
         <div class="title-movement-card">
@@ -46,12 +47,13 @@
             </div>
         </div>
     </div>
-    {% if third_p_check.estado != 'endosado' %}
-    <div id="top-buttons">
-        <form method="post" id="change-state-form">
+    <div id="top-forms">
+        {% if third_p_check.estado != 'endosado' %}
+        <form method="post" id="change-state-form" action="">
             {% csrf_token %}
             {{ change_state_form.field.as_hidden }}
-            <input type="submit" id="change-state-btn" value="Cambiar estado">
+            <input type="button" id="change-state-btn" value="Cambiar estado">
+            <input type="hidden" name="change_state_token" value="1">
         </form>
         {% endif %}
         {% if third_p_check.estado != 'endosado' %}
@@ -81,7 +83,7 @@
 
     var changeInput = document.getElementById("change-state-btn")
     changeInput.addEventListener("click", function () {
-        if (confirm('Marcar el cheque como depositado?')) {
+        if (confirm('Cambiar el estado del cheque?')) {
             document.getElementById("change-state-form").submit()
         } else {
             return false;

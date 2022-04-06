@@ -130,8 +130,8 @@ def third_p_check_detail(request, year, month, day, third_p_check):
                                                             fecha_ingreso__month = month,
                                                             fecha_ingreso__day = day)                                                            
 
-    '''
-    if request.method == 'POST':
+    
+    if request.method == 'POST' and request.POST.get('change_state_token'):
 
         change_state_form = ChangeStateForm(request.POST)
 
@@ -141,16 +141,15 @@ def third_p_check_detail(request, year, month, day, third_p_check):
             return redirect(third_p_check.get_absolute_url())
     else:
         change_state_form = ChangeStateForm()
-    '''
+    
 
     if request.method == 'POST' and request.POST.get("delete_token"):
         parent = third_p_check.content_object
         parent_model = parent.__class__.__name__
 
         #acá va a ir el modelo de las ventas de granos también
-        if parent_model == 'Sales':
-            parent.status = 'por cobrar'
-            parent.save()
+        parent.status = 'por cobrar'
+        parent.save()
 
         if third_p_check.estado == 'endosado':
             endosed_check = EndorsedChecks.objects.filter(third_p_id=third_p_check.id).first()
