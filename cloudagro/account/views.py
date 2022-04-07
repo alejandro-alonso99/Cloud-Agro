@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from harvest.models import Harvest
 from purchases.models import Purchases, Animal
+from purchases.forms import SearchForm
 from sales.models import Sales, SaleRow
 from expenses.models import Expenses
 from sowing.models import SowingPurchases
@@ -9,10 +10,14 @@ from funds.models import FundManualMove
 from payments.models import ThirdPartyChecks
 from stock.models import ManualMove
 from sowing.models import SowingPurchases, Applications
-from land.models import Lote
+import difflib
 
 @login_required
 def dashboard(request):
+
+    search_form = SearchForm()
+
+    query = None
 
     def calculate_funds():
         purchases = Purchases.objects.all()
@@ -144,6 +149,13 @@ def dashboard(request):
 
         product_choices = [x.lower() for x in product_choices]
 
+        if 'query' in request.GET:
+            form = SearchForm(request.GET)
+            if form.is_valid():
+                query = form.cleaned_data['query']
+                product_choices = difflib.get_close_matches(query, product_choices)
+
+
         product_lt_kg = {}
         for product in product_choices:
             if product in applications_lt_dict.keys():
@@ -183,6 +195,12 @@ def dashboard(request):
 
     cereal_dict = calculate_cereal_stock()
 
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            product_lt_kg = calculate_products_stock()
+    
     return render(request, 'account/dashboard.html',{
                                                     'cash_total':cash_total,
                                                     'bank_total':bank_total,
@@ -192,4 +210,6 @@ def dashboard(request):
                                                     'third_p_checks_total':third_p_checks_total,
                                                     'product_lt_kg':product_lt_kg,
                                                     'cereal_dict':cereal_dict,
+                                                    'search_form':search_form,
+                                                    'query':query,
                                                     })

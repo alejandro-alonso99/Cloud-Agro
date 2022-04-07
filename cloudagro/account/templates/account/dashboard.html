@@ -2,8 +2,52 @@
 {% load purchase_extras %}
 {% block title %}Resumen{% endblock %}
 {% block content %}
-<div class="info-container">
 
+{% if query %}
+<div class="info-container">
+    <div id="list-title">
+        Filtrando por: "{{query}}"
+    </div>
+    <div id="wrapper">
+        <div id="wrapper-list-title">
+            Stock de insumos:
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Producto</h2>
+                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="title-client-tag"> Lt / Kg</h2>
+            </div>
+        </div>
+        {% for producto,total in product_lt_kg.items %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{producto | capfirst}}</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">- - -</h2>
+                <h2 id="client-tag">{{total | floatformat:2}}</h2>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Volver a resumen
+            </div>
+            <a href="{% url 'account:dashboard' %}">
+                <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+
+<div class="info-container">
     <div id="wrapper">
         <h1 id="wrapper-list-title">Resúmen de fondos:</h1>
 
@@ -94,8 +138,48 @@
     </div>
 
 
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Fondos
+            </div>
+            <a href="{% url 'funds:funds_manualmove_create' %}">
+                <h1 id="action-title">Modificar fondos <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+        <div id="action">
+            <div id="action-section">
+                Hacienda
+            </div>
+            <a href="{% url 'stock:manualmove_create' %}">
+                <h1 id="action-title">Modificar stock <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+        <div id="action">
+            <div id="action-section">
+                Insumos
+            </div>
+            <a href="{% url 'stock:manualmove_create' %}">
+                <h1 id="action-title">Modificar stock <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+
+            <form action="." method="get" id="search-form">
+                {% csrf_token %}
+                <div id="search-label">
+                    <i class="fas fa-search"></i> Buscar por producto:
+                </div>
+                {{search_form.query}}
+                <input type="submit" value="Buscar" id="search-btn">
+            </form>
+        </div>
+    </div>
 
 </div>
 
+
+{% endif %}
 
 {% endblock %}
