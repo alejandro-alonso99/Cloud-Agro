@@ -1,6 +1,5 @@
-from tkinter.messagebox import NO
 from django.shortcuts import get_object_or_404, render, redirect
-
+from land.models import Land
 from harvest.models import Harvest
 from .models import Applications, Labors, SowingPurchases
 from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm
@@ -12,6 +11,7 @@ from purchases.forms import SearchForm, DateForm
 from django.contrib.postgres.search import SearchVector
 from harvest.forms import HarvestForm
 from payments.forms import ChangeStateForm
+from .forms import ChooseCampoForm, LoteNumberForm
 
 @login_required
 def sowing_purchases_list(request):
@@ -257,14 +257,53 @@ def products_averages(request):
 
 @login_required
 def lotes_list(request):
-    
     campaña = Campaign.objects.filter(estado = 'vigente').first()
 
     lotes = Lote.objects.filter(campaña=campaña)
 
+    search_form = SearchForm()
+
+    campo_form = ChooseCampoForm()
+
+    number_form = LoteNumberForm()
+
+    query = None
+
+    campo = None
+
+    number_query = None
+
+    if 'number_query' in request.GET:
+        form = LoteNumberForm(request.GET)
+        if form.is_valid():
+            number_query = int(form.cleaned_data['number_query'])
+            lotes = lotes.filter(numero = number_query)
+
+    if 'campo' in request.GET:
+        form = ChooseCampoForm(request.GET)
+        if form.is_valid():
+            campo = str(form.cleaned_data['campo'])
+            campo = campo.capitalize()
+            campo_query = Land.objects.filter(nombre=campo).first()
+            lotes = Lote.objects.filter(campo=campo_query)
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            lotes = Lote.objects.annotate(search=SearchVector('tipo'),).filter(search=query)
+
+
+
     return render(request,'sowing/lotes_list.html',{
                                                     'lotes':lotes,
-                                                    'campaña':campaña
+                                                    'campaña':campaña,
+                                                    'search_form':search_form,
+                                                    'query':query,
+                                                    'campo_form':campo_form,
+                                                    'campo':campo,
+                                                    'number_form':number_form,
+                                                    'number_query':number_query,
                                                 })
 
 @login_required

@@ -3,6 +3,66 @@
 {% block title %} Listado de lotes {% endblock %}
 
 {% block content %}
+{% if query or campo or number_query%}
+
+<div class="info-container">
+    {% if query %}
+    <div id="list-title">
+        Filtrando por cultivo: {{query}}:
+    </div>
+    {% endif %}
+    {% if campo %}
+    <div id="list-title">
+        Filtrando por campo: {{campo}}:
+    </div>
+    {% endif %}
+    {% if number_query %}
+    <div id="list-title">
+        Filtrando por número: {{number_query}}:
+    </div>
+    {% endif %}
+    {% if lotes %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Campo:</h2>
+            <h2 id="title-client-tag">Número:</h2>
+            <h2 id="title-client-tag">Hectáreas:</h2>
+            <h2 id="title-client-tag">Tipo:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for lote in lotes %}
+    <a href="{{lote.get_absolute_url}}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{lote.campo}}</h2>
+                <h2 id="client-tag">{{lote.numero}}</h2>
+                <h2 id="client-tag">{{lote.hectareas}}</h2>
+                <h2 id="client-tag">{{lote.tipo | capfirst}}</h2>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda
+    </div>
+    {% endfor %}
+</div>
+<div class="actions-sidebar">
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Volver a listado
+            </div>
+            <a href="{% url 'sowing:lotes_list' %}">
+                <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
 <div class="info-container">
     <div id="list-title">
         Listado de lotes para campaña: {{campaña | capfirst}}:
@@ -29,6 +89,32 @@
     {% endfor %}
 </div>
 <div class="actions-sidebar">
-    <div id="actions"></div>
+    <div id="actions">
+        <form action="." method="get" id="search-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-search"></i> Buscar por tipo:
+            </div>
+            {{search_form.query}}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+        <form action="." method="get" id="search-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-search"></i> Buscar por campo:
+            </div>
+            {{campo_form.campo}}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+        <form action="." method="get" id="search-form">
+            {% csrf_token %}
+            <div id="search-label">
+                <i class="fas fa-search"></i> Buscar por número:
+            </div>
+            {{number_form.number_query}}
+            <input type="submit" value="Buscar" id="search-btn">
+        </form>
+    </div>
 </div>
+{% endif %}
 {% endblock %}

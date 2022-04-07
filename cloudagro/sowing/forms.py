@@ -1,11 +1,10 @@
-from pyexpat import model
 from django import forms
 
 from land.models import Campaign
 from .models import Labors, SowingPurchases, Applications
 from land.models import Lote
 from django.forms.models import ModelForm
-
+from land.models import Land
 
 class SowingPurchasesForm(forms.ModelForm):
     class Meta:
@@ -46,3 +45,15 @@ class LaborsForm(ModelForm):
         exclude = ('slug','lote')
 
 campaigns = Campaign.objects.all()
+
+campos = Land.objects.all()
+class ChooseCampoForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(ChooseCampoForm, self).__init__(*args, **kwargs)
+        self.fields['campo'] = forms.ChoiceField(
+            choices=[(o.lower(), str(o)) for o in list(set(map(str,campos.values_list('nombre',flat=True))))]
+        )
+
+class LoteNumberForm(forms.Form):
+
+    number_query = forms.IntegerField()

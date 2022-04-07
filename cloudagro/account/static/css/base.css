@@ -589,7 +589,7 @@ e {
   border-radius: 5px;
   transition: all 0.5s;
   background-color: rgb(177, 177, 177);
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
 #search-btn:hover {
@@ -1405,8 +1405,8 @@ e {
 }
 
 #search-form select {
-  width: fit-content !important;
-  font-size: 0.9vw !important;
+  width: 100% !important;
+  font-size: 15px !important;
   padding: 7px 10px;
   border: 1px solid rgb(177, 177, 177);
   border-radius: 5px;
