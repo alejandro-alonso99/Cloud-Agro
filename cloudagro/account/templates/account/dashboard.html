@@ -9,6 +9,7 @@
         Filtrando por: "{{query}}"
     </div>
     <div id="wrapper">
+        {% if product_lt_kg %}
         <div id="wrapper-list-title">
             Stock de insumos:
         </div>
@@ -20,6 +21,7 @@
                 <h2 id="title-client-tag"> Lt / Kg</h2>
             </div>
         </div>
+        {% endif %}
         {% for producto,total in product_lt_kg.items %}
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -28,6 +30,10 @@
                 <h2 id="client-tag">- - -</h2>
                 <h2 id="client-tag">{{total | floatformat:2}}</h2>
             </div>
+        </div>
+        {% empty %}
+        <div id="wrapper-list-title">
+            No hay resultados para la búsqueda
         </div>
         {% endfor %}
     </div>
