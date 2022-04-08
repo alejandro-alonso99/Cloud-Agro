@@ -10,8 +10,9 @@ from django.contrib.auth.decorators import login_required
 from purchases.forms import SearchForm, DateForm
 from django.contrib.postgres.search import SearchVector
 from harvest.forms import HarvestForm
-from payments.forms import ChangeStateForm
+from payments.forms import ChangeStateForm, DestroyObjectForm
 from .forms import ChooseCampoForm, LoteNumberForm
+
 
 @login_required
 def sowing_purchases_list(request):
@@ -356,6 +357,7 @@ def lote_detail(request,  lote_id):
         labors_form = LaborsForm(data=request.POST)
         harvest_form = HarvestForm(data=request.POST)
         change_state_form = ChangeStateForm(data=request.POST)
+        destroy_object_form = DestroyObjectForm(data=request.POST)
 
         if application_form.is_valid():
             
@@ -388,7 +390,6 @@ def lote_detail(request,  lote_id):
         if harvest_form.is_valid():
             kg_totales = harvest_form.cleaned_data.get('kg_totales')
             attrs = {'kg_totales':kg_totales, 'lote':lote}
-            print(attrs)
             new_harvest = Harvest(**attrs)
             new_harvest.save()
             lote.estado = 'cosechado'
@@ -397,19 +398,25 @@ def lote_detail(request,  lote_id):
             return redirect(lote_view)
 
         
-        if change_state_form.is_valid():            
+        if change_state_form.is_valid() and request.POST.get('change_state_token'):            
             cosecha = Harvest.objects.filter(lote=lote)
             cosecha.delete()
             lote.estado = 'no cosechado'
             lote.save()
 
             return redirect(lote_view)
+        
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+            lote.delete()
+            print('si')
+            return redirect('sowing:lotes_list')
 
     else:
         application_form = ApplicationForm()
         labors_form = LaborsForm()
         harvest_form = HarvestForm()
         change_state_form = ChangeStateForm()
+        destroy_object_form = DestroyObjectForm()
     
     applications = lote.applications_set.all()
 
@@ -489,4 +496,10 @@ def lote_detail(request,  lote_id):
                                                         'change_state_form':change_state_form,
                                                         'kg_totales':kg_totales,
                                                         'quintales_ha':quintales_ha,
+                                                        'destroy_object_form':destroy_object_form,
                                                         })
+
+@login_required
+def update_lote(request):
+
+    return render(request, 'sowing/lote_update.html',{})

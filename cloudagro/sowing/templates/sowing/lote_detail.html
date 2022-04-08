@@ -5,26 +5,6 @@
 {% block content %}
 
 <div class="info-container">
-    <div id="delete-forms">
-        {% if lote.estado == 'no cosechado' %}
-        <form action="." method="post" id="search-form" class="date-form"
-            onsubmit="confirm('Confirme la cosecha del lote')">
-            {% csrf_token %}
-            <div id="search-label">
-                <i class="fas fa-calendar-alt"></i> Registrar cosecha:
-            </div>
-            {{harvest_form.kg_totales }}
-            <input type="submit" value="Cosechar" id="search-btn">
-        </form>
-        {% else %}
-        <form method="post"
-            onsubmit="return confirm('Si elimina la cosecha el lote se cambiará a estado de no cosechado y la cosecha registrada se elimina')">
-            {% csrf_token %}
-            {{ change_state_form.field.as_hidden }}
-            <input type="submit" id="change-state-btn" value="Eliminar cosecha">
-        </form>
-        {% endif %}
-    </div>
     <div id="data-wrapper">
         <div class="data sales-month">
             <i class="fa-solid fa-tags"></i>
@@ -265,5 +245,69 @@
     </form>
     {% endif %}
 </div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Lote
+            </div>
+            <a href="{% url 'stock:manualmove_create' %}">
+                <h1 id="edit-btn">Editar lote<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar lote">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
+        <div id="action">
+            <div id="action-section">
+                Cosecha
+            </div>
+            {% if lote.estado == 'cosechado' %}
+            <form method="post" action="" id="delete-harvest-form">
+                {% csrf_token %}
+                {{ change_state_form.field.as_hidden }}
+                <input type="button" id="del-harvest-btn" value="Eliminar cosecha">
+                <input type="hidden" name="change_state_token" value="1">
+            </form>
+            {% else %}
+            <form method="post" id="search-form" action="">
+                <div id="search-label">
+                    <i class="fas fa-calendar-alt"></i> Ingresar kg cosechados:
+                </div>
+                {% csrf_token %}
+                {{harvest_form.kg_totales }}
+                <input type="submit" value="Cosechar" id="search-btn">
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    var inputElement = document.getElementById("del-harvest-btn")
+    inputElement.addEventListener("click", function () {
+        if (confirm('Quiere eliminar esta cosecha?')) {
+            document.getElementById("delete-harvest-form").submit()
+        } else {
+            return false;
+        }
+    })
+
+    var harvestElement = document.getElementById("delete-btn")
+    harvestElement.addEventListener("click", function () {
+        if (confirm('Quiere eliminar el lote?')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    })
+
+
+
+</script>
 
 {% endblock %}

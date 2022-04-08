@@ -629,7 +629,7 @@ e {
 
 #delete-btn {
   font-size: 14px;
-  width: fit-content;
+  width: 100%;
   color: #fff;
   padding: 10px 20px;
   font-weight: bolder;
@@ -637,6 +637,35 @@ e {
   border: none;
   transition: all 0.3s;
   background-color: #f50004;
+  margin: 10px 0;
+}
+
+#edit-btn {
+  font-size: 14px;
+  width: 100%;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: bolder;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.3s;
+  background-color: #80E080;
+  margin: 10px 0;
+  text-align: center;
+  color: #141a1e;
+}
+
+#del-harvest-btn {
+  font-size: 14px;
+  width: 100%;
+  color: #fff;
+  padding: 10px 20px;
+  font-weight: bolder;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.3s;
+  background-color: #f50004;
+  margin: 10px 0;
 }
 
 #del-endose-btn {
@@ -659,8 +688,19 @@ e {
 
 
 #delete-btn:hover {
-  background-color: rgb(177, 177, 177);
-  color: #232230;
+  background-color: #ff4137;
+  color: #fff;
+  cursor: pointer;
+}
+
+#del-harvest-btn:hover {
+  background-color: #ff4137;
+  color: #fff;
+  cursor: pointer;
+}
+
+#edit-btn:hover {
+  background-color: #a0e0a0;
   cursor: pointer;
 }
 
@@ -729,6 +769,11 @@ e {
 #action-title:hover {
   transform: translateY(-10%);
   background-color: #c4c4c4;
+}
+
+.delete-title:hover {
+  background-color: #f50004 !important;
+  color: #fff !important;
 }
 
 #action {
@@ -1370,7 +1415,11 @@ e {
 }
 
 #delete-form {
-  float: right;
+  width: 100%;
+}
+
+#delete-harvest-form {
+  width: 100%;
 }
 
 #search-btn {
