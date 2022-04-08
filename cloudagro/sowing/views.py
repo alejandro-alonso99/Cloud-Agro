@@ -500,6 +500,45 @@ def lote_detail(request,  lote_id):
                                                         })
 
 @login_required
-def update_lote(request):
+def lote_update(request, id):
 
-    return render(request, 'sowing/lote_update.html',{})
+    lote = get_object_or_404(Lote, id=id)
+
+    if request.method == 'POST':
+        lote_form = LoteForm(data=request.POST)
+
+        if lote_form.is_valid():
+
+            campo = lote_form.cleaned_data.get('campo')
+            numero = lote_form.cleaned_data.get('numero')
+            hectareas= lote_form.cleaned_data.get('hectareas')
+            tipo= lote_form.cleaned_data.get('tipo')
+
+            print(hectareas)
+
+            campaña = Campaign.objects.filter(estado = 'vigente').first()
+            
+            attrs = {'campo':campo, 'numero':numero,
+                    'hectareas':hectareas, 'tipo':tipo,
+                    'campaña':campaña }
+
+            print(attrs)
+
+            lote = Lote(id=id, **attrs)
+            lote.save()
+        
+
+            return redirect(lote.get_absolute_url())
+        
+    else:
+        lote_form = LoteForm()
+
+    return render(request, 'sowing/lote_update.html',{
+                                                        'lote':lote,
+                                                        'lote_form':lote_form,
+                                                    })
+def application_detail(request,id):
+
+    application = get_object_or_404(Applications, id=id)
+
+    return render(request, 'sowing/application_detail.html',{})                                            

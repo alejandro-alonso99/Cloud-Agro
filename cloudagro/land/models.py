@@ -97,6 +97,9 @@ class Lote(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('sowing:lote_detail', args=[self.id])
+    
+    def get_update_url(self):
+        return reverse_lazy('sowing:lote_update', args=[self.id])
 
     def calculate_total(self):
 

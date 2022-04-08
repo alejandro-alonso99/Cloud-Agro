@@ -11,5 +11,6 @@ urlpatterns = [
     path('<int:day>/<int:month>/<int:year>/<slug:sowing_purchase>/', views.sowing_purchase_detail, name='sowing_purchase_detail'),
     path('lotes/list/', views.lotes_list, name='lotes_list'),
     path('lotes/create/', views.lote_create, name='lote_create'),
+    path('lotes/update/<int:id>', views.lote_update, name='lote_update'),
 ]
  

@@ -783,7 +783,9 @@ e {
   padding-top: 20px;
 }
 
-
+#update-description {
+  font-size: 16px;
+}
 
 .info-container a {
   text-decoration: none;

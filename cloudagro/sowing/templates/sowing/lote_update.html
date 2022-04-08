@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+
+{% block title %} Cambiar datos {% endblock %}
+
+{% block content %}
+
+<div class="info-container">
+    <div id="list-title">
+        Modificar lote:
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
+                        <h2 id="title-client-tag">{{lote_form.campo}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Número de lote:</h3>
+                        <h2 id="title-client-tag">{{lote_form.numero}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Hectáreas:</h3>
+                        <h2 id="title-client-tag">{{lote_form.hectareas}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-image"></i>Tipo de lote:
+                        </h3>
+                        <h2 id="title-client-tag">{{lote_form.tipo}}</h2>
+                    </div>
+                    {{lote_form.errors}}
+                </div>
+            </div>
+            <input type="submit" value="Modificar" id="create-btn">
+        </div>
+    </form>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Lote actual
+            </div>
+            <h3 id="update-description">
+                Campo: {{lote.campo | capfirst}}
+            </h3>
+            <h3 id="update-description">
+                Hectareas: {{lote.hectareas}}
+            </h3>
+            <h3 id="update-description">
+                Número: {{lote.numero}}
+            </h3>
+            <h3 id="update-description">
+                Cultivo: {{lote.tipo}}
+            </h3>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
