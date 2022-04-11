@@ -10,6 +10,7 @@ urlpatterns = [
     path('create/', views.sowing_purchases_create, name='sowing_purchases_create'),
     path('product/averages/', views.products_averages, name='product_averages'),
     path('purchases/<int:id>/', views.sowing_purchase_detail, name='sowing_purchase_detail'),
+    path('purchases/update/<int:id>/', views.sowing_purchase_update, name='sowing_purchase_update'),
     path('lotes/list/', views.lotes_list, name='lotes_list'),
     path('lotes/create/', views.lote_create, name='lote_create'),
     path('lotes/update/<int:id>/', views.lote_update, name='lote_update'),

@@ -1,5 +1,4 @@
-from datetime import date, datetime
-from urllib import request
+
 from django.shortcuts import get_object_or_404, render, redirect
 from land.models import Land
 from harvest.models import Harvest
@@ -265,8 +264,65 @@ def sowing_purchase_detail(request, id):
 
 
 @login_required
-def sowing_purchase_update(request):
-    pass
+def sowing_purchase_update(request, id):
+
+    sowing_purchase = get_object_or_404(SowingPurchases, id=id)
+
+    if request.method == 'POST':
+        sowing_p_form = SowingPurchasesForm(data=request.POST)
+
+        if sowing_p_form.is_valid():
+
+            payments = sowing_purchase.payments
+
+            self_checks = sowing_purchase.self_checks
+
+            endorsed_checks = sowing_purchase.endorsed_checks
+
+            for check in endorsed_checks:
+                    check_id = check.third_p_id
+                    third_p_check = ThirdPartyChecks.objects.get(id=check_id)
+                    third_p_check.estado = 'a depositar'
+                    third_p_check.save()
+                    check.delete()
+
+            for check in self_checks:
+                check.delete()
+
+            for payment in payments:
+                payment.delete()
+
+            campo = sowing_p_form.cleaned_data.get('campo')
+            factura = sowing_p_form.cleaned_data.get('factura')
+            proveedor = sowing_p_form.cleaned_data.get('proveedor')
+            producto = sowing_p_form.cleaned_data.get('producto')
+            precio_lt_kg_usd = sowing_p_form.cleaned_data.get('precio_lt_kg_usd')
+            lt_kg = sowing_p_form.cleaned_data.get('lt_kg')
+            tipo_cambio = sowing_p_form.cleaned_data.get('tipo_cambio')
+            iva = sowing_p_form.cleaned_data.get('iva')
+
+            date = sowing_purchase.date
+            campaña = Campaign.objects.filter(estado = 'vigente').first()
+
+            attrs = {'campaña':campaña,'campo':campo, 
+                                        'factura':factura,
+                                        'proveedor':proveedor,
+                                        'producto':producto,
+                                        'precio_lt_kg_usd':precio_lt_kg_usd,
+                                        'lt_kg':lt_kg,
+                                        'tipo_cambio':tipo_cambio,
+                                        'iva':iva,
+                                        'date':date}
+
+            sowing_purchase = SowingPurchases(id=id,**attrs)
+            sowing_purchase.save()
+
+        return redirect('sowing:sowing_purchases_list')
+        
+    else:
+        sowing_p_form = SowingPurchasesForm()
+
+    return render(request,'sowing/sowing_purchase_update.html',{'sowing_p_form':sowing_p_form})
 
 @login_required
 def products_averages(request):

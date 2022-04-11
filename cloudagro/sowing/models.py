@@ -32,6 +32,10 @@ class SowingPurchases(models.Model):
 
     def get_absolute_url(self):
         return reverse ('sowing:sowing_purchase_detail',args=[self.id])
+    
+    def get_update_url(self):
+        return reverse_lazy('sowing:sowing_purchase_update',args=[self.id])
+
 
     def calculate_total(self):
 

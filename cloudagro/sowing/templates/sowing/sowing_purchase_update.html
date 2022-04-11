@@ -5,9 +5,8 @@
 {% block content %}
 <div class="info-container">
     <div id="list-title">
-        Agregar compra:
+        Editar compra:
     </div>
-
     <form action="." method="post">
         {% csrf_token %}
 
@@ -58,5 +57,19 @@
         </div>
         <input type="submit" value="Crear" id="create-btn">
     </form>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Cambiar compra
+            </div>
+            <h3 id="update-description">
+                Recuerde que al editar la compra se eliminan los pagos anteriormente registrados en la misma y se
+                desendosan los cheques endosados.
+            </h3>
+        </div>
+    </div>
 </div>
 {% endblock %}
