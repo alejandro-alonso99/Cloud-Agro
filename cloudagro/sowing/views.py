@@ -265,6 +265,10 @@ def sowing_purchase_detail(request, id):
 
 
 @login_required
+def sowing_purchase_update(request):
+    pass
+
+@login_required
 def products_averages(request):
 
     campaña = Campaign.objects.filter(estado = 'vigente').first()
@@ -553,6 +557,8 @@ def lote_update(request, id):
                                                         'lote':lote,
                                                         'lote_form':lote_form,
                                                     })
+
+@login_required                                       
 def application_detail(request,id):
 
     application = get_object_or_404(Applications, id=id)
@@ -573,6 +579,7 @@ def application_detail(request,id):
                                                             'destroy_object_form':destroy_object_form,
                                                             })
 
+@login_required                                       
 def application_update(request,id):
 
     application = get_object_or_404(Applications, id=id)
@@ -610,6 +617,7 @@ def application_update(request,id):
                                                             'application_form':application_form,
                                                             }) 
 
+@login_required                                       
 def labor_detail(request, id):
 
     labor = get_object_or_404(Labors, id=id)
@@ -630,6 +638,7 @@ def labor_detail(request, id):
                                                         'destroy_object_form':destroy_object_form,
                                                         })
 
+@login_required                                       
 def labor_update(request, id):
 
     labor = get_object_or_404(Labors, id=id)

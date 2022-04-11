@@ -267,6 +267,7 @@ def purchase_create(request):
                                                     })
                                                 
 
+@login_required
 def purchase_update(request, id):
 
     purchase = get_object_or_404(Purchases, id=id)
