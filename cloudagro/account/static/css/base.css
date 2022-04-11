@@ -754,11 +754,12 @@ e {
 #action-section {
   font-size: 18px;
   width: 100%;
-  background-color: #0080ff;
-  color: #fff;
+  background-color: #c4c4c4;
+  color: var(--main-color);
   text-align: center;
   padding: 5px;
   border-radius: 5px;
+  font-weight: 500;
 }
 
 #action-title i {
@@ -1449,6 +1450,7 @@ e {
   border: 1px solid rgb(177, 177, 177);
   border-radius: 5px;
   margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 #search-form input:valid {

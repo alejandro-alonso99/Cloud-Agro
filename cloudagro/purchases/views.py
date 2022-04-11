@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
+
+from payments.forms import DestroyObjectForm
 from .models import Animal, Purchases
 from .forms import AnimalForm, DateForm, SearchForm, PurchaseForm
 from django.contrib.postgres.search import SearchVector
@@ -60,11 +62,8 @@ def purchase_list(request):
                                     
 
 @login_required
-def purchase_detail(request, year, month, day, purchase):
-    purchase = get_object_or_404(Purchases, slug=purchase,
-                                                date__year = year,
-                                                date__month = month,
-                                                date__day = day )
+def purchase_detail(request, id):
+    purchase = get_object_or_404(Purchases, id=id)
     
     kg_neto =  purchase.brute_kg - (purchase.brute_kg * (purchase.desbaste/100)) 
 
@@ -202,6 +201,25 @@ def purchase_detail(request, year, month, day, purchase):
 
     money_zip = zip(payments,self_checks)
 
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(data=request.POST)
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+
+            for check in endorsed_checks:
+                check_id = check.third_p_id
+                third_p_check = ThirdPartyChecks.objects.get(id=check_id)
+                third_p_check.estado = 'a depositar'
+                third_p_check.save()
+                check.delete()
+
+            for check in self_checks:
+                check.delete()
+
+            purchase.delete()
+            return redirect('purchases:purchase_list')
+    else:
+        destroy_object_form = DestroyObjectForm()
+
     return render(request, 'purchases/purchase_detail.html',
                                     {'purchase' : purchase,
                                     'kg_neto': kg_neto,
@@ -220,7 +238,8 @@ def purchase_detail(request, year, month, day, purchase):
                                     'money_zip':money_zip,
                                     'third_p_checks':third_p_checks,
                                     'endorsed_checks_form':endorsed_checks_form,
-                                    'endorsed_checks':endorsed_checks
+                                    'endorsed_checks':endorsed_checks,
+                                    'destroy_object_form':destroy_object_form,
                                     })
 
 @login_required

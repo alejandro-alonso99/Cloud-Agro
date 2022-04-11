@@ -3,11 +3,11 @@
 {% load purchase_extras %}
 
 {% block content %}
-<h1 id="list-title">Viendo compra: {{purchase}}</h1>
-{% if purchase.status == 'por pagar' %}
-<h1 id="total-list-title">Total por pagar: {{ purchase.calculate_amount_to_pay | currency}}</h1>
-{% endif %}
 <div class="info-container">
+    <h1 id="list-title">Viendo compra: {{purchase}}</h1>
+    {% if purchase.status == 'por pagar' %}
+    <h1 id="total-list-title">Total por pagar: {{ purchase.calculate_amount_to_pay | currency}}</h1>
+    {% endif %}
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -221,8 +221,37 @@
     {% endif %}
 
 </div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Compra
+            </div>
+            <a href="{{lote.get_update_url}}">
+                <h1 id="edit-btn">Editar compra<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar compra">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
+
+    var harvestElement = document.getElementById("delete-btn")
+    harvestElement.addEventListener("click", function () {
+        if (confirm('Si elimina la compra se eliminarán los pagos relacionados y se desendosan los cheques endosados.')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    });
+
     var inputs = document.querySelectorAll('.endose-btn')
     inputs.forEach(input => {
         input.addEventListener("click", function () {
