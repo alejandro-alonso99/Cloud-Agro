@@ -210,7 +210,7 @@ class Applications(models.Model):
 
 
     def __str__(self):
-        return 'Lote: ' + str(self.lote) + ' Aplicación nro: ' + str(self.numero)
+        return str(self.lote) + ', Aplicación nro: ' + str(self.numero) + ', ' + str(self.producto)
     
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.producto, self.slug)
@@ -227,6 +227,9 @@ class Applications(models.Model):
     def get_absolute_url(self):
 
         return reverse_lazy('sowing:application_detail',args=[self.id])
+    
+    def get_update_url(self):
+        return reverse_lazy('sowing:application_update', args=[self.id])
 
     def calculate_lt_by_type():
 

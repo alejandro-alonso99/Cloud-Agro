@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %}Detalle de aplicación {% endblock %}
+
+{% block content %}
+
+<div class="info-container">
+    <div id="list-title">
+        Viendo aplicación: {{application}}
+    </div>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Lote:</h2>
+                <h2 id="title-client-tag">Fecha</h2>
+                <h2 id="title-client-tag">Número:</h2>
+                <h2 id="title-client-tag">Lt/Kg:</h2>
+                <h2 id="title-client-tag">Producto:</h2>
+                <h2 id="title-client-tag">Tipo:</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ application.lote}}</h2>
+                <h2 id="client-tag">{{ application.date.day }} / {{ application.date.month }} /
+                    {{ application.date.year}}</h2>
+                <h2 id="client-tag">{{ application.numero}}</h2>
+                <h2 id="client-tag">{{ application.lt_kg}}</h2>
+                <h2 id="client-tag">{{ application.producto | capfirst}}</h2>
+                <h2 id="client-tag">{{ application.tipo | capfirst}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Aplicación
+            </div>
+            <a href="{{application.get_update_url}}">
+                <h1 id="edit-btn">Editar aplicación<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar aplicación">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var harvestElement = document.getElementById("delete-btn")
+    harvestElement.addEventListener("click", function () {
+        if (confirm('Quiere eliminar la aplicación?')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    });
+</script>
+
+{% endblock %}

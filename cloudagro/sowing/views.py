@@ -1,3 +1,5 @@
+from datetime import date, datetime
+from urllib import request
 from django.shortcuts import get_object_or_404, render, redirect
 from land.models import Land
 from harvest.models import Harvest
@@ -408,7 +410,6 @@ def lote_detail(request,  lote_id):
         
         if destroy_object_form.is_valid() and request.POST.get('delete_token'):
             lote.delete()
-            print('si')
             return redirect('sowing:lotes_list')
 
     else:
@@ -514,15 +515,12 @@ def lote_update(request, id):
             hectareas= lote_form.cleaned_data.get('hectareas')
             tipo= lote_form.cleaned_data.get('tipo')
 
-            print(hectareas)
-
             campaña = Campaign.objects.filter(estado = 'vigente').first()
             
             attrs = {'campo':campo, 'numero':numero,
                     'hectareas':hectareas, 'tipo':tipo,
                     'campaña':campaña }
 
-            print(attrs)
 
             lote = Lote(id=id, **attrs)
             lote.save()
@@ -541,4 +539,55 @@ def application_detail(request,id):
 
     application = get_object_or_404(Applications, id=id)
 
-    return render(request, 'sowing/application_detail.html',{'application':application,})                                            
+    lote = application.lote
+
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(data=request.POST)
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+            application.delete()
+            return redirect(lote.get_absolute_url())
+
+    else:
+        destroy_object_form = DestroyObjectForm()
+
+    return render(request, 'sowing/application_detail.html',{
+                                                            'application':application,
+                                                            'destroy_object_form':destroy_object_form,
+                                                            })
+
+def application_update(request,id):
+
+    application = get_object_or_404(Applications, id=id)
+
+    lote = application.lote
+
+    if request.method == 'POST':
+        application_form = ApplicationForm(data=request.POST)
+
+        if application_form.is_valid():
+
+            numero = application_form.cleaned_data.get('numero')
+            producto = application_form.cleaned_data.get('producto')
+            lt_kg =  application_form.cleaned_data.get('lt_kg')
+            tipo= application_form.cleaned_data.get('tipo')            
+            
+            date = application.date
+
+            attrs = {'numero':numero, 'producto':producto,
+                    'lt_kg':lt_kg, 'tipo':tipo, 'date':date,
+                    'lote':lote }
+
+
+            application = Applications(id=id, **attrs)
+            application.save()
+        
+
+            return redirect(lote.get_absolute_url())
+        
+    else:
+        application_form = ApplicationForm()
+
+    return render(request, 'sowing/application_update.html',{   
+                                                            'application':application,
+                                                            'application_form':application_form,
+                                                            }) 

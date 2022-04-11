@@ -89,7 +89,7 @@ class Lote(models.Model):
     estado = models.CharField(choices=STATE_CHOICES, default='no cosechado', max_length=12)
 
     def __str__(self):
-        return  'Campo: ' + str(self.campo) + ', ' ' Lote número: ' +  str(self.numero)
+        return str(self.campo) + ', ' ' Lote número: ' +  str(self.numero)
 
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.tipo, self.slug)
