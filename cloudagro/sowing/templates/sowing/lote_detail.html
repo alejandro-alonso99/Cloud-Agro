@@ -288,14 +288,6 @@
 </div>
 
 <script>
-    var inputElement = document.getElementById("del-harvest-btn")
-    inputElement.addEventListener("click", function () {
-        if (confirm('Quiere eliminar esta cosecha?')) {
-            document.getElementById("delete-harvest-form").submit()
-        } else {
-            return false;
-        }
-    })
 
     var harvestElement = document.getElementById("delete-btn")
     harvestElement.addEventListener("click", function () {
@@ -304,7 +296,18 @@
         } else {
             return false;
         }
-    })
+    });
+
+    var inputElement = document.getElementById("del-harvest-btn")
+    inputElement.addEventListener("click", function () {
+        if (confirm('Quiere eliminar esta cosecha?')) {
+            document.getElementById("delete-harvest-form").submit()
+        } else {
+            return false;
+        }
+    });
+
+
 
 
 

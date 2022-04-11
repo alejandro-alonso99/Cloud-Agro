@@ -541,4 +541,4 @@ def application_detail(request,id):
 
     application = get_object_or_404(Applications, id=id)
 
-    return render(request, 'sowing/application_detail.html',{})                                            
+    return render(request, 'sowing/application_detail.html',{'application':application,})                                            
