@@ -15,5 +15,7 @@ urlpatterns = [
     path('lotes/update/<int:id>/', views.lote_update, name='lote_update'),
     path('lotes/applications/<int:id>/', views.application_detail, name='application_detail'),
     path('lotes/applications/update/<int:id>/', views.application_update, name='application_update'),
+    path('lotes/labors/<int:id>/', views.labor_detail, name='labor_detail'),
+    path('lotes/labors/update/<int:id>/', views.labor_update, name='labor_update'),
 ]
  

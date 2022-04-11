@@ -258,11 +258,18 @@ class Labors(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return 'Lote: ' + str(self.lote) + ' Labor nro: ' + str(self.numero)
+        return str(self.lote) + ', Aplicación nro: ' + str(self.numero) + ', ' + str(self.nombre) 
     
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.nombre, self.slug)
         super(Labors, self).save(*args,**kwargs)
+
+    def get_absolute_url(self):
+
+        return reverse_lazy('sowing:labor_detail',args=[self.id])
+    
+    def get_update_url(self):
+       return reverse_lazy('sowing:labor_update', args=[self.id])
 
     def calculate_sub_total(self):
 

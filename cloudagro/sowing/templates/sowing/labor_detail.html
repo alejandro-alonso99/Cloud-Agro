@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% load purchase_extras %}
+
+{% block title %} Detalle de labor {% endblock %}
+
+{% block content %}
+
+<div class="info-container">
+    <div id="list-title">
+        Viendo aplicación: {{labor}}
+    </div>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Lote:</h2>
+                <h2 id="title-client-tag">Fecha</h2>
+                <h2 id="title-client-tag">Número:</h2>
+                <h2 id="title-client-tag">Nombre:</h2>
+                <h2 id="title-client-tag">USD X ha:</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ labor.lote}}</h2>
+                <h2 id="client-tag">{{ labor.date.day }} / {{ labor.date.month }} /
+                    {{ labor.date.year}}</h2>
+                <h2 id="client-tag">{{ labor.numero}}</h2>
+                <h2 id="client-tag">{{ labor.nombre | capfirst}}</h2>
+                <h2 id="client-total-tag">{{ labor.costo_ha | floatformat:2 | usd_currency}}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Labor
+            </div>
+            <a href="{{labor.get_update_url}}">
+                <h1 id="edit-btn">Editar labor<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar labor">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var harvestElement = document.getElementById("delete-btn")
+    harvestElement.addEventListener("click", function () {
+        if (confirm('Quiere eliminar el labor?')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    });
+</script>
+{% endblock %}

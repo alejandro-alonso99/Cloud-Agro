@@ -591,3 +591,59 @@ def application_update(request,id):
                                                             'application':application,
                                                             'application_form':application_form,
                                                             }) 
+
+def labor_detail(request, id):
+
+    labor = get_object_or_404(Labors, id=id)
+
+    lote = labor.lote
+
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(data=request.POST)
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+            labor.delete()
+            return redirect(lote.get_absolute_url())
+
+    else:
+        destroy_object_form = DestroyObjectForm()
+
+    return render(request, 'sowing/labor_detail.html',{
+                                                        'labor':labor,
+                                                        'destroy_object_form':destroy_object_form,
+                                                        })
+
+def labor_update(request, id):
+
+    labor = get_object_or_404(Labors, id=id)
+
+    lote = labor.lote
+
+    if request.method == 'POST':
+        labor_form = LaborsForm(data=request.POST)
+
+        if labor_form.is_valid():
+
+            numero = labor_form.cleaned_data.get('numero')
+            nombre = labor_form.cleaned_data.get('nombre')
+            costo_ha =  labor_form.cleaned_data.get('costo_ha')
+            
+            date = labor.date
+
+            attrs = {'numero':numero, 'nombre':nombre,
+                    'costo_ha':costo_ha, 'date':date,
+                    'lote':lote }
+
+
+            labor = Labors(id=id, **attrs)
+            labor.save()
+        
+
+            return redirect(lote.get_absolute_url())
+        
+    else:
+        labor_form = LaborsForm()
+    
+    return render(request, 'sowing/labor_update.html', {
+                                                        'labor':labor,
+                                                        'labor_form':labor_form,
+                                                        })
