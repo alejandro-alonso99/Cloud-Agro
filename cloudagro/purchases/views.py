@@ -266,3 +266,68 @@ def purchase_create(request):
                                                     'formset':formset,
                                                     })
                                                 
+
+def purchase_update(request, id):
+
+    purchase = get_object_or_404(Purchases, id=id)
+
+    purchase_form = PurchaseForm(request.POST or None)
+    qs = Animal.objects.none()
+    AnimalFormset = modelformset_factory(Animal, form=AnimalForm, extra=3)
+    formset = AnimalFormset(request.POST or None, queryset=qs)
+
+    if all([purchase_form.is_valid(),formset.is_valid()]):
+        
+        payments = purchase.payments
+
+        self_checks = purchase.self_checks
+
+        endorsed_checks = purchase.endorsed_checks
+
+        for check in endorsed_checks:
+                check_id = check.third_p_id
+                third_p_check = ThirdPartyChecks.objects.get(id=check_id)
+                third_p_check.estado = 'a depositar'
+                third_p_check.save()
+                check.delete()
+
+        for check in self_checks:
+            check.delete()
+
+        for payment in payments:
+            payment.delete()
+        
+        animals = purchase.animal_set.all()
+
+        for animal in animals:
+            animal.delete()
+
+        campo = purchase_form.cleaned_data.get('campo')
+        client = purchase_form.cleaned_data.get('client')
+        brute_kg = purchase_form.cleaned_data.get('brute_kg')
+        desbaste = purchase_form.cleaned_data.get('desbaste')
+        total_animals = purchase_form.cleaned_data.get('total_animals')
+
+        date = purchase.date
+
+        attrs = {'campo':campo, 'client':client,
+                    'brute_kg':brute_kg, 'desbaste':desbaste,
+                    'total_animals':total_animals,
+                    'date':date, 'status':'por pagar'}
+
+        purchase = Purchases(id=id, **attrs)
+        purchase.save()
+        
+        for form in formset:
+            child = form.save(commit=False)
+            child.purchase = purchase
+            child.save()
+            Animal.delete_empty()
+        
+        return redirect(purchase.get_absolute_url())
+
+    return render(request, 'purchases/purchase_update.html',{
+                                                            'purchase_form':purchase_form,
+                                                            'formset':formset,
+                                                            'purchase':purchase,
+                                                            })

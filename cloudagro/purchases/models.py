@@ -1,5 +1,5 @@
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from land.models import Campaign, Land
 from cloudagro.utils import unique_slug_generator
 from django.contrib.contenttypes.models import ContentType
@@ -29,6 +29,9 @@ class Purchases(models.Model):
     def get_absolute_url(self):
         return reverse ('purchases:purchase_detail',
                                         args=[self.id])
+
+    def get_update_url(self):
+        return reverse_lazy('purchases:purchase_update', args=[self.id])
 
     def calculate_total(self):
         animals = self.animal_set.all()
