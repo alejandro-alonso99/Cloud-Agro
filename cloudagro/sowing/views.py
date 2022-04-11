@@ -114,14 +114,9 @@ def sowing_purchases_create(request):
                                                                     })
 
 @login_required
-def sowing_purchase_detail(request, year, month, day, sowing_purchase):
+def sowing_purchase_detail(request, id):
 
-    sowing_purchase = get_object_or_404(SowingPurchases, slug=sowing_purchase,
-                                                            date__year = year,
-                                                            date__month = month,
-                                                            date__day = day
-                                                            )
-
+    sowing_purchase = get_object_or_404(SowingPurchases, id=id)
 
     precio_lt_kg = sowing_purchase.precio_lt_kg_usd * sowing_purchase.tipo_cambio
 
@@ -230,7 +225,29 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
 
         return redirect(sowing_purchase.get_absolute_url())
 
-    
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(data=request.POST)
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+
+            for check in endorsed_checks:
+                check_id = check.third_p_id
+                third_p_check = ThirdPartyChecks.objects.get(id=check_id)
+                third_p_check.estado = 'a depositar'
+                third_p_check.save()
+                check.delete()
+
+            for check in self_checks:
+                check.delete()
+
+            for payment in payments:
+                payment.delete()
+
+            sowing_purchase.delete()
+            return redirect('sowing:sowing_purchases_list')
+    else:
+        destroy_object_form = DestroyObjectForm()
+
+
     return render(request, 'sowing/sowing_purchase_detail.html', {
                                                                 'sowing_purchase':sowing_purchase,
                                                                 'precio_lt_kg':precio_lt_kg,
@@ -243,6 +260,7 @@ def sowing_purchase_detail(request, year, month, day, sowing_purchase):
                                                                 'third_p_checks':third_p_checks,
                                                                 'endorsed_checks_form':endorsed_checks_form,
                                                                 'endorsed_checks':endorsed_checks,
+                                                                'destroy_object_form':destroy_object_form,
                                                                 })                                
 
 

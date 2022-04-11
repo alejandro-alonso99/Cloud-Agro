@@ -31,11 +31,7 @@ class SowingPurchases(models.Model):
         return str(self.proveedor) + ' ' + self.date.strftime("%d-%m-%Y") + ' Siembra'
 
     def get_absolute_url(self):
-        return reverse ('sowing:sowing_purchase_detail',
-                                        args=[self.date.day,
-                                                self.date.month,
-                                                self.date.year,
-                                                self.slug])
+        return reverse ('sowing:sowing_purchase_detail',args=[self.id])
 
     def calculate_total(self):
 
