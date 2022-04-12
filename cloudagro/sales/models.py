@@ -28,10 +28,7 @@ class Sales(models.Model):
 
     def get_absolute_url(self):
         return reverse ('sales:sales_detail',
-                                        args=[self.date.day,
-                                                self.date.month,
-                                                self.date.year,
-                                                self.slug])
+                                        args=[self.id])
     
     def calculate_total(self):
         sale_rows = self.salerow_set.all()

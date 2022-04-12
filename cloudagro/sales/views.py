@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
 from .forms import SaleSearchForm, SaleForm, SaleRowForm
@@ -8,6 +9,7 @@ from payments.forms import PaymentForm, ThirdPartyChecksForm
 from django.forms.models import modelformset_factory
 from .models import Payments
 from purchases.forms import SearchForm, DateForm
+from payments.forms import DestroyObjectForm
 
 @login_required
 def sales_list(request):
@@ -75,12 +77,8 @@ def sale_search(request):
 
 
 @login_required
-def sales_detail(request, year, month, day, sale):
-    sale = get_object_or_404(Sales, slug=sale,
-                                                date__year = year,
-                                                date__month = month,
-                                                date__day = day )
-    
+def sales_detail(request, id):
+    sale = get_object_or_404(Sales, id=id)
     kg_neto =  sale.brute_kg - (sale.brute_kg * (sale.desbaste/100)) 
 
     try:   
@@ -182,6 +180,28 @@ def sales_detail(request, year, month, day, sale):
 
     sale_zip = zip(sale_rows,kg_totales,sub_totals,animal_ivas,animal_totals)
     money_zip = zip(payments,third_p_checks)
+
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(data=request.POST)
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+
+            for payment in payments:
+                payment.delete()
+
+            for check in third_p_checks:
+                check_id = check.id
+                if EndorsedChecks.objects.filter(third_p_id = check_id):
+                    print('yes')
+                    endorsed_check = EndorsedChecks.objects.filter(third_p_id = check_id).first()
+                    parent = endorsed_check.content_object
+                    parent.status = 'por pagar'
+                    parent.save()
+                    endorsed_check.delete()
+
+                check.delete()
+
+            sale.delete()
+            return redirect('sales:sale_list')
 
     return render(request, 'sales/sales_detail.html',
                                     {'sale' : sale,

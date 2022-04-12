@@ -3,12 +3,11 @@
 {% load purchase_extras %}
 
 {% block content %}
-<h1 id="list-title">Viendo venta: {{sale}}</h1>
-{% if sale.status == 'por cobrar' %}
-<h1 id="total-list-title">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h1>
-{% endif %}
-
 <div class="info-container">
+    <h1 id="list-title">Viendo venta: {{sale}}</h1>
+    {% if sale.status == 'por cobrar' %}
+    <h1 id="total-list-title">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h1>
+    {% endif %}
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -178,4 +177,35 @@
     </form>
     {% endif %}
 </div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Venta
+            </div>
+            <a href="{{purchase.get_update_url}}">
+                <h1 id="edit-btn">Editar venta<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar venta">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var harvestElement = document.getElementById("delete-btn")
+    harvestElement.addEventListener("click", function () {
+        if (confirm('Si elimina la venta se eliminarán los pagos relacionados')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    });
+
+</script>
 {% endblock %}
