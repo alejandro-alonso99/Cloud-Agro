@@ -191,7 +191,6 @@ def sales_detail(request, id):
             for check in third_p_checks:
                 check_id = check.id
                 if EndorsedChecks.objects.filter(third_p_id = check_id):
-                    print('yes')
                     endorsed_check = EndorsedChecks.objects.filter(third_p_id = check_id).first()
                     parent = endorsed_check.content_object
                     parent.status = 'por pagar'
@@ -235,10 +234,73 @@ def sale_create(request):
             child = form.save(commit=False)
             child.sale = parent
             child.save()
-        
+            SaleRow.delete_empty()
+
         return redirect(parent.get_absolute_url())
 
     return render(request, 'sales/sales_form.html',{
+                                                    'sale_form':sale_form,
+                                                    'formset':formset,
+                                                    })
+
+@login_required
+def sale_update(request, id):
+
+    sale = get_object_or_404(Sales, id=id)
+
+    sale_form = SaleForm(request.POST or None)
+    qs = SaleRow.objects.none()
+    SaleRowFormset = modelformset_factory(SaleRow, form=SaleRowForm, extra=3)
+    formset = SaleRowFormset(request.POST or None, queryset=qs)
+
+    if all([sale_form.is_valid(),formset.is_valid()]):
+        payments = sale.payments
+
+        for payment in payments:
+            payment.delete()
+
+        third_p_checks = sale.third_party_checks
+
+        for check in third_p_checks:
+            check_id = check.id
+            if EndorsedChecks.objects.filter(third_p_id = check_id):
+                endorsed_check = EndorsedChecks.objects.filter(third_p_id = check_id).first()
+                parent = endorsed_check.content_object
+                parent.status = 'por pagar'
+                parent.save()
+                endorsed_check.delete()
+            
+            check.delete()
+
+        sale_rows = sale.salerow_set.all()
+        for row in sale_rows:
+            row.delete()
+
+        campo = sale_form.cleaned_data.get('campo')
+        client = sale_form.cleaned_data.get('client')
+        brute_kg = sale_form.cleaned_data.get('brute_kg')
+        desbaste = sale_form.cleaned_data.get('desbaste')
+        total_animals = sale_form.cleaned_data.get('total_animals')
+
+        date = sale.date
+
+        attrs = {'campo':campo, 'client':client,
+                    'brute_kg':brute_kg, 'desbaste':desbaste,
+                    'total_animals':total_animals,
+                    'date':date, 'status':'por cobrar'}
+
+        sale = Sales(id=id, **attrs)
+        sale.save()
+
+        for form in formset:
+            child = form.save(commit=False)
+            child.sale = sale
+            child.save()
+            SaleRow.delete_empty()
+
+        return redirect(sale.get_absolute_url())
+
+    return render(request, 'sales/sale_update.html',{
                                                     'sale_form':sale_form,
                                                     'formset':formset,
                                                     })

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="info-container">
+
+    <form action="." method="post">
+        {% csrf_token %}
+        <div id="list-title">
+            1- Datos generales:
+        </div>
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
+                        <h2 id="title-client-tag">{{sale_form.campo}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-user"></i>Cliente:</h3>
+                        <h2 id="title-client-tag">{{sale_form.client}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-signature"></i>Animales:
+                        </h3>
+                        <h2 id="title-client-tag">{{sale_form.total_animals}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-weight-hanging"></i>Kg brutos:</h3>
+                        <h2 id="title-client-tag">{{sale_form.brute_kg}}</h2>
+                    </div>
+                    <div class="create-element">
+
+                        <h3><i class="fa-solid fa-percent"></i>Desbaste:
+                        </h3>
+                        <h2 id="title-client-tag">{{sale_form.desbaste}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="list-title">
+            2- Animales por categoría (máximo 3 categorías) :
+        </div>
+        {{formset.management_form}}
+        {% for form in formset %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section-horizontal">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-import"></i>Categoria:</h3>
+                        <h2 id="title-client-tag">{{form.categoria}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Cantidad:</h3>
+                        <h2 id="title-client-tag">{{form.cantidad}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill"></i>iva:</h3>
+                        <h2 id="title-client-tag">{{form.iva}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-weight-scale"></i>Precio por kg:
+                        </h3>
+                        <h2 id="title-client-tag">{{form.precio_por_kg}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <input type="submit" value="Editar" id="create-btn">
+    </form>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Editar venta
+            </div>
+            <h3 id="update-description">
+                Recuerde que al editar la venta se eliminan los pagos anteriormente registrados en la misma y se
+                desendosan los cheques endosados.
+            </h3>
+        </div>
+    </div>
+</div>
+{% endblock %}
