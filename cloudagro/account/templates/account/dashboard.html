@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load purchase_extras %}
+{% load humanize %}
 {% block title %}Resumen{% endblock %}
 {% block content %}
 
@@ -28,7 +29,7 @@
                 <h2 id="client-tag">{{producto | capfirst}}</h2>
                 <h2 id="client-tag">- - -</h2>
                 <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">{{total | floatformat:2}}</h2>
+                <h2 id="client-tag">{{total | intcomma}}</h2>
             </div>
         </div>
         {% empty %}
@@ -68,9 +69,9 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">Total:</h2>
-                <h2 id="client-total-tag"> {{ cash_total | floatformat:2 | currency}}</h2>
-                <h2 id="client-total-tag"> {{ bank_total | floatformat:2 | currency}}</h2>
-                <h2 id="client-total-tag"> {{ third_p_checks_total | floatformat:2 | currency}}</h2>
+                <h2 id="client-total-tag"> ${{ cash_total | intcomma}}</h2>
+                <h2 id="client-total-tag"> ${{ bank_total | intcomma}}</h2>
+                <h2 id="client-total-tag"> ${{ third_p_checks_total | intcomma}}</h2>
             </div>
         </div>
     </div>
@@ -114,7 +115,7 @@
                 <h2 id="client-tag">{{cereal | capfirst}}</h2>
                 <h2 id="client-tag">- - -</h2>
                 <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">{{kg | floatformat:2}}</h2>
+                <h2 id="client-tag">{{kg | intcomma}}</h2>
             </div>
         </div>
         {% endfor %}
@@ -137,7 +138,7 @@
                 <h2 id="client-tag">{{producto | capfirst}}</h2>
                 <h2 id="client-tag">- - -</h2>
                 <h2 id="client-tag">- - -</h2>
-                <h2 id="client-tag">{{total | floatformat:2}}</h2>
+                <h2 id="client-tag">{{total | intcomma}}</h2>
             </div>
         </div>
         {% endfor %}

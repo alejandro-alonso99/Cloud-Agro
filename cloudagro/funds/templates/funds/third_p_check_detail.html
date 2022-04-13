@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %} Detalle del Cheque {% endblock %}
 
 {% block content %}
@@ -20,12 +22,10 @@
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ third_p_check.fecha_ingreso.day }} / {{ third_p_check.fecha_ingreso.month }} /
-                    {{third_p_check.fecha_ingreso.year }}</h2>
+                <h2 id="client-tag">{{ third_p_check.fecha_ingreso | date:"d M Y"}}</h2>
                 <h2 id="client-tag">{{ third_p_check.cliente | capfirst }}</h2>
-                <h2 id="client-tag">{{ third_p_check.fecha_deposito.day }} / {{ third_p_check.fecha_deposito.month }} /
-                    {{ third_p_check.fecha_deposito.year }}</h2>
-                <h2 id="client-total-tag">{{third_p_check.monto | currency}}</h2>
+                <h2 id="client-tag">{{ third_p_check.fecha_deposito | date:"d M Y"}}</h2>
+                <h2 id="client-total-tag">${{third_p_check.monto | intcomma}}</h2>
             </div>
         </div>
     </div>

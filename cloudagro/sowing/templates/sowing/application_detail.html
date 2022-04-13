@@ -24,8 +24,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ application.lote}}</h2>
-                <h2 id="client-tag">{{ application.date.day }} / {{ application.date.month }} /
-                    {{ application.date.year}}</h2>
+                <h2 id="client-tag">{{ application.date | date:"d M Y"}}</h2>
                 <h2 id="client-tag">{{ application.numero}}</h2>
                 <h2 id="client-tag">{{ application.lt_kg}}</h2>
                 <h2 id="client-tag">{{ application.producto | capfirst}}</h2>

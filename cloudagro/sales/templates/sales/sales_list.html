@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %}Ventas Hacienda{% endblock %}
 
 {% block content %}
@@ -33,13 +35,13 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ sale.client | capfirst}}</h2>
-                <h2 id="client-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
+                <h2 id="client-tag"> {{ sale.date | date:"d M Y"}} </h2>
                 {% if sale.status == 'por cobrar' %}
                 <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
                 {% else %}
                 <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
+                <h2 id="total-sale-tag">${{ sale.calculate_total| intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -79,7 +81,7 @@
         <div class="data total-sales-month">
             <i class="fa-solid fa-cash-register"></i>
             <h1>Monto por cobrar:</h1>
-            <h2>{{ amount_to_receive_total | currency }}</h2>
+            <h2>${{ amount_to_receive_total | intcomma }}</h2>
         </div>
     </div>
     <h1 id="list-title">Historial de ventas de hacienda:</h1>
@@ -98,13 +100,13 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ sale.client | capfirst}}</h2>
-                <h2 id="client-tag"> {{ sale.date.day }}/{{ sale.date.month }}/{{ sale.date.year }} </h2>
+                <h2 id="client-tag"> {{ sale.date | date:"d M Y"}} </h2>
                 {% if sale.status == 'por cobrar' %}
                 <h2 id="status-tag">{{ sale.status | capfirst}}</h2>
                 {% else %}
                 <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-sale-tag">Total: {{ sale.calculate_total | floatformat:2 | currency }}</h2>
+                <h2 id="total-sale-tag">${{ sale.calculate_total | intcomma }}</h2>
             </div>
         </div>
     </a>

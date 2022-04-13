@@ -23,8 +23,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ labor.lote}}</h2>
-                <h2 id="client-tag">{{ labor.date.day }} / {{ labor.date.month }} /
-                    {{ labor.date.year}}</h2>
+                <h2 id="client-tag">{{ labor.date | date:"d M Y"}}</h2>
                 <h2 id="client-tag">{{ labor.numero}}</h2>
                 <h2 id="client-tag">{{ labor.nombre | capfirst}}</h2>
                 <h2 id="client-total-tag">{{ labor.costo_ha | floatformat:2 | usd_currency}}</h2>

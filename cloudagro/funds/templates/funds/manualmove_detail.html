@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %}Detalle del movimiento {% endblock %}
 
 {% block content %}
@@ -25,12 +27,11 @@
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ manualmove.date.day }} / {{ manualmove.date.month }} /
-                    {{ manualmove.date.year }}
+                <h2 id="client-tag">{{ manualmove.date | date:"d M Y" }}
                 </h2>
                 <h2 id="client-tag">{{ manualmove.tipo | capfirst }}</h2>
                 <h2 id="client-tag">{{ manualmove.action | capfirst }}</h2>
-                <h2 id="client-total-tag">{{ manualmove.monto | currency }}</h2>
+                <h2 id="client-total-tag">${{ manualmove.monto | intcomma }}</h2>
             </div>
         </div>
     </div>

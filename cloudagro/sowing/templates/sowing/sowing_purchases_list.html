@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %} Compras de Siembra {% endblock %}
 
 {% block content %}
@@ -41,9 +43,8 @@
                 {% endif %}
                 <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
                 <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>
-                <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}
-                    /{{sowing_purchase.date.year }} </h2>
-                <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag"> {{ sowing_purchase.date | date:"d M Y"}} </h2>
+                <h2 id="total-tag">${{ sowing_purchase.calculate_total | intcomma }}</h2>
                 {% if sowing_purchase.status == 'por pagar' %}
                 <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% else %}
@@ -87,7 +88,7 @@
         <div class="data total-sales-month">
             <i class="fa-solid fa-cash-register"></i>
             <h1>Monto por pagar:</h1>
-            <h2>{{ total_amount_to_pay | floatformat:2 | currency}}</h2>
+            <h2>${{ total_amount_to_pay | intcomma}}</h2>
         </div>
     </div>
     <div id="list-title">
@@ -116,9 +117,8 @@
                 {% endif %}
                 <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
                 <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>
-                <h2 id="client-tag"> {{ sowing_purchase.date.day }}/{{ sowing_purchase.date.month }}
-                    /{{sowing_purchase.date.year }} </h2>
-                <h2 id="total-tag">{{ sowing_purchase.calculate_total | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag"> {{ sowing_purchase.date | date:"d M Y" }} </h2>
+                <h2 id="total-tag">${{ sowing_purchase.calculate_total | intcomma }}</h2>
                 {% if sowing_purchase.status == 'por pagar' %}
                 <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% else %}

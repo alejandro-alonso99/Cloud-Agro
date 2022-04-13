@@ -1,47 +1,75 @@
-{% extends "base.html" %}
 {% load static %}
-{% block title %}Log-in{% endblock %}
-{% block login %}
-    <div id="form-box">
-        <div id="login-logo">
-            <svg width="284" height="284" viewBox="0 0 284 284" fill="none" xmlns="http://www.w3.org/2000/svg" id="logo-svg">
-                <rect x="0.892578" y="142.131" width="200" height="200" transform="rotate(-45 0.892578 142.131)" fill="#63FF9B"/>
-                <path d="M177.633 101.644L142.056 65.8531L66.0344 142.169L142.013 217.985L177.77 182.512L209.827 214.755L141.644 282.58L1.33984 142.276L142.257 1.68172L210.008 69.6243L177.633 101.644Z" fill="#232230" stroke="#232230"/>
-                <path d="M257.261 141.948L204.44 88.5711L216.349 75.9947L282.708 142.029L216.39 208.267L203.849 195.766L257.261 141.948Z" fill="#232230" stroke="#232230"/>
-                <path d="M183.788 69.5252L140.663 26.5284L24.9961 142.002L140.727 257.733L183.724 214.736L176.258 207.592L140.727 243.315L39.6066 142.002L140.663 41.0752L176.579 76.7343L183.788 69.5252Z" fill="#63FF9B" stroke="#232230"/>
-                <path d="M243.278 142.131L197.982 187.657L178.438 168.343L143.029 203.293L81.1768 142.131L143.029 80.9691L178.438 114.999L197.982 95.9146L243.278 142.131Z" fill="#232230"/>
-                <path d="M142.431 179.365L105.674 142.244L142.431 104.896L177.504 139.97L197.264 120.827L219 141.575L197.264 163.558L177.504 144.168L142.431 179.365Z" fill="#63FF9B"/>
-                <circle cx="142.314" cy="142.131" r="12.5" fill="#232230"/>
-                </svg>    
-            <h1>AgroCloud</h1>
-        </div>
-        
-        {% if form.errors %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/026a228444.js" crossorigin="anonymous"></script>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/normalize.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/Darklogo.svg' %}">
+    <title>Log-in</title>
+</head>
+
+<body>
+    <div id="login-content">
+        <div id="form-box">
+            <div id="login-logo">
+                <svg width="284" height="284" viewBox="0 0 284 284" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    id="logo-svg">
+                    <rect x="0.892578" y="142.131" width="200" height="200" transform="rotate(-45 0.892578 142.131)"
+                        fill="#63FF9B" />
+                    <path
+                        d="M177.633 101.644L142.056 65.8531L66.0344 142.169L142.013 217.985L177.77 182.512L209.827 214.755L141.644 282.58L1.33984 142.276L142.257 1.68172L210.008 69.6243L177.633 101.644Z"
+                        fill="#232230" stroke="#232230" />
+                    <path
+                        d="M257.261 141.948L204.44 88.5711L216.349 75.9947L282.708 142.029L216.39 208.267L203.849 195.766L257.261 141.948Z"
+                        fill="#232230" stroke="#232230" />
+                    <path
+                        d="M183.788 69.5252L140.663 26.5284L24.9961 142.002L140.727 257.733L183.724 214.736L176.258 207.592L140.727 243.315L39.6066 142.002L140.663 41.0752L176.579 76.7343L183.788 69.5252Z"
+                        fill="#63FF9B" stroke="#232230" />
+                    <path
+                        d="M243.278 142.131L197.982 187.657L178.438 168.343L143.029 203.293L81.1768 142.131L143.029 80.9691L178.438 114.999L197.982 95.9146L243.278 142.131Z"
+                        fill="#232230" />
+                    <path
+                        d="M142.431 179.365L105.674 142.244L142.431 104.896L177.504 139.97L197.264 120.827L219 141.575L197.264 163.558L177.504 144.168L142.431 179.365Z"
+                        fill="#63FF9B" />
+                    <circle cx="142.314" cy="142.131" r="12.5" fill="#232230" />
+                </svg>
+                <h1>AgroCloud</h1>
+            </div>
+
+            {% if form.errors %}
             <p>
                 Usuario o contraseña incorrectos.
             </p>
-        {% endif %}
+            {% endif %}
             <div class="login-form">
                 <form action="{% url 'account:login' %}" method="post">
                     {% csrf_token %}
-                    
-                        <div class="form-element">
-                            <i class="fas fa-user"></i> {{form.username}} 
-                        </div>
-                        <div class="form-element">
-                            <i class="fas fa-lock"></i> {{form.password}}
-                        </div>
-                <input type="hidden" name="next" value="{{ next }}" />
-                <p><input type="submit" value="Ingresar" id="form-btn"></p>
+
+                    <div class="form-element">
+                        <i class="fas fa-user"></i> {{form.username}}
+                    </div>
+                    <div class="form-element">
+                        <i class="fas fa-lock"></i> {{form.password}}
+                    </div>
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <p><input type="submit" value="Ingresar" id="form-btn"></p>
                 </form>
             </div>
-    </div>
-    <div id="bg-ilust">
-        <img src="{% static 'images/Group 9.svg' %}" alt="">
-    </div>
+        </div>
+        <div id="bg-ilust">
+            <img src="{% static 'images/Group 9.svg' %}" alt="">
+        </div>
 
-    <div id="bg-ilust2">
-        <img src="{% static 'images/Group 8.svg' %}" alt="">
+        <div id="bg-ilust2">
+            <img src="{% static 'images/Group 8.svg' %}" alt="">
+        </div>
     </div>
+</body>
 
-{% endblock %}
+</html>

@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %} Cheques Terceros {% endblock %}
 
 {% block content %}
@@ -22,13 +24,13 @@
         </div>
         <div class="title-movement-card">
             <div id="total-card-row">
-                <h2 id="client-tag">{{today_checks | currency}}</h2>
-                <h2 id="client-tag">{{week_checks | currency}}</h2>
-                <h2 id="client-tag">{{two_week_checks | currency}}</h2>
-                <h2 id="client-tag">{{month_checks | currency}}</h2>
-                <h2 id="client-tag">{{two_month_checks | currency}}</h2>
-                <h2 id="client-tag">{{more_months_checks | currency}}</h2>
-                <h2 id="client-tag">{{total_to_pay_checks | currency}}</h2>
+                <h2 id="client-tag">${{today_checks | intcomma}}</h2>
+                <h2 id="client-tag">${{week_checks | intcomma}}</h2>
+                <h2 id="client-tag">${{two_week_checks | intcomma}}</h2>
+                <h2 id="client-tag">${{month_checks | intcomma}}</h2>
+                <h2 id="client-tag">${{two_month_checks | intcomma}}</h2>
+                <h2 id="client-tag">${{more_months_checks | intcomma}}</h2>
+                <h2 id="client-tag">${{total_to_pay_checks | intcomma}}</h2>
             </div>
         </div>
     </div>
@@ -52,10 +54,8 @@
             <div id="card-row-1">
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
-                    {{check.fecha_ingreso.year }} </h2>
-                <h2 id="client-tag"> {{ check.fecha_deposito.day }}/{{ check.fecha_deposito.month }}/
-                    {{check.fecha_deposito.year }} </h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
                 {% if check.estado == 'a depositar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
                 {% elif check.estado == 'endosado' %}
@@ -63,7 +63,7 @@
                 {% else %}
                 <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">{{ check.monto | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
             </div>
         </div>
     </a>

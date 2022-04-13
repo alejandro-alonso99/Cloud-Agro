@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %} Movimientos a mano {% endblock %}
 
 {% block content %}
@@ -12,7 +14,7 @@
                 class="fas fa-chevron-left"></i>Volver
             a listado</a></p>
     <div id="list-title">
-        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+        Filtrando entre Fechas: "{{date_query_start }}" y "{{date_query_end}}"
     </div>
     {% if manual_moves %}
     <div class="title-movement-card">
@@ -28,10 +30,10 @@
     <a href="{{move.get_absolute_url}}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+                <h2 id="date-tag"> {{ move.date | date:"d M Y"}} </h2>
                 <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
                 <h2 id="client-tag">{{ move.action | capfirst}}</h2>
-                <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">${{ move.monto | intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -77,10 +79,10 @@
     <a href="{{move.get_absolute_url}}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="date-tag"> {{ move.date.day }}/{{ move.date.month }}/{{ move.date.year }} </h2>
+                <h2 id="date-tag"> {{ move.date | date:"d M Y"}} </h2>
                 <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
                 <h2 id="client-tag">{{ move.action | capfirst}}</h2>
-                <h2 id="total-tag">{{ move.monto | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">${{ move.monto | intcomma }}</h2>
             </div>
         </div>
     </a>

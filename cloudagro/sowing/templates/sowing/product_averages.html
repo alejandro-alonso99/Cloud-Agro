@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %} Promedio de productos {% endblock %}
 
 {% block content %}
@@ -24,11 +26,25 @@
         <div id="card-row-1">
             <h2 id="client-tag">{{key1 | capfirst}}</h2>
             <h2 id="client-total-tag">{{ value1.0 | floatformat:2 | usd_currency}} </h2>
-            <h2 id="client-total-tag">{{ value1.1 | floatformat:2 | currency}} </h2>
+            <h2 id="client-total-tag">${{ value1.1 | intcomma}} </h2>
         </div>
     </div>
 
     {% endfor %}
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Precios promedio
+            </div>
+            <h3 id="update-description">
+                Los precios promedio se calculan promediando todas las compras de un producto en la campaña
+                seleccionada.
+            </h3>
+        </div>
+    </div>
 </div>
 
 

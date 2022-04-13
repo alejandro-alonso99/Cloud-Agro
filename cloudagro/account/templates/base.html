@@ -1,4 +1,8 @@
 {% load static %}
+{% load humanize %}
+{% load i18n %}
+{% load l10n %}
+{% language 'es' %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -14,8 +18,6 @@
 </head>
 
 <body>
-    {% if request.get_full_path != '/account/login/' %}
-
     <div class="navbar">
         <a href="{% url 'account:dashboard' %}" id="nav-title">AgroCloud </a>
         <div class="navbar-items">
@@ -106,14 +108,6 @@
         {% block content %}
         {% endblock %}
     </div>
-    {% endif %}
-    {% if request.get_full_path == '/account/login/' %}
-    <div id="login-content">
-        {% block login %}
-        {% endblock %}
-    </div>
-    {% endif %}
-
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -123,3 +117,4 @@
     crossorigin="anonymous"></script>
 
 </html>
+{% endlanguage %}

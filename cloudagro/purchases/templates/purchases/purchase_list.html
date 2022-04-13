@@ -2,6 +2,8 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block title %}Compras Hacienda{% endblock %}
 
 {% block content %}
@@ -34,13 +36,13 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ purchase.client | capfirst}}</h2>
-                <h2 id="date-tag"> {{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
+                <h2 id="date-tag"> {{ purchase.date | date:"d M Y"}} </h2>
                 {% if purchase.status == 'por pagar' %}
                 <h2 id="status-tag">{{ purchase.status | capfirst}}</h2>
                 {% else %}
                 <h2 id="status-done-tag">{{ purchase.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">Total: {{ purchase.calculate_total | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">${{ purchase.calculate_total | intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -79,7 +81,7 @@
         <div class="data total-sales-month">
             <i class="fa-solid fa-cash-register"></i>
             <h1>Monto por pagar:</h1>
-            <h2>{{ amount_to_pay_total | currency }}</h2>
+            <h2>${{ amount_to_pay_total | intcomma }}</h2>
         </div>
     </div>
     <div id="list-title">
@@ -100,13 +102,13 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ purchase.client | capfirst}}</h2>
-                <h2 id="date-tag"> {{ purchase.date.day }}/{{ purchase.date.month }}/{{ purchase.date.year }} </h2>
+                <h2 id="date-tag"> {{ purchase.date | date:"d M Y"}} </h2>
                 {% if purchase.status == 'por pagar' %}
                 <h2 id="status-tag">{{ purchase.status | capfirst}}</h2>
                 {% else %}
                 <h2 id="status-done-tag">{{ purchase.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">Total: {{ purchase.calculate_total | floatformat:2 | currency }}</h2>
+                <h2 id="total-tag">${{ purchase.calculate_total | intcomma }}</h2>
             </div>
         </div>
     </a>

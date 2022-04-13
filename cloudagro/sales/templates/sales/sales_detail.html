@@ -2,11 +2,13 @@
 
 {% load purchase_extras %}
 
+{% load humanize %}
+
 {% block content %}
 <div class="info-container">
     <h1 id="list-title">Viendo venta: {{sale}}</h1>
     {% if sale.status == 'por cobrar' %}
-    <h1 id="total-list-title">Total por cobrar: {{ sale.calculate_amount_to_pay | currency}}</h1>
+    <h1 id="total-list-title">Total por cobrar: ${{ sale.calculate_amount_to_pay | intcomma}}</h1>
     {% endif %}
     <div id="wrapper">
         <div class="title-movement-card">
@@ -22,7 +24,7 @@
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ sale.date.day }} / {{ sale.date.month }} / {{ sale.date.year }}</h2>
+                <h2 id="client-tag">{{ sale.date | date:"d M Y"}}</h2>
                 <h2 id="client-tag">{{ sale.client | capfirst }}</h2>
                 <h2 id="client-tag">{{ sale.total_animals }}</h2>
                 <h2 id="client-tag">{{ sale.brute_kg }}</h2>
@@ -59,9 +61,9 @@
                 <h2 id="client-tag">{{row.cantidad}}</h2>
                 <h2 id="client-tag">{{kg_cabeza | floatformat:2}}</h2>
                 <h2 id="client-tag">{{kg_total | floatformat:2}}</h2>
-                <h2 id="client-tag">{{sub_total | floatformat:2 | currency }}</h2>
-                <h2 id="client-tag">{{ iva | floatformat:2 | currency }}</h2>
-                <h2 id="client-tag">{{total | floatformat:2 | currency}}</h2>
+                <h2 id="client-tag">${{sub_total | intcomma }}</h2>
+                <h2 id="client-tag">${{ iva | intcomma }}</h2>
+                <h2 id="client-tag">${{total | intcomma}}</h2>
             </div>
         </div>
         {% endif %}
@@ -73,9 +75,9 @@
                 <h2 id="client-tag">{{ total_cabezas }}</h2>
                 <h2 id="client-tag">- - -</h2>
                 <h2 id="client-tag">{{total_kg_total |floatformat:2}}</h2>
-                <h2 id="client-tag">{{ total_sub_totals | floatformat:2 | currency }}</h2>
-                <h2 id="client-tag">{{ total_ivas | floatformat:2 | currency}}</h2>
-                <h2 id="client-tag">{{ sale_total | floatformat:2 | currency}}</h2>
+                <h2 id="client-tag">${{ total_sub_totals | intcomma }}</h2>
+                <h2 id="client-tag">${{ total_ivas | intcomma}}</h2>
+                <h2 id="client-tag">${{ sale_total | intcomma}}</h2>
             </div>
         </div>
     </div>
@@ -94,8 +96,8 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
-                <h2 id="client-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
-                <h2 id="client-total-tag">Total: {{ payment.monto | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag"> {{ payment.date | date:"d M Y"}} </h2>
+                <h2 id="client-total-tag">${{ payment.monto| intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -105,9 +107,8 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag"> Cheque </h2>
-                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
-                    {{check.fecha_ingreso.year }} </h2>
-                <h2 id="client-total-tag">Total: {{ check.monto | floatformat:2 | currency }}</h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-total-tag">${{ check.monto | intcomma }}</h2>
             </div>
         </div>
     </a>
