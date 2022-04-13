@@ -1,11 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from purchases.models import Animal
-from sales.models import SaleRow
 from stock.models import ManualMove
 from .forms import ManualMoveForm
-from sowing.models import Applications, SowingPurchases
 from django.contrib.auth.decorators import login_required
 from payments.forms import DestroyObjectForm
+from purchases.forms import SearchForm, DateForm
 
 @login_required
 def manualmove_detail(request, year, month, day, manualmove):
@@ -49,7 +47,23 @@ def manualmove_create(request):
 
 @login_required
 def manualmove_list(request):   
-    manualmoves = ManualMove.objects.all()
-    return render(request,'stock/manualmove_list.html',{'manualmoves':manualmoves
 
-                                                            })   
+    manualmoves = ManualMove.objects.all()
+
+    date_form = DateForm()
+
+    date_query_start = None
+    date_query_end = None
+
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            manualmoves = ManualMove.objects.filter(date__range=[date_query_start, date_query_end])
+
+    return render(request,'stock/manualmove_list.html',{'manualmoves':manualmoves,
+                                                        'date_form':date_form,
+                                                        'date_query_start':date_query_start,
+                                                        'date_query_end':date_query_end,
+                                                        })   
