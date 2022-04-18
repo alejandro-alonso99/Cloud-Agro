@@ -617,7 +617,7 @@ e {
 
 #change-state-btn {
   font-size: 14px;
-  width: fit-content;
+  width: 100%;
   color: #232230;
   padding: 10px 20px;
   font-weight: bolder;
@@ -625,6 +625,8 @@ e {
   border: none;
   transition: all 0.3s;
   background-color: #80E080;
+  margin: 10px 0;
+
 }
 
 #delete-btn {
@@ -705,8 +707,7 @@ e {
 }
 
 #change-state-btn:hover {
-  background-color: rgb(177, 177, 177);
-  color: #232230;
+  background-color: #a0e0a0;
   cursor: pointer;
 }
 

@@ -45,22 +45,32 @@
             </div>
         </div>
     </div>
-    <div id="top-forms">
-        <form method="post" id="change-state-form" action="">
-            {% csrf_token %}
-            {{ change_state_form.field.as_hidden }}
-            <input type="button" id="change-state-btn" value="Cambiar estado">
-            <input type="hidden" name="change_token" value="1">
-        </form>
-        <form method="post" id="delete-form" action="">
-            {% csrf_token %}
-            {{ detroy_object_form.field.as_hidden }}
-            <input type="button" id="delete-btn" value="Eliminar cheque">
-            <input type="hidden" name="delete_token" value="1">
-        </form>
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Cheque
+            </div>
+            <a href="{{self_check.get_update_url}}">
+                <h1 id="edit-btn">Editar cheque<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar cheque">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+            <form method="post" id="change-state-form" action="">
+                {% csrf_token %}
+                {{ change_state_form.field.as_hidden }}
+                <input type="button" id="change-state-btn" value="Cambiar estado">
+                <input type="hidden" name="change_token" value="1">
+            </form>
+        </div>
     </div>
 </div>
-
 <script type="text/javascript">
     var inputElement = document.getElementById("delete-btn")
     inputElement.addEventListener("click", function () {

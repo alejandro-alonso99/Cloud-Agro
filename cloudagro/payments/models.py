@@ -207,17 +207,17 @@ class SelfChecks(models.Model):
 
     def get_absolute_url(self):
         return reverse ('funds:self_check_detail',
-                                        args=[self.id])   
+                                        args=[self.id])
+
+    def get_update_url(self):
+        return reverse ('funds:self_check_update',
+                                        args=[self.id])                                              
 
     class Meta:
         ordering = ('-fecha_salida',)
 
     def __str__(self):
         return  str(self.numero_cheque)
-    
-    def save(self, *args, **kwargs):
-        self.slug = unique_slug_generator(self, self.numero_cheque, self.slug)
-        super(SelfChecks, self).save(*args,**kwargs)
 
     def change_state(self):
         if self.estado == 'a pagar':

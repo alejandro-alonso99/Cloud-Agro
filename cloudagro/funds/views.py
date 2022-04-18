@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from payments.forms import SelfChecksForm
 from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks, SelfChecks
 from payments.forms import ChangeStateForm
@@ -308,3 +309,65 @@ def self_check_detail(request, id):
                                                             'change_state_form':change_state_form,
                                                             'destroy_object_form':destroy_object_form,
                                                             })                                                            
+
+@login_required
+def self_check_update(request, id):
+
+    self_check = get_object_or_404(SelfChecks, id=id)
+
+    parent = self_check.content_object
+
+    parent_model = parent.__class__.__name__
+    
+    initial_payment_data = {
+        'content_type': parent.get_content_type,
+        'object_id': parent.id,
+    }
+    
+    print(initial_payment_data)
+
+    self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
+
+    if self_check_form.is_valid():
+        content_type = self_check_form.cleaned_data.get('content_type')
+        obj_id = self_check_form.cleaned_data.get('object_id')
+        fecha_pago = self_check_form.cleaned_data.get('fecha_pago')
+        banco_emision = self_check_form.cleaned_data.get('banco_emision')
+        numero_cheque = self_check_form.cleaned_data.get('numero_cheque')
+        titular_cheque = self_check_form.cleaned_data.get('titular_cheque')
+        monto = self_check_form.cleaned_data.get('monto')
+
+        fecha_salida = self_check.fecha_salida
+
+        if parent_model == 'Purchases':
+            cliente = parent.client
+            descripcion = parent.__str__
+
+        elif parent_model == 'Expenses':
+            cliente = parent.concepto
+            descripcion = parent.descripcion
+        
+        else:
+            cliente = parent.proveedor
+            descripcion = parent.producto
+
+        attrs = {'content_type':content_type, 'object_id':obj_id, 
+                                                'cliente':cliente,
+                                                'descripcion':descripcion,
+                                                'fecha_pago':fecha_pago, 
+                                                'banco_emision':banco_emision,
+                                                'numero_cheque':numero_cheque,
+                                                'titular_cheque':titular_cheque,
+                                                'monto':monto,
+                                                'fecha_salida':fecha_salida
+                                                }
+        
+        self_check = SelfChecks(id,**attrs)
+        self_check.save()
+
+        return redirect(parent.get_absolute_url())
+
+    return render(request, 'funds/self_check_update.html',{'self_check':self_check,
+                                                            'self_check_form':self_check_form,    
+                                                            'parent':parent,
+                                                        })
