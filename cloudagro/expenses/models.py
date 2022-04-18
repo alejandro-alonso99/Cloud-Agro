@@ -31,10 +31,11 @@ class Expenses(models.Model):
     
     def get_absolute_url(self):
         return reverse ('expenses:expense_detail',
-                                        args=[self.date.day,
-                                                self.date.month,
-                                                self.date.year,
-                                                self.slug])
+                                        args=[self.id])
+
+    def get_update_url(self):
+        return reverse ('expenses:expense_update',
+                                        args=[self.id])                                        
     
     def __str__(self):
 

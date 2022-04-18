@@ -59,7 +59,7 @@
     var inputs = document.querySelectorAll('.endose-btn')
     inputs.forEach(input => {
         input.addEventListener("click", function () {
-            if (confirm('Quiere endosar el cheque?')) {
+            if (confirm('Quiere eliminar el movimiento?')) {
                 document.getElementById("endose-form").submit()
             } else {
                 return false;

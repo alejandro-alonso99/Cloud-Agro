@@ -8,9 +8,8 @@
 
 {% block content %}
 
-<h1 id="list-title">Resúmen de gastos:</h1>
-
 <div class="info-container">
+    <h1 id="list-title">Resúmen de gastos:</h1>
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -33,9 +32,7 @@
     <h1 id="list-title">Resúmen por categoría:</h1>
     {% for key1,value1 in expenses_dict.items %}
     {% if value1 %}
-    <div id="section-title">
-        <h1> {{key1 | capfirst}}</h1>
-    </div>
+    <h1 id="list-title">{{key1 | capfirst}}</h1>
     <div id="expense-wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -55,5 +52,11 @@
     {% endif %}
     {% endfor %}
 </div>
+<div class="actions-sidebar">
 
+    <div id="actions">
+
+    </div>
+
+</div>
 {% endblock %}

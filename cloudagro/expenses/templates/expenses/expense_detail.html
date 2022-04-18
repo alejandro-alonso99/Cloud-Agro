@@ -6,12 +6,13 @@
 
 {% block content %}
 
-<h1 id="list-title">Viendo gasto: {{expense}}</h1>
-{% if expense.status == 'por pagar' %}
-<h1 id="total-list-title">Total por pagar: ${{ expense.calculate_amount_to_pay | intcomma}}</h1>
-{% endif %}
+
 
 <div class="info-container">
+    <h1 id="list-title">Viendo gasto: {{expense}}</h1>
+    {% if expense.status == 'por pagar' %}
+    <h1 id="total-list-title">Total por pagar: ${{ expense.calculate_amount_to_pay | intcomma}}</h1>
+    {% endif %}
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
@@ -25,7 +26,7 @@
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }}</h2>
+                <h2 id="client-tag">{{ expense.date | date:"d M Y"}}</h2>
                 <h2 id="client-tag">{{ expense.categoria | capfirst}}</h2>
                 <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
                 <h2 id="client-tag">{{ expense.descripcion | capfirst}}</h2>
@@ -48,7 +49,7 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
-                <h2 id="date-tag"> {{ payment.date.day }}/{{ payment.date.month }}/{{ payment.date.year }} </h2>
+                <h2 id="date-tag"> {{ payment.date | date:"d M Y"}} </h2>
                 <h2 id="total-tag">${{ payment.monto | intcomma }}</h2>
             </div>
         </div>
@@ -59,9 +60,7 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag"> Cheque </h2>
-                <h2 id="date-tag"> {{ check.fecha_salida.day }}/{{ check.fecha_salida.month }}/
-                    {{check.fecha_salida.year }}
-                </h2>
+                <h2 id="date-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
                 <h2 id="total-tag">${{ check.monto | intcomma}}</h2>
             </div>
         </div>
@@ -70,12 +69,10 @@
     {% endfor %}
     {% for check in endorsed_checks %}
     <a href="{{check.get_absolute_url}}">
-        <div class="title-movement-card">
+        <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag"> Endosado </h2>
-                <h2 id="date-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/{{
-                    check.fecha_ingreso.year
-                    }} </h2>
+                <h2 id="date-tag"> {{ check.fecha_ingreso | date:"d M Y"}}</h2>
                 <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
             </div>
         </div>
@@ -164,8 +161,7 @@
             <div id="card-row-1">
                 <h2 id="client-tag">{{ check.numero_cheque }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_ingreso.day }}/{{ check.fecha_ingreso.month }}/
-                    {{check.fecha_ingreso.year }} </h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
                 <h2 id="client-total-tag">${{ check.monto | intcomma }}</h2>
                 <input type="button" id="endose-tag" value="Endosar" class="endose-btn">
                 <input type="hidden" name="check_id" value="{{ check.id }}">
@@ -176,8 +172,35 @@
     {% endif %}
     {% endif %}
 </div>
+<div class="actions-sidebar">
 
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Gasto
+            </div>
+            <a href="{{expense.get_update_url}}">
+                <h1 id="edit-btn">Editar gasto<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar gasto">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
+    var harvestElement = document.getElementById("delete-btn")
+    harvestElement.addEventListener("click", function () {
+        if (confirm('Si elimina el gasto se eliminarán los pagos relacionados y se desendosan los cheques endosados.')) {
+            document.getElementById("delete-form").submit()
+        } else {
+            return false;
+        }
+    });
+
     var inputs = document.querySelectorAll('.endose-btn')
     inputs.forEach(input => {
         input.addEventListener("click", function () {

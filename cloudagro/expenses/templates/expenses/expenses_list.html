@@ -10,11 +10,6 @@
 
 {% if filter_query or date_query_end %}
 <div class="info-container">
-    <p><a href="{% url 'expenses:expenses_list' %}" id="search-btn" class="back-link"><i
-                class="fas fa-chevron-left"></i>Volver
-            a listado</a></p>
-
-
     {% if filter_query %}
     <div id="list-title">
         Viendo gastos en: "{{filter_query}}"
@@ -41,7 +36,7 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
-                <h2 id="client-tag"> {{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }} </h2>
+                <h2 id="client-tag"> {{ expense.date | date:"d M Y"}} </h2>
                 {% if expense.status == 'por pagar' %}
                 <h2 id="status-tag">{{ expense.status | capfirst}}</h2>
                 {% else %}
@@ -56,6 +51,19 @@
         No hay resultados para la búsqueda.
     </div>
     {% endfor %}
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Volver a listado
+            </div>
+            <a href="{% url 'expenses:expenses_list' %}">
+                <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+    </div>
 </div>
 {% else %}
 <div class="info-container">
@@ -76,25 +84,6 @@
             <h2>${{ amount_to_pay_total | intcomma }}</h2>
         </div>
     </div>
-    <div id="top-forms">
-        <form action="." method="get" id="search-form" class="date-form">
-            {% csrf_token %}
-            <div id="search-label">
-                <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
-            </div>
-            {{date_form.date_query_start }}
-            {{date_form.date_query_end }}
-            <input type="submit" value="Buscar" id="search-btn">
-        </form>
-        <form action="." method="get" id="search-form">
-            {% csrf_token %}
-            <div id="search-label">
-                <i class="fas fa-search"></i> Buscar por Categoría:
-            </div>
-            {{filter_expense.filter_query}}
-            <input type="submit" value="Buscar" id="search-btn">
-        </form>
-    </div>
     <h1 id="list-title">Historial de gastos:</h1>
     <div class="title-movement-card">
         <div id="card-row-1">
@@ -109,7 +98,7 @@
         <div class="movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ expense.concepto | capfirst}}</h2>
-                <h2 id="client-tag"> {{ expense.date.day }} / {{ expense.date.month }} / {{ expense.date.year }} </h2>
+                <h2 id="client-tag"> {{ expense.date | date:"d M Y" }} </h2>
                 {% if expense.status == 'por pagar' %}
                 <h2 id="status-tag">{{ expense.status | capfirst}}</h2>
                 {% else %}
@@ -120,6 +109,39 @@
         </div>
     </a>
     {% endfor %}
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Filtrar por fecha
+            </div>
+            <form action="." method="get" id="search-form" class="date-form">
+                {% csrf_token %}
+                <div id="search-label">
+                    <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
+                </div>
+                {{date_form.date_query_start }}
+                {{date_form.date_query_end }}
+                <input type="submit" value="Buscar" id="search-btn">
+            </form>
+        </div>
+        <div id="action">
+            <div id="action-section">
+                Filtrar por Categoría
+            </div>
+            <form action="." method="get" id="search-form">
+                {% csrf_token %}
+                <div id="search-label">
+                    <i class="fas fa-search"></i> Buscar por Categoría:
+                </div>
+                {{filter_expense.filter_query}}
+                <input type="submit" value="Buscar" id="search-btn">
+            </form>
+        </div>
+    </div>
+
 </div>
 {% endif %}
 {% endblock %}

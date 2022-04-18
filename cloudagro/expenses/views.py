@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from expenses.models import Expenses
 from .forms import ExpenseForm, FilterExpenseForm
 from payments.models import Payments, SelfChecks, ThirdPartyChecks, EndorsedChecks
-from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
+from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm, DestroyObjectForm
 from purchases.forms import DateForm
 
 @login_required
@@ -73,11 +73,8 @@ def expense_create(request):
     else:
         expense_form = ExpenseForm()
     
-    last_3_expenses = Expenses.objects.all()[:3]
-
     return render(request, 'expenses/expense_create.html',{
                                                             'expense_form': expense_form,
-                                                            'last_3_expenses':last_3_expenses
                                                             }) 
 @login_required
 def expenses_summary(request):
@@ -130,11 +127,8 @@ def expenses_summary(request):
                                                                 'expense_category_totals':expense_category_totals,
                                                                 })
 @login_required
-def expense_detail(request, year, month, day, expense):
-    expense = get_object_or_404(Expenses, slug=expense,
-                                                date__year = year,
-                                                date__month = month,
-                                                date__day = day )
+def expense_detail(request, id):
+    expense = get_object_or_404(Expenses, id=id)
 
     #PAGOS
     payments = expense.payments
@@ -237,6 +231,25 @@ def expense_detail(request, year, month, day, expense):
 
     money_zip = zip(payments,self_checks)
 
+    if request.method == 'POST':
+        destroy_object_form = DestroyObjectForm(data=request.POST)
+        if destroy_object_form.is_valid() and request.POST.get('delete_token'):
+
+            for check in endorsed_checks:
+                check_id = check.third_p_id
+                third_p_check = ThirdPartyChecks.objects.get(id=check_id)
+                third_p_check.estado = 'a depositar'
+                third_p_check.save()
+                check.delete()
+
+            for check in self_checks:
+                check.delete()
+
+            expense.delete()
+            return redirect('expenses:expenses_list')
+    else:
+        destroy_object_form = DestroyObjectForm()
+
     return render(request, 'expenses/expense_detail.html',{'expense':expense,
                                                             'payment_form':payment_form,
                                                             'self_check_form':self_check_form,
@@ -246,4 +259,59 @@ def expense_detail(request, year, month, day, expense):
                                                             'third_p_checks':third_p_checks,
                                                             'endorsed_checks':endorsed_checks,
                                                             'money_zip':money_zip,
-                                                                })                                            
+                                                            'destroy_object_form':destroy_object_form,
+                                                                })
+
+@login_required
+def expense_update(request, id):
+
+    expense = get_object_or_404(Expenses, id=id)
+
+    if request.method == 'POST':
+        expense_form = ExpenseForm(data=request.POST)
+
+        if expense_form.is_valid():
+
+            payments = expense.payments
+
+            self_checks = expense.self_checks
+
+            endorsed_checks = expense.endorsed_checks
+
+            for check in endorsed_checks:
+                    check_id = check.third_p_id
+                    third_p_check = ThirdPartyChecks.objects.get(id=check_id)
+                    third_p_check.estado = 'a depositar'
+                    third_p_check.save()
+                    check.delete()
+
+            for check in self_checks:
+                check.delete()
+
+            for payment in payments:
+                payment.delete()
+
+            campo = expense_form.cleaned_data.get('campo')
+            concepto = expense_form.cleaned_data.get('concepto')
+            monto = expense_form.cleaned_data.get('monto')
+            descripcion = expense_form.cleaned_data.get('descripcion')
+            categoria = expense_form.cleaned_data.get('categoria')
+
+            date = expense.date
+
+            attrs = {'campo':campo,'concepto':concepto,
+                    'monto':monto, 'descripcion':descripcion,
+                    'categoria':categoria, 'date':date,
+                    'status':'por pagar'}
+            
+            expense = Expenses(id=id, **attrs)
+            expense.save()
+            
+            return redirect(expense.get_absolute_url())
+    
+    else:
+        expense_form = ExpenseForm()
+
+    return render(request, 'expenses/expense_update.html',{
+                                                            'expense_form':expense_form,
+                                                            })
