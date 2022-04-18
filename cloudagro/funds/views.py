@@ -147,12 +147,9 @@ def funds_third_party_checks(request):
                                                             })
 
 @login_required
-def third_p_check_detail(request, year, month, day, third_p_check):
+def third_p_check_detail(request, id):
 
-    third_p_check = get_object_or_404(ThirdPartyChecks, slug=third_p_check,
-                                                            fecha_ingreso__year = year,
-                                                            fecha_ingreso__month = month,
-                                                            fecha_ingreso__day = day)                                                            
+    third_p_check = get_object_or_404(ThirdPartyChecks, id=id)                                                            
 
     
     if request.method == 'POST' and request.POST.get('change_state_token'):

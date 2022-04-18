@@ -46,61 +46,75 @@
             </div>
         </div>
     </div>
-    <div id="top-forms">
-        {% if third_p_check.estado != 'endosado' %}
-        <form method="post" id="change-state-form" action="">
-            {% csrf_token %}
-            {{ change_state_form.field.as_hidden }}
-            <input type="button" id="change-state-btn" value="Cambiar estado">
-            <input type="hidden" name="change_state_token" value="1">
-        </form>
-        {% endif %}
-        {% if third_p_check.estado == 'endosado' %}
+</div>
+<div class="actions-sidebar">
 
-        <form method="post" id="delete-endose-form" action="">
-            {% csrf_token %}
-            {{ change_state_form.field.as_hidden }}
-            <input type="button" id="del-endose-btn" value="Eliminar endoso">
-            <input type="hidden" name="del_endose_token" value="1">
-        </form>
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Cheque
+            </div>
+            <a href="{{self_check.get_update_url}}">
+                <h1 id="edit-btn">Editar cheque<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            {% if third_p_check.estado != 'endosado' %}
+            <form method="post" id="change-state-form" action="">
+                {% csrf_token %}
+                {{ change_state_form.field.as_hidden }}
+                <input type="button" id="change-state-btn" value="Cambiar estado">
+                <input type="hidden" name="change_state_token" value="1">
+            </form>
+            {% endif %}
+            {% if third_p_check.estado == 'endosado' %}
 
-        {% endif %}
-        <form method="post" id="change-state-form" action="">
-            {% csrf_token %}
-            {{ detroy_object_form.field.as_hidden }}
-            <input type="button" id="delete-btn" value="Eliminar cheque">
-            <input type="hidden" name="delete_token" value="1">
-        </form>
+            <form method="post" id="delete-endose-form" action="">
+                {% csrf_token %}
+                {{ change_state_form.field.as_hidden }}
+                <input type="button" id="del-endose-btn" value="Eliminar endoso">
+                <input type="hidden" name="del_endose_token" value="1">
+            </form>
+
+            {% endif %}
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar cheque">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
     </div>
-
 </div>
 <script>
-
     var inputElement = document.getElementById("delete-btn")
     inputElement.addEventListener("click", function () {
-        if (confirm('Si elimina el cheque se descontará su total del pago de la venta así como el endoso en una compra/gasto si existe. Será redireccionado a la venta vinculada.')) {
+        if (confirm('Si elimina el cheque se descontará su total del pago de la compra/gasto.')) {
             document.getElementById("delete-form").submit()
         } else {
             return false;
         }
     })
 
-    var endoseElement = document.getElementById("del-endose-btn")
-    endoseElement.addEventListener("click", function () {
-        if (confirm('Si elimina el endoso se descontará el pago de la compra/gasto y el cheque pasará a estado "a depositar"')) {
-            document.getElementById("delete-endose-form").submit()
-        } else {
-            return false;
-        }
-    })
+    if (document.getElementById("change-state-btn")) {
+        var changeInput = document.getElementById("change-state-btn")
+        changeInput.addEventListener("click", function () {
+            if (confirm('Cambiar el estado del cheque?')) {
+                document.getElementById("change-state-form").submit()
+            } else {
+                return false;
+            }
+        })
+    }
 
-    var changeInput = document.getElementById("change-state-btn")
-    changeInput.addEventListener("click", function () {
-        if (confirm('Cambiar el estado del cheque?')) {
-            document.getElementById("change-state-form").submit()
-        } else {
-            return false;
-        }
-    })
+    if (document.getElementById("del-endose-btn")) {
+        var endoseElement = document.getElementById("del-endose-btn")
+        endoseElement.addEventListener("click", function () {
+            if (confirm('Si elimina el endoso se descontará el pago de la compra/gasto y el cheque pasará a estado "a depositar"')) {
+                document.getElementById("delete-endose-form").submit()
+            } else {
+                return false;
+            }
+        })
+    }
+
 </script>
 {% endblock %}
