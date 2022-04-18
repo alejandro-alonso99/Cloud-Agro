@@ -6,7 +6,8 @@ from .forms import FundManualMoveForm
 from .models import FundManualMove
 from django.contrib.auth.decorators import login_required
 from payments.forms import DestroyObjectForm
-from purchases.forms import DateForm
+from purchases.forms import DateForm, SearchForm
+from django.contrib.postgres.search import SearchVector
 
 @login_required
 def fund_manualmove_create(request):
@@ -31,11 +32,6 @@ def fund_manualmove_create(request):
 
 @login_required
 def funds_manualmove_list(request):
-
-    date_form = DateForm()
-
-    date_query_start = None
-    date_query_end = None
 
     manual_moves = FundManualMove.objects.all()
 
@@ -232,6 +228,28 @@ def funds_self_checks(request):
     
     total_to_pay_checks = today_checks + week_checks + two_week_checks + month_checks + two_month_checks + more_months_checks
 
+    search_form = SearchForm()
+
+    date_form = DateForm()
+
+    query = None
+
+    date_query_start = None
+    date_query_end = None
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            self_checks = SelfChecks.objects.annotate(search=SearchVector('cliente'),).filter(search=query)
+        
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            self_checks = SelfChecks.objects.filter(fecha_salida__range=[date_query_start, date_query_end])
+
     return render(request, 'funds/funds_self_checks.html',{
                                                             'self_checks':self_checks,
                                                             'today_checks':today_checks,
@@ -241,11 +259,16 @@ def funds_self_checks(request):
                                                             'two_month_checks':two_month_checks,
                                                             'more_months_checks':more_months_checks,
                                                             'total_to_pay_checks':total_to_pay_checks,
-                                                                    })
+                                                            'search_form':search_form,
+                                                            'query':query,
+                                                            'date_form':date_form,
+                                                            'date_query_start':date_query_start,
+                                                            'date_query_end':date_query_end,
+                                                            })
 @login_required
-def self_check_detail(request, self_check):
+def self_check_detail(request, id):
 
-    self_check = get_object_or_404(SelfChecks, slug=self_check)
+    self_check = get_object_or_404(SelfChecks, id=id)
 
     if request.method == 'POST' and request.POST.get("change_token"):
         change_state_form = ChangeStateForm(request.POST)
