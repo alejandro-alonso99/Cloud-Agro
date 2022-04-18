@@ -6,11 +6,8 @@ from payments.forms import DestroyObjectForm
 from purchases.forms import SearchForm, DateForm
 
 @login_required
-def manualmove_detail(request, year, month, day, manualmove):
-    manualmove = get_object_or_404(ManualMove, slug=manualmove,
-                                                date__year = year,
-                                                date__month = month,
-                                                date__day= day)       
+def manualmove_detail(request, id):
+    manualmove = get_object_or_404(ManualMove, id=id)       
 
     if request.method == 'POST':
         destroy_object_form = DestroyObjectForm(request.POST)
@@ -24,6 +21,37 @@ def manualmove_detail(request, year, month, day, manualmove):
     return render(request, 'stock/manualmove_detail.html',{'manualmove':manualmove,
                                                             'destroy_object_form':destroy_object_form
                                                             })                  
+
+@login_required
+def manualmove_update(request, id):   
+
+    manualmove = get_object_or_404(ManualMove, id=id)
+
+    if request.method == 'POST':
+        move_form = ManualMoveForm(data=request.POST)
+        if move_form.is_valid():            
+            campo = move_form.cleaned_data.get('campo')
+            categoria = move_form.cleaned_data.get('categoria')
+            cantidad = move_form.cleaned_data.get('cantidad')
+            tipo = move_form.cleaned_data.get('tipo')
+
+            date = manualmove.date
+
+            args = {'campo':campo, 'categoria':categoria,
+                    'cantidad':cantidad, 'tipo':tipo,
+                    'date':date}
+            
+            manualmove = ManualMove(id=id, **args)
+            manualmove.save()
+
+            return redirect(manualmove.get_absolute_url())
+    else:
+        move_form = ManualMoveForm()
+
+    return render(request, 'stock/manualmove_update.html',{
+                                                            'manualmove':manualmove,
+                                                            'move_form':move_form,
+                                                            })
 
 @login_required                                                            
 def manualmove_create(request):

@@ -1,6 +1,6 @@
 from django.db import models
 from cloudagro.utils import unique_slug_generator
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from land.models import Land
 
 class ManualMove(models.Model):
@@ -35,7 +35,9 @@ class ManualMove(models.Model):
     
     def get_absolute_url(self):
         return reverse ('stock:manualmove_detail',
-                                        args=[self.date.day,
-                                                self.date.month,
-                                                self.date.year,
-                                                self.slug])
+                                        args=[self.id])
+
+    def get_update_url(self):
+        return reverse_lazy('stock:manualmove_update',
+                                        args=[self.id])
+                                    
