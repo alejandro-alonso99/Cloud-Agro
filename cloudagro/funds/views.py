@@ -1,4 +1,6 @@
+from http import client
 from django.shortcuts import get_object_or_404, render, redirect
+from payments.forms import ThirdPartyChecksForm
 from payments.forms import SelfChecksForm
 from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks, SelfChecks
@@ -216,6 +218,62 @@ def third_p_check_detail(request, id):
                                                             })
 
 @login_required
+def third_p_check_update(request, id):
+
+    third_p_check = get_object_or_404(ThirdPartyChecks, id=id)
+
+    parent = third_p_check.content_object
+
+    parent_model = parent.__class__.__name__
+
+    initial_payment_data = {
+        'content_type': parent.get_content_type,
+        'object_id': parent.id,
+    }
+    
+    third_p_form = ThirdPartyChecksForm(request.POST or None, initial=initial_payment_data)
+
+    if third_p_form.is_valid():
+        content_type = third_p_form.cleaned_data.get('content_type')
+        obj_id = third_p_form.cleaned_data.get('object_id')
+        fecha_deposito = third_p_form.cleaned_data.get('fecha_deposito')
+        banco_emision = third_p_form.cleaned_data.get('banco_emision')
+        numero_cheque = third_p_form.cleaned_data.get('numero_cheque')
+        titular_cheque = third_p_form.cleaned_data.get('titular_cheque')
+        monto = third_p_form.cleaned_data.get('monto')
+        observacion = ''
+        fecha_ingreso = third_p_check.fecha_ingreso
+
+        if parent_model == 'Sales':
+            cliente = parent.client
+
+        #agregar acá para ventas de granos
+        observacion = ''
+        descripcion = ''
+        attrs = {'content_type':content_type, 'object_id':obj_id,
+                                     'cliente':cliente,
+                                     'descripcion': descripcion,                                      
+                                     'fecha_deposito':fecha_deposito,
+                                     'banco_emision':banco_emision,
+                                     'numero_cheque':numero_cheque,
+                                     'titular_cheque':titular_cheque,
+                                     'monto':monto,
+                                     'observacion':observacion,
+                                     'fecha_ingreso':fecha_ingreso,    
+                                     }
+
+        third_p_check = ThirdPartyChecks(id,**attrs)
+        third_p_check.save()
+        
+        return redirect(third_p_check.get_absolute_url())
+
+
+    return render(request,'funds/third_p_check_update.html',{
+                                                            'third_p_check':third_p_check,
+                                                            'third_p_form': third_p_form,       
+                                                            })
+
+@login_required
 def funds_self_checks(request):
 
     self_checks = SelfChecks.objects.all()
@@ -348,8 +406,6 @@ def self_check_update(request, id):
         'object_id': parent.id,
     }
     
-    print(initial_payment_data)
-
     self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
 
     if self_check_form.is_valid():
@@ -393,5 +449,4 @@ def self_check_update(request, id):
 
     return render(request, 'funds/self_check_update.html',{'self_check':self_check,
                                                             'self_check_form':self_check_form,    
-                                                            'parent':parent,
                                                         })

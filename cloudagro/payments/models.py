@@ -109,7 +109,11 @@ class ThirdPartyChecks(models.Model):
 
     def get_absolute_url(self):
         return reverse ('funds:third_p_check_detail',
-                                        args=[self.id])                                            
+                                        args=[self.id])
+
+    def get_update_url(self):
+        return reverse ('funds:third_p_check_update',
+                                        args=[self.id])                                                                                    
 
     def save(self, *args, **kwargs):
         self.slug = unique_slug_generator(self, self.cliente, self.slug)
