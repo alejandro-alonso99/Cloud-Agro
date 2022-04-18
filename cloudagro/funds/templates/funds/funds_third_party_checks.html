@@ -8,6 +8,70 @@
 
 {% block content %}
 
+{% if query or date_query_start %}
+
+<div class="info-container">
+    {% if query %}
+    <div id="list-title">
+        Filtrando por: "{{query}}"
+    </div>
+    {% endif %}
+    {% if date_query_start %}
+    <div id="list-title">
+        Filtrando entre Fechas: "{{date_query_start}}" y "{{date_query_end}}"
+    </div>
+    {% endif %}
+    {% if third_party_checks %}
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Número:</h2>
+            <h2 id="title-client-tag">Cliente:</h2>
+            <h2 id="title-client-tag">Fecha ingreso:</h2>
+            <h2 id="title-client-tag">Fecha depósito:</h2>
+            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Monto:</h2>
+        </div>
+    </div>
+    {% endif %}
+    {% for check in third_party_checks %}
+    <a href="{{ check.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                {% if check.estado == 'a depositar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'endosado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
+            </div>
+        </div>
+    </a>
+    {% empty %}
+    <div id="list-title">
+        No hay resultados para la búsqueda
+    </div>
+    {% endfor %}
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Volver a listado
+            </div>
+            <a href="{% url 'funds:funds_third_party_checks' %}">
+                <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
 <div class="info-container">
     <h1 id="list-title">A depositar</h1>
     <div id="wrapper">
@@ -69,5 +133,37 @@
     </a>
     {% endfor %}
 </div>
+<div class="actions-sidebar">
 
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Filtrar por fecha salida
+            </div>
+            <form action="." method="get" id="search-form" class="date-form">
+                {% csrf_token %}
+                <div id="search-label">
+                    <i class="fas fa-calendar-alt"></i> Fecha inicio / Fecha final:
+                </div>
+                {{date_form.date_query_start }}
+                {{date_form.date_query_end }}
+                <input type="submit" value="Buscar" id="search-btn">
+            </form>
+        </div>
+        <div id="action">
+            <div id="action-section">
+                Filtrar por proveedor
+            </div>
+            <form action="." method="get" id="search-form">
+                {% csrf_token %}
+                <div id="search-label">
+                    <i class="fas fa-search"></i> Buscar por Proveedor:
+                </div>
+                {{search_form.query}}
+                <input type="submit" value="Buscar" id="search-btn">
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

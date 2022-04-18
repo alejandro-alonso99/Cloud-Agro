@@ -108,6 +108,28 @@ def funds_third_party_checks(request):
     
     total_to_pay_checks = today_checks + week_checks + two_week_checks + month_checks + two_month_checks + more_months_checks
 
+    search_form = SearchForm()
+
+    date_form = DateForm()
+
+    query = None
+
+    date_query_start = None
+    date_query_end = None
+
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            third_party_checks = ThirdPartyChecks.objects.annotate(search=SearchVector('cliente'),).filter(search=query)
+        
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            third_party_checks = ThirdPartyChecks.objects.filter(fecha_ingreso__range=[date_query_start, date_query_end])
+
     return render(request, 'funds/funds_third_party_checks.html',{
                                                             'third_party_checks':third_party_checks,
                                                             'today_checks':today_checks,
@@ -117,6 +139,11 @@ def funds_third_party_checks(request):
                                                             'two_month_checks':two_month_checks,
                                                             'more_months_checks':more_months_checks,
                                                             'total_to_pay_checks':total_to_pay_checks,
+                                                            'search_form':search_form,
+                                                            'date_form':date_form,
+                                                            'query':query,
+                                                            'date_query_start':date_query_start,
+                                                            'date_query_end':date_query_end,
                                                             })
 
 @login_required
