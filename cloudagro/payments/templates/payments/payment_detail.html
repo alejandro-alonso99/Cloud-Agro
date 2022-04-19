@@ -25,17 +25,25 @@
             </div>
         </div>
     </div>
-    <div id="top-buttons">
-        <form method="post" id="delete-form" action="">
-            {% csrf_token %}
-            {{ detroy_object_form.field.as_hidden }}
-            <input type="button" id="change-state-btn" value="Eliminar pago">
-        </form>
+</div>
+<div class="actions-sidebar">
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Pago
+            </div>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar pago">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    var inputElement = document.getElementById("change-state-btn")
+    var inputElement = document.getElementById("delete-btn")
     inputElement.addEventListener("click", function () {
         if (confirm('Quiere eliminar este pago?')) {
             document.getElementById("delete-form").submit()
