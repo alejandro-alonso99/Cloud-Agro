@@ -188,7 +188,7 @@
         </div>
     </div>
     {% for check in third_p_checks %}
-    <form method="post" id="endose-form" action="">
+    <form method="post" id="{{ forloop.counter0 }}" class="endose-form" action="">
         {% csrf_token %}
         {{ endorsed_checks_form.content_type.as_hidden }}
         {{ endorsed_checks_form.object_id.as_hidden }}
@@ -238,10 +238,10 @@
     });
 
     var inputs = document.querySelectorAll('.endose-btn')
-    inputs.forEach(input => {
+    inputs.forEach((input, i) => {
         input.addEventListener("click", function () {
             if (confirm('Quiere endosar el cheque?')) {
-                document.getElementById("endose-form").submit()
+                document.getElementById(i).submit()
             } else {
                 return false;
             }

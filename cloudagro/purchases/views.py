@@ -164,7 +164,6 @@ def purchase_detail(request, id):
 
     if endorsed_checks_form.is_valid() and request.POST.get("check_id"):
         third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
-
         content_type = endorsed_checks_form.cleaned_data.get('content_type')
         obj_id = endorsed_checks_form.cleaned_data.get('object_id')
         fecha_deposito = third_p_check.fecha_deposito
