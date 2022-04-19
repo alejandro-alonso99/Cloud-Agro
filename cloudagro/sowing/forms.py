@@ -1,3 +1,4 @@
+from math import prod
 from django import forms
 
 from land.models import Campaign
@@ -26,12 +27,16 @@ class LoteForm(ModelForm):
         exclude = ('slug','campaña','estado')
 
 sowing_purchases = SowingPurchases.objects.all()
+products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
+products = [x.lower() for x in products]
+products = list(dict.fromkeys(products))
+products = [x.capitalize() for x in products]
 class ApplicationForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ApplicationForm, self).__init__(*args, **kwargs)
         self.fields['producto'] = forms.ChoiceField(
-            choices=[(o.lower(), str(o)) for o in list(set(map(str,sowing_purchases.values_list('producto',flat=True))))]
+            choices=[(o, str(o)) for o in products]
         )
     
     class Meta:

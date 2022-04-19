@@ -83,6 +83,7 @@ def sowing_purchases_create(request):
             factura = sowing_p_form.cleaned_data.get('factura')
             proveedor = sowing_p_form.cleaned_data.get('proveedor')
             producto = sowing_p_form.cleaned_data.get('producto')
+            producto = producto.lower()
             precio_lt_kg_usd = sowing_p_form.cleaned_data.get('precio_lt_kg_usd')
             lt_kg = sowing_p_form.cleaned_data.get('lt_kg')
             tipo_cambio = sowing_p_form.cleaned_data.get('tipo_cambio')
@@ -559,6 +560,10 @@ def lote_detail(request,  lote_id):
         kg_totales = None
         quintales_ha = None
 
+    sowing_purchases = SowingPurchases.objects.all()
+
+    products = sowing_purchases.values_list('producto',flat=True)
+
     return render(request, 'sowing/lote_detail.html', {
                                                         'lote':lote,
                                                         'application_form':application_form,
@@ -576,6 +581,7 @@ def lote_detail(request,  lote_id):
                                                         'kg_totales':kg_totales,
                                                         'quintales_ha':quintales_ha,
                                                         'destroy_object_form':destroy_object_form,
+                                                        'products':products,
                                                         })
 
 @login_required

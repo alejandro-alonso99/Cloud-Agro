@@ -188,7 +188,7 @@
         {% endfor %}
     </div>
     {% endif %}
-    {% if lote.estado == 'no cosechado' %}
+    {% if lote.estado == 'no cosechado' and products%}
     <h1 id="list-title">Agregar aplicación:</h1>
     <form action="" method="post">
         {% csrf_token %}
@@ -221,7 +221,10 @@
             <input type="submit" value="Crear" id="create-btn">
         </div>
     </form>
-
+    {% else %}
+    <h1 id="list-title">Para agregar aplicaciones registre compras de insumos</h1>
+    {% endif %}
+    {% if lote.estado == 'no cosechado' %}
     <h1 id="list-title">Agregar labor:</h1>
     <form action="" method="post">
         {% csrf_token %}
