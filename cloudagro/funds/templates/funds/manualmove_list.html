@@ -9,10 +9,6 @@
 {% block content %}
 {% if date_query_end %}
 <div class="info-container">
-
-    <p><a href="{% url 'funds:funds_manualmoves' %}" id="search-btn" class="back-link"><i
-                class="fas fa-chevron-left"></i>Volver
-            a listado</a></p>
     <div id="list-title">
         Filtrando entre Fechas: "{{date_query_start }}" y "{{date_query_end}}"
     </div>
@@ -44,20 +40,21 @@
     {% endfor %}
 
 </div>
+<div class="actions-sidebar">
 
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Volver a listado
+            </div>
+            <a href="{% url 'funds:funds_manualmoves' %}">
+                <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+        </div>
+    </div>
+</div>
 {% else %}
 <div class="info-container">
-    <div id="top-forms">
-        <form action="." method="get" id="search-form" class="date-form">
-            {% csrf_token %}
-            <div id="search-label">
-                <i class="fas fa-calendar-alt"></i> Buscar por Fecha inicio / Fecha final:
-            </div>
-            {{date_form.date_query_start }}
-            {{date_form.date_query_end }}
-            <input type="submit" value="Buscar" id="search-btn">
-        </form>
-    </div>
     <div id="list-title">
         Historial de movimientos a mano de fondos:
     </div>
@@ -87,6 +84,25 @@
         </div>
     </a>
     {% endfor %}
+</div>
+<div class="actions-sidebar">
+
+    <div id="actions">
+        <div id="action">
+            <div id="action-section">
+                Filtrar por fecha
+            </div>
+            <form action="." method="get" id="search-form" class="date-form">
+                {% csrf_token %}
+                <div id="search-label">
+                    <i class="fas fa-calendar-alt"></i> Fecha inicio / Fecha final:
+                </div>
+                {{date_form.date_query_start }}
+                {{date_form.date_query_end }}
+                <input type="submit" value="Buscar" id="search-btn">
+            </form>
+        </div>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

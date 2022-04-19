@@ -37,6 +37,11 @@ def fund_manualmove_create(request):
 def funds_manualmove_list(request):
 
     manual_moves = FundManualMove.objects.all()
+    
+    date_form = DateForm()
+
+    date_query_start = None
+    date_query_end = None
 
     if 'date_query_start' and 'date_query_end' in request.GET:
         form = DateForm(request.GET)
