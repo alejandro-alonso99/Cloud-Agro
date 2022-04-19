@@ -105,7 +105,7 @@ class ThirdPartyChecks(models.Model):
         
 
     def __str__(self):
-        return self.fecha_deposito.strftime("%d-%m-%Y") + ' ' + str(self.monto) + str(self.id)
+        return str(self.numero_cheque)
 
     def get_absolute_url(self):
         return reverse ('funds:third_p_check_detail',
