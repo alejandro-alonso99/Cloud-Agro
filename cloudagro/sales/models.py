@@ -1,9 +1,11 @@
 from django.db import models
+from land.models import Campaign
 from cloudagro.utils import unique_slug_generator
 from django.urls import reverse, reverse_lazy
 from payments.models import Payments, ThirdPartyChecks
 from django.contrib.contenttypes.models import ContentType
 from land.models import Land
+
 
 class Sales(models.Model):
 
@@ -164,6 +166,7 @@ class GrainSales(models.Model):
         ('por cobrar','Por cobrar')
     )
 
+    campana = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     cliente = models.CharField(max_length=100)
     grano = models.CharField(choices=TYPE_CHOICES, max_length=7)
     precio_tn = models.FloatField()

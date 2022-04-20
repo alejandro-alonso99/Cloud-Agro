@@ -7,7 +7,7 @@ from .forms import GrainSaleForm, SaleSearchForm, SaleForm, SaleRowForm
 from django.contrib.postgres.search import SearchVector
 from payments.forms import PaymentForm, ThirdPartyChecksForm
 from django.forms.models import modelformset_factory
-from .models import Payments
+from .models import GrainSales, Payments
 from purchases.forms import SearchForm, DateForm
 from payments.forms import DestroyObjectForm
 
@@ -315,4 +315,12 @@ def grains_sale_create(request):
 
         return render('sales:grain_sales_list')
 
-    return render(request, 'sales/grains_sale_create.html',{})
+    return render(request, 'sales/grains_sale_create.html',{
+                                                            'grain_sale_form':grain_sale_form,
+                                                            })
+
+def grains_sale_list(request):
+
+    grain_sales = GrainSales.objects.all()
+
+    return render(request,'')
