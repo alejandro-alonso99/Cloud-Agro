@@ -193,15 +193,15 @@ class GrainSales(models.Model):
     
     def calculate_subtotal(self):
 
-        return self.calculate_total_kg * self.calculate_precio_kg
+        return self.calculate_total_kg() * self.calculate_precio_kg()
     
     def calculate_iva(self):
 
-        return self.calculate_subtotal * (self.iva/100)
+        return self.calculate_subtotal() * (self.iva/100)
 
     def calculate_total(self):
         
-        return self.calculate_subtotal + self.calculate_iva 
+        return self.calculate_subtotal() + self.calculate_iva() 
 
     def calculate_deductions_total(self):
 
@@ -221,7 +221,7 @@ class GrainSales(models.Model):
     
     def calculate_saldo(self):
 
-        return self.calculate_total() - self.calculate_deductions_total - self.calculate_retentions_total
+        return self.calculate_total() - self.calculate_deductions_total() - self.calculate_retentions_total()
 
     def calculate_iva_retentions(self):
 
@@ -241,7 +241,11 @@ class GrainSales(models.Model):
 
     def calculate_iva_transf(self):
 
-        return self.calculate_iva - self.calculate_iva_retentions - self.calculate_deductions_iva
+        return self.calculate_iva() - self.calculate_iva_retentions() - self.calculate_deductions_iva()
+    
+    def get_absolute_url(self):
+        return reverse ('sales:grain_sale_detail',
+                                        args=[self.id])
         
 
 class Deductions(models.Model):

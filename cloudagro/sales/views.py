@@ -62,20 +62,6 @@ def sales_list(request):
                                     'date_query_end':date_query_end,
                                     })
 
-@login_required
-def sale_search(request):
-    form = SaleSearchForm()
-    query = None
-    results = []
-    if 'query' in request.GET:
-        form = SaleSearchForm(request.GET)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            results = Sales.objects.annotate(search=SearchVector('client','date'),).filter(search=query)
-    return render(request, 'sales/search.html', {'form':form,
-                                                            'query':query,
-                                                            'results':results}) 
-
 
 @login_required
 def sales_detail(request, id):
@@ -323,10 +309,19 @@ def grains_sale_create(request):
     return render(request, 'sales/grains_sales_create.html',{
                                                             'grain_sale_form':grain_sale_form,
                                                             })
-
+@login_required
 def grains_sales_list(request):
 
     campana = Campaign.objects.first()
+
+    search_form = SearchForm()
+
+    date_form = DateForm()
+
+    query = None
+
+    date_query_start = None
+    date_query_end = None
 
     grain_sales = GrainSales.objects.filter(campana=campana)
 
@@ -335,10 +330,36 @@ def grains_sales_list(request):
     unpayed_sales = grain_sales.filter(status='por cobrar').count()
 
 
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            grain_sales = GrainSales.objects.annotate(search=SearchVector('cliente'),).filter(search=query)
+        
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            grain_sales = GrainSales.objects.filter(fecha__range=[date_query_start, date_query_end])
 
     return render(request,'sales/grains_sales_list.html',{
                                                         'grain_sales':grain_sales,
                                                         'total_sales':total_sales,
                                                         'unpayed_sales':unpayed_sales,
                                                         'campana':campana,
+                                                        'search_form':search_form,
+                                                        'date_form':date_form,
+                                                        'query':query,
+                                                        'date_query_start':date_query_start,
+                                                        'date_query_end':date_query_end,
                                                         })
+
+@login_required
+def grain_sale_detail(request,id):
+
+    grain_sale = get_object_or_404(GrainSales, id=id)
+
+    return render(request, 'sales/grain_sale_detail.html',{
+                                                            'grain_sale':grain_sale,
+                                                            })

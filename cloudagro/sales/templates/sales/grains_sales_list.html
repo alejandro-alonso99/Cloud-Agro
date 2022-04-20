@@ -23,39 +23,33 @@
     {% if grain_sales %}
     <div class="title-movement-card">
         <div id="card-row-1">
-            <h2 id="title-client-tag">Factura:</h2>
-            <h2 id="title-client-tag">Proveedor:</h2>
-            <h2 id="title-client-tag">Producto:</h2>
-            <h2 id="title-client-tag">Fecha:</h2>
-            <h2 id="title-client-tag">Total:</h2>
-            <h2 id="title-client-tag">Estado:</h2>
+            <h2 id="title-client-tag">Fecha</h2>
+            <h2 id="title-client-tag">Cliente</h2>
+            <h2 id="title-client-tag">Grano</h2>
+            <h2 id="title-client-tag">Estado</h2>
+            <h2 id="title-client-tag">Total</h2>
         </div>
     </div>
     {% endif %}
-    {% for sowing_purchase in grain_sales %}
-    <a href="{{ sowing_purchase.get_absolute_url }}">
+    {% for grain_sale in grain_sales %}
+    <a href="{{ grain_sale.get_absolute_url }}">
         <div class="movement-card">
             <div id="card-row-1">
-                {% if sowing_purchase.factura %}
-                <h2 id="client-tag">{{sowing_purchase.factura}}</h2>
+                <h2 id="client-tag">{{ grain_sale.fecha | date:"d M Y" }}</h2>
+                <h2 id="client-tag">{{ grain_sale.cliente | capfirst }}</h2>
+                <h2 id="client-tag"> {{ grain_sale.grano | capfirst }} </h2>
+                {% if grain_sale.status == 'por cobrar' %}
+                <h2 id="status-tag">{{ grain_sale.status | capfirst}}</h2>
                 {% else %}
-                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="status-done-tag">{{ grain_sale.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
-                <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>
-                <h2 id="client-tag"> {{ sowing_purchase.date | date:"d M Y"}} </h2>
-                <h2 id="total-tag">${{ sowing_purchase.calculate_total | intcomma }}</h2>
-                {% if sowing_purchase.status == 'por pagar' %}
-                <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
-                {% else %}
-                <h2 id="status-done-tag">{{ sowing_purchase.status | capfirst}}</h2>
-                {% endif %}
+                <h2 id="total-tag">${{ grain_sale.calculate_total | floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>
     {% empty %}
     <div id="list-title">
-        No hay resultados para la búsqueda
+        No hay resultados para la búsqueda.
     </div>
     {% endfor %}
 </div>
@@ -66,7 +60,7 @@
             <div id="action-section">
                 Volver a listado
             </div>
-            <a href="{% url 'sowing:grain_sales_list' %}">
+            <a href="{% url 'sales:grains_sales_list' %}">
                 <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
             </a>
         </div>
@@ -82,7 +76,7 @@
         </div>
         <div class="data sales-month">
             <i class="fa-solid fa-bag-shopping"></i>
-            <h1>Ventas por pagar:</h1>
+            <h1>Ventas por cobrar:</h1>
             <h2>{{unpayed_sales}}.</h2>
         </div>
         <div class="data total-sales-month">
@@ -101,28 +95,23 @@
             <h2 id="title-client-tag">Cliente</h2>
             <h2 id="title-client-tag">Grano</h2>
             <h2 id="title-client-tag">Estado</h2>
-            <h2 id="title-client-tag">Saldo</h2>
+            <h2 id="title-client-tag">Total</h2>
         </div>
     </div>
     {% endif %}
-    {% for sowing_purchase in grain_sales %}
-    <a href="{{ sowing_purchase.get_absolute_url }}">
+    {% for grain_sale in grain_sales %}
+    <a href="{{ grain_sale.get_absolute_url }}">
         <div class="movement-card">
             <div id="card-row-1">
-                {% if sowing_purchase.factura %}
-                <h2 id="client-tag">{{sowing_purchase.factura}}</h2>
+                <h2 id="client-tag">{{ grain_sale.fecha | date:"d M Y" }}</h2>
+                <h2 id="client-tag">{{ grain_sale.cliente | capfirst }}</h2>
+                <h2 id="client-tag"> {{ grain_sale.grano | capfirst }} </h2>
+                {% if grain_sale.status == 'por cobrar' %}
+                <h2 id="status-tag">{{ grain_sale.status | capfirst}}</h2>
                 {% else %}
-                <h2 id="title-client-tag">- - -</h2>
+                <h2 id="status-done-tag">{{ grain_sale.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
-                <h2 id="client-tag">{{ sowing_purchase.producto | capfirst }}</h2>
-                <h2 id="client-tag"> {{ sowing_purchase.date | date:"d M Y" }} </h2>
-                <h2 id="total-tag">${{ sowing_purchase.calculate_total | intcomma }}</h2>
-                {% if sowing_purchase.status == 'por pagar' %}
-                <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
-                {% else %}
-                <h2 id="status-done-tag">{{ sowing_purchase.status | capfirst}}</h2>
-                {% endif %}
+                <h2 id="total-tag">${{ grain_sale.calculate_total | floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>
