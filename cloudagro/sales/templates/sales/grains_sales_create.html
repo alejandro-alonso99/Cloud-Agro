@@ -16,46 +16,47 @@
             <div id="small-wrapper">
                 <div class="create-section-horizontal">
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-tractor"></i>Campo:</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.campo}}</h2>
+                        <h3><i class="fa-solid fa-tractor"></i>Cliente:</h3>
+                        <h2 id="title-client-tag">{{grain_sale_form.cliente}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-receipt"></i>Factura (opcional):</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.factura}}</h2>
+                        <h3><i class="fa-solid fa-receipt"></i>Grano</h3>
+                        <h2 id="title-client-tag">{{grain_sale_form.grano}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-user"></i>Proveedor:
+                        <h3><i class="fa-solid fa-user"></i>Precio Tn.
                         </h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.proveedor}}</h2>
+                        <h2 id="title-client-tag">{{grain_sale_form.precio_tn}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-vial"></i>Producto:</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.producto}}</h2>
+                        <h3><i class="fa-solid fa-vial"></i>IVA</h3>
+                        <h2 id="title-client-tag">{{grain_sale_form.iva}}</h2>
                     </div>
                 </div>
             </div>
             <div id="small-wrapper">
                 <div class="create-section-horizontal">
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-money-bill-wave"></i>Precio lt/kg usd:</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.precio_lt_kg_usd}}</h2>
+                        <h3><i class="fa-solid fa-money-bill-wave"></i>Camionero:</h3>
+                        <h2 id="title-client-tag">{{grain_sale_form.camionero}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-weight-hanging"></i>Litros o Kg
+                        <h3><i class="fa-solid fa-weight-hanging"></i>Patente
                         </h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.lt_kg}}</h2>
+                        <h2 id="title-client-tag">{{grain_sale_form.patente}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-hand-holding-dollar"></i>Tipo cambio:</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.tipo_cambio}}</h2>
-                    </div>
-                    <div class="create-element">
-                        <h3><i class="fa-solid fa-percent"></i>IVA (opcional):
+                        <h3><i class="fa-solid fa-percent"></i>Kg Bruto:
                         </h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.iva}}</h2>
+                        <h2 id="title-client-tag">{{grain_sale_form.kg_bruto}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-hand-holding-dollar"></i>Kg Tara</h3>
+                        <h2 id="title-client-tag">{{grain_sale_form.kg_tara}}</h2>
                     </div>
                 </div>
             </div>
+            {{grain_sale_form.errors}}
         </div>
         <input type="submit" value="Crear" id="create-btn">
     </form>

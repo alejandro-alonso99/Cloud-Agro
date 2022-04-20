@@ -18,4 +18,4 @@ class GrainSaleForm(forms.ModelForm):
 
     class Meta:
         model = GrainSales
-        exclude = ('status','slug','iva_status')
+        exclude = ('status','slug','iva_status', 'campana')

@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from land.models import Campaign
 from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
@@ -308,19 +309,36 @@ def sale_update(request, id):
 @login_required
 def grains_sale_create(request):
 
+    campana = Campaign.objects.get(id=1)
+
     grain_sale_form = GrainSaleForm(request.POST or None)
 
     if grain_sale_form.is_valid():
-        grain_sale_form.save()
+        new_grain_sale = grain_sale_form.save(commit=False)
+        new_grain_sale.campana = campana
+        new_grain_sale.save()
 
         return render('sales:grain_sales_list')
 
-    return render(request, 'sales/grains_sale_create.html',{
+    return render(request, 'sales/grains_sales_create.html',{
                                                             'grain_sale_form':grain_sale_form,
                                                             })
 
-def grains_sale_list(request):
+def grains_sales_list(request):
 
-    grain_sales = GrainSales.objects.all()
+    campana = Campaign.objects.first()
 
-    return render(request,'')
+    grain_sales = GrainSales.objects.filter(campana=campana)
+
+    total_sales = grain_sales.count()
+
+    unpayed_sales = grain_sales.filter(status='por cobrar').count()
+
+
+
+    return render(request,'sales/grains_sales_list.html',{
+                                                        'grain_sales':grain_sales,
+                                                        'total_sales':total_sales,
+                                                        'unpayed_sales':unpayed_sales,
+                                                        'campana':campana,
+                                                        })

@@ -180,7 +180,69 @@ class GrainSales(models.Model):
     iva_status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='por cobrar')
 
     def __str__(self):
+
         return str(self.cliente) + str(self.fecha)
+
+    def calculate_total_kg(self):
+
+        return self.kg_bruto - self.kg_tara
+
+    def calculate_precio_kg(self):
+
+        return self.precio_tn / 1000
+    
+    def calculate_subtotal(self):
+
+        return self.calculate_total_kg * self.calculate_precio_kg
+    
+    def calculate_iva(self):
+
+        return self.calculate_subtotal * (self.iva/100)
+
+    def calculate_total(self):
+        
+        return self.calculate_subtotal + self.calculate_iva 
+
+    def calculate_deductions_total(self):
+
+        deductions = self.deductions_set.all()
+
+        deductions_total = sum([ded.calculate_total() for ded in deductions])
+
+        return deductions_total
+    
+    def calculate_retentions_total(self):
+
+        retentions = self.retentions_set.all()
+
+        retentions_total = sum(ret.monto for ret in retentions)
+
+        return retentions_total
+    
+    def calculate_saldo(self):
+
+        return self.calculate_total() - self.calculate_deductions_total - self.calculate_retentions_total
+
+    def calculate_iva_retentions(self):
+
+        iva_retentions = self.retentions_set.filter(tipo='iva')
+
+        iva_ret_total = sum([ret.monto for ret in iva_retentions])
+
+        return iva_ret_total
+
+    def calculate_deductions_iva(self):
+
+        deductions = self.deductions_set.all()
+
+        deductions_iva = sum(list(map(int, deductions.values_list('iva',flat=True))))
+
+        return deductions_iva
+
+    def calculate_iva_transf(self):
+
+        return self.calculate_iva - self.calculate_iva_retentions - self.calculate_deductions_iva
+        
 
 class Deductions(models.Model):
 
@@ -194,6 +256,7 @@ class Deductions(models.Model):
         total = (self.base_calculo + (self.base_calculo*(self.iva/100)))
 
         return total
+
 
 class Retentions(models.Model): 
 
