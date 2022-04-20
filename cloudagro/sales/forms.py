@@ -1,6 +1,5 @@
 from django import forms
-from django.forms.models import ModelForm, inlineformset_factory
-from .models import Sales, SaleRow
+from .models import GrainSales, Sales, SaleRow
 
 class SaleForm(forms.ModelForm):
     class Meta: 
@@ -14,3 +13,9 @@ class SaleRowForm(forms.ModelForm):
 
 class SaleSearchForm(forms.Form):
     query = forms.CharField()
+
+class GrainSaleForm(forms.ModelForm):
+
+    class Meta:
+        model = GrainSales
+        exclude = ('status','slug','iva_status')

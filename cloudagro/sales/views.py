@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
-from .forms import SaleSearchForm, SaleForm, SaleRowForm
+from .forms import GrainSaleForm, SaleSearchForm, SaleForm, SaleRowForm
 from django.contrib.postgres.search import SearchVector
 from payments.forms import PaymentForm, ThirdPartyChecksForm
 from django.forms.models import modelformset_factory
@@ -304,3 +304,15 @@ def sale_update(request, id):
                                                     'sale_form':sale_form,
                                                     'formset':formset,
                                                     })
+
+@login_required
+def grains_sale_create(request):
+
+    grain_sale_form = GrainSaleForm(request.POST or None)
+
+    if grain_sale_form.is_valid():
+        grain_sale_form.save()
+
+        return render('sales:grain_sales_list')
+
+    return render(request, 'sales/grains_sale_create.html',{})

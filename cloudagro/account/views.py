@@ -56,6 +56,12 @@ def dashboard(request):
             sowing_purchase_trans_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
             sowing_purchase_cash_payed_totals.append(sowing_purchase_cash_payed_total)
             sowing_purchase_trans_payed_totals.append(sowing_purchase_trans_payed_total)
+        
+        #agregar ventas de granos.
+
+        #agregar cheques propios.
+
+        #agregar iva transferencia.
 
         purchase_cash_total = sum(purchase_cash_payed_totals)
         sale_cash_total = sum(sale_cash_payed_totals)

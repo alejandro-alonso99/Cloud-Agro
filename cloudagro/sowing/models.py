@@ -218,7 +218,9 @@ class Applications(models.Model):
 
     def calculate_sub_total(self, averages):
 
-        avg = averages[self.producto][0]
+        producto = self.producto.lower()
+
+        avg = averages[producto][0]
 
         sub_total = Decimal(avg) * Decimal(self.lt_kg)
 

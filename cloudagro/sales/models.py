@@ -144,3 +144,63 @@ class SaleRow(models.Model):
         empty_rows = rows.filter(cantidad=0)
 
         empty_rows.delete()
+
+class GrainSales(models.Model):
+
+    TYPE_CHOICES = (
+    ('soja','Soja'),
+    ('maiz','Maiz'),
+    ('trigo','Trigo'),
+    ('girasol','Girasol'),
+    ('sorgo','Sorgo'),
+    ('centeno','Centeno'),
+    ('cebada','Cebada'),
+    ('avena','Avena'),
+    ('arroz','Arroz'),
+    )
+
+    STATUS_CHOICES = (
+        ('cobrado','Cobrado'),
+        ('por cobrar','Por cobrar')
+    )
+
+    cliente = models.CharField(max_length=100)
+    grano = models.CharField(choices=TYPE_CHOICES, max_length=7)
+    precio_tn = models.FloatField()
+    iva = models.FloatField()
+    camionero = models.CharField(max_length=100)
+    patente = models.CharField(max_length=50)
+    kg_bruto = models.FloatField()
+    kg_tara = models.FloatField()
+    fecha = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='por cobrar')
+    iva_status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='por cobrar')
+
+    def __str__(self):
+        return str(self.cliente) + str(self.fecha)
+
+class Deductions(models.Model):
+
+    sale = models.ForeignKey(GrainSales, on_delete=models.CASCADE)
+    detalle = models.CharField(max_length=50)
+    base_calculo = models.FloatField()
+    iva = models.FloatField()
+
+    def calculate_total(self):
+        
+        total = (self.base_calculo + (self.base_calculo*(self.iva/100)))
+
+        return total
+
+class Retentions(models.Model): 
+
+    TYPE_CHOICES = (
+    ('ganancias','Ganancias'),
+    ('iva','IVA'),
+    ('ingresos brutos','Ingresos Brutos'),
+    )
+
+    sale = models.ForeignKey(GrainSales, on_delete=models.CASCADE)
+    tipo = models.CharField(choices=TYPE_CHOICES, max_length=15)
+    monto = models.FloatField()
+
