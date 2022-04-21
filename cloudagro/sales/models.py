@@ -235,7 +235,7 @@ class GrainSales(models.Model):
 
         deductions = self.deductions_set.all()
 
-        deductions_iva = sum([ded.iva for ded in deductions])
+        deductions_iva = sum([ded.calculate_iva_total() for ded in deductions])
 
         return deductions_iva
 

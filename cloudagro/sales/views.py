@@ -8,7 +8,7 @@ from .forms import DeductionForm, GrainSaleForm, RententionForm, SaleSearchForm,
 from django.contrib.postgres.search import SearchVector
 from payments.forms import PaymentForm, ThirdPartyChecksForm
 from django.forms.models import modelformset_factory
-from .models import GrainSales, Payments
+from .models import Deductions, GrainSales, Payments, Retentions
 from purchases.forms import SearchForm, DateForm
 from payments.forms import DestroyObjectForm
 
@@ -364,21 +364,43 @@ def grain_sale_detail(request,id):
 
     retention_form = RententionForm(request.POST or None)
 
+    destroy_object_form = DestroyObjectForm(request.POST or None)
+
     if deduction_form.is_valid():
 
         new_ded = deduction_form.save(commit=False)
         new_ded.sale = grain_sale
         new_ded.save()
+
+        return redirect(grain_sale.get_absolute_url())
     
     if retention_form.is_valid():
 
         new_ret = retention_form.save(commit=False)
         new_ret.sale = grain_sale
         new_ret.save()
+
+        return redirect(grain_sale.get_absolute_url())
+
     
+    if destroy_object_form.is_valid and request.POST.get('ded_id'):
+        ded_id = int(request.POST.get("ded_id"))
+        ded = Deductions.objects.get(pk=ded_id)
+        ded.delete()
+
+        return redirect(grain_sale.get_absolute_url())
+    
+    if destroy_object_form.is_valid and request.POST.get('ret_id'):
+        ret_id = int(request.POST.get("ret_id"))
+        ret = Retentions.objects.get(pk=ret_id)
+        ret.delete()
+
+        return redirect(grain_sale.get_absolute_url())
+        
 
     return render(request, 'sales/grain_sale_detail.html',{
                                                             'grain_sale':grain_sale,
                                                             'deduction_form':deduction_form,
                                                             'retention_form':retention_form,
+                                                            'destroy_object_form':destroy_object_form,
                                                             })

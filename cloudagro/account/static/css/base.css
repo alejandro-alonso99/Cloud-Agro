@@ -991,6 +991,21 @@ e {
   width: 20%;
 }
 
+#delete-tag {
+  text-align: center;
+  background-color: var(--red-accent-color);
+  font-size: 17px;
+  color: #fff;
+  padding: 5px 0;
+  border-radius: 5px;
+  width: 20%;
+  border: none;
+}
+
+#delete-tag:hover {
+  cursor: pointer;
+}
+
 #endose-tag {
   text-align: center;
   background-color: #0080ff;

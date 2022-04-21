@@ -69,17 +69,24 @@
                 <h2 id="title-client-tag">Base cálculo</h2>
                 <h2 id="title-client-tag">IVA</h2>
                 <h2 id="title-client-tag">Monto</h2>
+                <h2 id="title-client-tag">Eliminar</h2>
             </div>
         </div>
         {% for ded in grain_sale.get_deductions %}
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">{{ded.detalle | capfirst}}</h2>
-                <h2 id="client-tag">${{ded.base_calculo | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-tag">${{ded.iva | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-tag">${{ded.calculate_total | floatformat:2 | intcomma}}</h2>
+        <form method="post" id="ded {{ forloop.counter0 }}" action="" class="endose-form">
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ded.detalle | capfirst}}</h2>
+                    <h2 id="client-tag">${{ded.base_calculo | floatformat:2 | intcomma}}</h2>
+                    <h2 id="client-tag">${{ded.calculate_iva_total | floatformat:2 | intcomma}}</h2>
+                    <h2 id="client-tag">${{ded.calculate_total | floatformat:2 | intcomma}}</h2>
+                    {% csrf_token %}
+                    {{ destroy_object_form.field.as_hidden }}
+                    <input type="button" id="delete-tag" value="Eliminar" class="ded-btn">
+                    <input type="hidden" name="ded_id" value="{{ ded.id }}">
+                </div>
             </div>
-        </div>
+        </form>
         {% endfor %}
         <div class="title-movement-card">
             <div id="total-card-row">
@@ -87,6 +94,7 @@
                 <h2 id="client-total-tag">- - -</h2>
                 <h2 id="client-total-tag">${{grain_sale.calculate_deductions_iva | floatformat:2 | intcomma}}</h2>
                 <h2 id="client-total-tag">${{grain_sale.calculate_deductions_total | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-total-tag">- - -</h2>
             </div>
         </div>
     </div>
@@ -102,13 +110,18 @@
             </div>
         </div>
         {% for ret in grain_sale.get_retentions %}
-        <div class="title-movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag">{{ret.tipo | capfirst}}</h2>
-                <h2 id="client-tag">${{ret.monto | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-tag">- - -</h2>
+        <form method="post" id="ret {{ forloop.counter0 }}" action="" class="endose-form">
+            {% csrf_token %}
+            {{ destroy_object_form.field.as_hidden }}
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ret.tipo | capfirst}}</h2>
+                    <h2 id="client-tag">${{ret.monto | floatformat:2 | intcomma}}</h2>
+                    <input type="button" id="delete-tag" value="Eliminar" class="ret-btn">
+                    <input type="hidden" name="ret_id" value="{{ ret.id }}">
+                </div>
             </div>
-        </div>
+        </form>
         {% endfor %}
         <div class="title-movement-card">
             <div id="total-card-row">
@@ -122,7 +135,6 @@
     {% endif %}
 
     {% if grain_sale.status == 'por cobrar' %}
-
     <h1 id="list-title">Agregar deducción:</h1>
     <form action="" method="post">
         {% csrf_token %}
@@ -145,7 +157,6 @@
                         <h2 id="title-client-tag">{{deduction_form.iva}}</h2>
                     </div>
                 </div>
-                {{deduction_form.errors}}
             </div>
             <input type="submit" value="Agregar" id="create-btn">
         </div>
@@ -167,12 +178,40 @@
                         <h2 id="title-client-tag">{{retention_form.monto}}</h2>
                     </div>
                 </div>
-                {{retention_form.errors}}
             </div>
             <input type="submit" value="Agregar" id="create-btn">
         </div>
     </form>
     {% endif %}
 </div>
+
+<script type="text/javascript">
+    if (document.querySelectorAll('.ded-btn')) {
+        var inputs = document.querySelectorAll('.ded-btn')
+        inputs.forEach((input, i) => {
+            input.addEventListener("click", function () {
+                if (confirm('Quiere eliminar la deducción?')) {
+                    document.getElementById('ded ' + i.toString()).submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+    if (document.querySelectorAll('.ret-btn')) {
+        var inputs = document.querySelectorAll('.ret-btn')
+        inputs.forEach((input, i) => {
+            input.addEventListener("click", function () {
+                if (confirm('Quiere eliminar la retención?')) {
+                    document.getElementById('ret ' + i.toString()).submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+</script>
 
 {% endblock %}

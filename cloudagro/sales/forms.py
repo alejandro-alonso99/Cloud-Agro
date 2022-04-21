@@ -1,5 +1,3 @@
-from dataclasses import fields
-from pyexpat import model
 from django import forms
 from .models import Deductions, GrainSales, Retentions, Sales, SaleRow
 
@@ -33,3 +31,5 @@ class RententionForm(forms.ModelForm):
     class Meta:
         model = Retentions
         exclude = ('sale',)
+
+
