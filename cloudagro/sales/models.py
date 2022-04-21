@@ -181,7 +181,7 @@ class GrainSales(models.Model):
 
     def __str__(self):
 
-        return str(self.cliente) + str(self.fecha)
+         return str(self.cliente) + ' ' + self.fecha.strftime("%d/%m/%Y")
 
     def calculate_total_kg(self):
 
@@ -235,13 +235,21 @@ class GrainSales(models.Model):
 
         deductions = self.deductions_set.all()
 
-        deductions_iva = sum(list(map(int, deductions.values_list('iva',flat=True))))
+        deductions_iva = sum([ded.iva for ded in deductions])
 
         return deductions_iva
 
     def calculate_iva_transf(self):
 
         return self.calculate_iva() - self.calculate_iva_retentions() - self.calculate_deductions_iva()
+    
+    def get_deductions(self):
+
+        return self.deductions_set.all()
+    
+    def get_retentions(self):
+        
+        return self.retentions_set.all()
     
     def get_absolute_url(self):
         return reverse ('sales:grain_sale_detail',
@@ -260,6 +268,11 @@ class Deductions(models.Model):
         total = (self.base_calculo + (self.base_calculo*(self.iva/100)))
 
         return total
+
+    def calculate_iva_total(self):
+
+        return self.base_calculo*(self.iva/100)
+
 
 
 class Retentions(models.Model): 

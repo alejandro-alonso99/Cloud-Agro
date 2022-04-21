@@ -1,5 +1,7 @@
+from dataclasses import fields
+from pyexpat import model
 from django import forms
-from .models import GrainSales, Sales, SaleRow
+from .models import Deductions, GrainSales, Retentions, Sales, SaleRow
 
 class SaleForm(forms.ModelForm):
     class Meta: 
@@ -19,3 +21,15 @@ class GrainSaleForm(forms.ModelForm):
     class Meta:
         model = GrainSales
         exclude = ('status','slug','iva_status', 'campana')
+
+class DeductionForm(forms.ModelForm):
+
+    class Meta:
+        model = Deductions
+        exclude = ('sale',)
+
+class RententionForm(forms.ModelForm):
+
+    class Meta:
+        model = Retentions
+        exclude = ('sale',)

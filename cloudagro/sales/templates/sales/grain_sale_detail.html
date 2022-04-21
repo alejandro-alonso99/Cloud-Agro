@@ -1,9 +1,178 @@
 {% extends "base.html" %}
 
+{% load humanize %}
+
 {% block title %}Venta de granos {% endblock %}
 
 {% block content %}
 
-{{grain_sale}}
+<div class="info-container">
+    <h1 id="list-title">Viendo venta: {{grain_sale}}</h1>
+    {% if grain_sale.status == 'por cobrar' %}
+    <h1 id="total-list-title">Total por cobrar: Agregar calulate amount to pay</h1>
+    {% endif %}
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Fecha</h2>
+                <h2 id="title-client-tag">Cliente</h2>
+                <h2 id="title-client-tag">Grano</h2>
+                <h2 id="title-client-tag">Precio Tn</h2>
+                <h2 id="title-client-tag">Camionero</h2>
+                <h2 id="title-client-tag">Patente</h2>
+                <h2 id="title-client-tag">Estado</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ grain_sale.fecha | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ grain_sale.cliente | capfirst }}</h2>
+                <h2 id="client-tag">{{ grain_sale.grano | capfirst }}</h2>
+                <h2 id="client-tag">{{ grain_sale.precio_tn }}</h2>
+                <h2 id="client-tag">{{ grain_sale.camionero | capfirst}}</h2>
+                <h2 id="client-tag">{{ grain_sale.patente }}</h2>
+                <h2 id="client-tag">{{ grain_sale.status | capfirst}}</h2>
+            </div>
+        </div>
+    </div>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Kg Bruto</h2>
+                <h2 id="title-client-tag">Kg Tara</h2>
+                <h2 id="title-client-tag">Kg total</h2>
+                <h2 id="title-client-tag">Precio / Kg</h2>
+                <h2 id="title-client-tag">Subtotal</h2>
+                <h2 id="title-client-tag">IVA</h2>
+                <h2 id="title-client-tag">Total</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ grain_sale.kg_bruto}}</h2>
+                <h2 id="client-tag">{{ grain_sale.kg_tara }}</h2>
+                <h2 id="client-tag">{{ grain_sale.calculate_total_kg | floatformat:2}}</h2>
+                <h2 id="client-tag">${{ grain_sale.calculate_precio_kg | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">${{ grain_sale.calculate_subtotal | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">${{ grain_sale.calculate_iva | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-total-tag">${{ grain_sale.calculate_total | floatformat:2 | intcomma }}</h2>
+            </div>
+        </div>
+    </div>
+
+    {% if grain_sale.get_deductions %}
+    <h1 id="list-title">Deducciones</h1>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Detalle</h2>
+                <h2 id="title-client-tag">Base cálculo</h2>
+                <h2 id="title-client-tag">IVA</h2>
+                <h2 id="title-client-tag">Monto</h2>
+            </div>
+        </div>
+        {% for ded in grain_sale.get_deductions %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ded.detalle | capfirst}}</h2>
+                <h2 id="client-tag">${{ded.base_calculo | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">${{ded.iva | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">${{ded.calculate_total | floatformat:2 | intcomma}}</h2>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="title-movement-card">
+            <div id="total-card-row">
+                <h2 id="title-client-tag">Total:</h2>
+                <h2 id="client-total-tag">- - -</h2>
+                <h2 id="client-total-tag">${{grain_sale.calculate_deductions_iva | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-total-tag">${{grain_sale.calculate_deductions_total | floatformat:2 | intcomma }}</h2>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if grain_sale.get_retentions %}
+    <h1 id="list-title">Retenciones</h1>
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Tipo</h2>
+                <h2 id="title-client-tag">Monto</h2>
+                <h2 id="title-client-tag">Eliminar</h2>
+            </div>
+        </div>
+        {% for ret in grain_sale.get_retentions %}
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ret.tipo | capfirst}}</h2>
+                <h2 id="client-tag">${{ret.monto | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">- - -</h2>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="title-movement-card">
+            <div id="total-card-row">
+                <h2 id="title-client-tag">Total:</h2>
+                <h2 id="client-total-tag">${{grain_sale.calculate_retentions_total | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-total-tag">- - -</h2>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+    {% if grain_sale.status == 'por cobrar' %}
+
+    <h1 id="list-title">Agregar deducción:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Detalle:</h3>
+                        <h2 id="title-client-tag">{{deduction_form.detalle}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Base cálculo:</h3>
+                        <h2 id="title-client-tag">{{deduction_form.base_calculo}}</h2>
+                    </div>
+
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>IVA (%):</h3>
+                        <h2 id="title-client-tag">{{deduction_form.iva}}</h2>
+                    </div>
+                </div>
+                {{deduction_form.errors}}
+            </div>
+            <input type="submit" value="Agregar" id="create-btn">
+        </div>
+    </form>
+    <h1 id="list-title">Agregar retención:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Tipo:</h3>
+                        <h2 id="title-client-tag">{{retention_form.tipo}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{retention_form.monto}}</h2>
+                    </div>
+                </div>
+                {{retention_form.errors}}
+            </div>
+            <input type="submit" value="Agregar" id="create-btn">
+        </div>
+    </form>
+    {% endif %}
+</div>
 
 {% endblock %}

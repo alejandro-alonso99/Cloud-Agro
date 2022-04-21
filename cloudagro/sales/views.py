@@ -4,7 +4,7 @@ from land.models import Campaign
 from payments.models import EndorsedChecks
 from payments.models import ThirdPartyChecks
 from sales.models import SaleRow, Sales
-from .forms import GrainSaleForm, SaleSearchForm, SaleForm, SaleRowForm
+from .forms import DeductionForm, GrainSaleForm, RententionForm, SaleSearchForm, SaleForm, SaleRowForm
 from django.contrib.postgres.search import SearchVector
 from payments.forms import PaymentForm, ThirdPartyChecksForm
 from django.forms.models import modelformset_factory
@@ -360,6 +360,25 @@ def grain_sale_detail(request,id):
 
     grain_sale = get_object_or_404(GrainSales, id=id)
 
+    deduction_form = DeductionForm(request.POST or None)
+
+    retention_form = RententionForm(request.POST or None)
+
+    if deduction_form.is_valid():
+
+        new_ded = deduction_form.save(commit=False)
+        new_ded.sale = grain_sale
+        new_ded.save()
+    
+    if retention_form.is_valid():
+
+        new_ret = retention_form.save(commit=False)
+        new_ret.sale = grain_sale
+        new_ret.save()
+    
+
     return render(request, 'sales/grain_sale_detail.html',{
                                                             'grain_sale':grain_sale,
+                                                            'deduction_form':deduction_form,
+                                                            'retention_form':retention_form,
                                                             })
