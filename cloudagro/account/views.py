@@ -187,7 +187,8 @@ def dashboard(request):
 
     def calculate_cereal_stock():
         harvests = Harvest.objects.all()
-        
+        grain_sales = GrainSales.objects.all()
+
         cereal_dict = {}
         for harvest in harvests:
             lote = harvest.lote
@@ -199,6 +200,15 @@ def dashboard(request):
             else:
                 cereal_dict[lote_type] = harvest.kg_totales
         
+        for sale in grain_sales:
+            sale_type = sale.grano
+
+            if sale_type in cereal_dict:
+                cereal_dict[sale_type] -= sale.calculate_total_kg()
+
+            else:
+                cereal_dict[lote_type] = sale.calculate_total_kg()
+
         return cereal_dict
 
 
