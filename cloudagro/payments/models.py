@@ -174,6 +174,7 @@ class SelfChecks(models.Model):
     STATE_CHOICES = (
         ('pagado','Pagado'),
         ('a pagar','A Pagar'),
+        ('anulado','Anulado'),
     )
 
     BANK_CHOICES = (

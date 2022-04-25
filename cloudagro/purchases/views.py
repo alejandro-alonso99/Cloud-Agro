@@ -103,6 +103,10 @@ def purchase_detail(request, id):
 
     self_checks = purchase.self_checks
 
+    self_checks = [check for check in self_checks if check.estado != 'anulado']
+
+    print(self_checks)
+
     endorsed_checks = purchase.endorsed_checks
 
     third_p_checks = ThirdPartyChecks.objects.filter(estado='a depositar')

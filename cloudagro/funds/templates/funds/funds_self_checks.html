@@ -44,7 +44,9 @@
                 </h2>
                 {% if check.estado == 'a pagar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
-                {% else %}
+                {% elif check.estado == 'anulado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'pagado' %}
                 <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                 {% endif %}
                 <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
@@ -122,7 +124,9 @@
                 </h2>
                 {% if check.estado == 'a pagar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
-                {% else %}
+                {% elif check.estado == 'anulado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'pagado' %}
                 <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                 {% endif %}
                 <h2 id="total-tag">${{ check.monto | intcomma }}</h2>

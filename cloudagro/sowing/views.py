@@ -128,6 +128,8 @@ def sowing_purchase_detail(request, id):
 
     self_checks = sowing_purchase.self_checks
 
+    self_checks = [check for check in self_checks if check.estado != 'anulado']
+
     endorsed_checks = sowing_purchase.endorsed_checks
 
     third_p_checks = ThirdPartyChecks.objects.filter(estado='a depositar')

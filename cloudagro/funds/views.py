@@ -385,6 +385,25 @@ def self_check_detail(request, id):
         self_check.delete()
 
         return redirect(parent.get_absolute_url())
+    
+    if request.method == 'POST' and request.POST.get("cancel_token"):
+        parent = self_check.content_object
+        print(parent)
+        parent.status = 'por pagar'
+        parent.save()
+
+        destroy_object_form = DestroyObjectForm(request.POST)
+        self_check.estado = 'anulado'
+        self_check.save()
+
+        return redirect(self_check.get_absolute_url())
+    
+    if request.method == 'POST' and request.POST.get("del_cancel_token"):
+        destroy_object_form = DestroyObjectForm(request.POST)
+        self_check.estado = 'por pagar'
+        self_check.save()
+
+        return redirect(self_check.get_absolute_url())
 
     else:
         destroy_object_form = DestroyObjectForm()

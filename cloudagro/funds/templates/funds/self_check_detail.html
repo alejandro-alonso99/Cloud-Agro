@@ -63,12 +63,28 @@
                 <input type="button" id="delete-btn" value="Eliminar cheque">
                 <input type="hidden" name="delete_token" value="1">
             </form>
+            {% if self_check.estado != 'anulado' %}
             <form method="post" id="change-state-form" action="">
                 {% csrf_token %}
                 {{ change_state_form.field.as_hidden }}
-                <input type="button" id="change-state-btn" value="Cambiar estado">
+                <input type="button" id="change-state-btn" value="Cambiar estado" class="change-state-btn">
                 <input type="hidden" name="change_token" value="1">
             </form>
+            <form method="post" id="cancel-state-form" action="">
+                {% csrf_token %}
+                {{ change_state_form.field.as_hidden }}
+                <input type="button" id="change-state-btn" value="Anular cheque" class="cancel-state-btn">
+                <input type="hidden" name="cancel_token" value="1">
+            </form>
+            {% endif %}
+            {% if self_check.estado == 'anulado' %}
+            <form method="post" id="del-cancel-state-form" action="">
+                {% csrf_token %}
+                {{ change_state_form.field.as_hidden }}
+                <input type="button" id="change-state-btn" value="Eliminar anulado" class="del-cancel-state-btn">
+                <input type="hidden" name="del_cancel_token" value="1">
+            </form>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -82,14 +98,48 @@
         }
     })
 
-    var changeInput = document.getElementById("change-state-btn")
-    changeInput.addEventListener("click", function () {
-        if (confirm('Cambiar el estado del cheque?')) {
-            document.getElementById("change-state-form").submit()
-        } else {
-            return false;
+    if (document.querySelectorAll('.change-state-btn')) {
+        var inputs = document.querySelectorAll('.change-state-btn')
+        inputs.forEach((input) => {
+            input.addEventListener("click", function () {
+                if (confirm('Confirme para cambiar el estado a pagado.')) {
+                    document.getElementById('change-state-form').submit()
+                } else {
+                    return false;
+                }
+            })
         }
-    })
+        )
+    }
+
+    if (document.querySelectorAll('.cancel-state-btn')) {
+        var inputs = document.querySelectorAll('.cancel-state-btn')
+        inputs.forEach((input) => {
+            input.addEventListener("click", function () {
+                if (confirm('Si anula el cheque se eliminará de alguna compra/gasto relacionado.')) {
+                    document.getElementById('cancel-state-form').submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+
+    if (document.querySelectorAll('.del-cancel-state-btn')) {
+        var inputs = document.querySelectorAll('.del-cancel-state-btn')
+        inputs.forEach((input) => {
+            input.addEventListener("click", function () {
+                if (confirm('Confirme para quitar el anulado del cheque.')) {
+                    document.getElementById('del-cancel-state-form').submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+
 </script>
 
 {% endblock %}
