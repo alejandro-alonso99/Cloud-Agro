@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Seleccionar campaña {% endblock %}
+
+{% block content %}
+
+<div class="info-container">
+    <div id="list-title">
+        Seleccionar campaña:
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Seleccionar campaña:</h3>
+                        <h2 id="title-client-tag">{{select_campaign_form.campaign}}</h2>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Seleccionar" id="create-btn">
+        </div>
+    </form>
+</div>
+
+{% endblock %}

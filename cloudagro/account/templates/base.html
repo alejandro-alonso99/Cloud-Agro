@@ -30,6 +30,7 @@
                 <div class="dropdown-content">
                     <a href="{% url 'land:campaign_create' %}">Crear campaña</a>
                     <a href="{% url 'land:campaign_list' %}">Campañas</a>
+                    <a href="{% url 'account:change_campaign' %}">Seleccionar campaña</a>
                     <a href="{% url 'land:land_main' %}">Campos</a>
                     <a href="{% url 'land:land_create' %}">Agregar campo</a>
                     <a href="{% url 'sowing:lotes_list' %}">Lotes</a>
@@ -102,11 +103,13 @@
                     <a href="{% url 'funds:funds_manualmoves' %}">Historial Modificaciones a mano</a>
                 </div>
             </div>
+            {% if campaign %}
             <div class="dropdown">
                 <button class="dropbtn" id="campaing-info">
                     {{campaign | capfirst}}
                 </button>
             </div>
+            {% endif %}
         </div>
     </div>
     <div id="content">

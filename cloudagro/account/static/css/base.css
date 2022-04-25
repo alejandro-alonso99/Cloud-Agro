@@ -167,10 +167,13 @@ h6 {
   font-size: 17px;
   font-weight: 600;
   color: #232230;
-  background-color: #80E080;
   text-align: center;
   padding: 14px 0;
   text-decoration: none;
+}
+
+#nav-title:hover {
+  background-color: #fff !important;
 }
 
 /* The dropdown container */
@@ -229,6 +232,10 @@ h6 {
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+#campaing-info {
+  background-color: #80E080 !important;
 }
 
 /* <------------------nav-------------------> */

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from account.forms import SelectCampaignForm
 from payments.models import SelfChecks
 from harvest.models import Harvest
 from purchases.models import Purchases, Animal
@@ -242,3 +243,22 @@ def dashboard(request):
                                                     'search_form':search_form,
                                                     'query':query,
                                                     })
+
+def change_campaign(request):
+
+    select_campaign_form = SelectCampaignForm(request.POST or None)
+
+    if select_campaign_form.is_valid():
+
+        campaign = select_campaign_form.cleaned_data.get('campaign')
+
+        request.session['campaign'] = campaign
+        request.session.modified = True
+
+        print(request.session['campaign'])
+
+        return redirect('account:dashboard')
+
+    return render(request,'account/change_campaign.html',{
+                                                        'select_campaign_form':select_campaign_form
+                                                        })
