@@ -646,7 +646,8 @@ e {
   border-radius: 5px;
   border: none;
   transition: all 0.3s;
-  background-color: #80E080;
+  background-color: #fff;
+  border: 2px solid #80E080;
   margin: 10px 0;
 
 }
@@ -673,10 +674,10 @@ e {
   border-radius: 5px;
   border: none;
   transition: all 0.3s;
-  background-color: #80E080;
   margin: 10px 0;
   text-align: center;
   color: #141a1e;
+  border: 2px solid #80E080;
 }
 
 #del-harvest-btn {

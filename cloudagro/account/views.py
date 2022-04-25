@@ -253,10 +253,7 @@ def change_campaign(request):
         campaign = select_campaign_form.cleaned_data.get('campaign')
 
         request.session['campaign'] = campaign
-        request.session.modified = True
-
-        print(request.session['campaign'])
-
+        
         return redirect('account:dashboard')
 
     return render(request,'account/change_campaign.html',{
