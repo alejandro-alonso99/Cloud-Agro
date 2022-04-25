@@ -186,16 +186,14 @@ def third_p_check_detail(request, id):
             third_p_check.estado = 'a depositar'
             third_p_check.save()
 
-            return redirect(third_p_check.get_absolute_url())
+            return redirect(endosed_parent.get_absolute_url())
     else:
         change_state_form = ChangeStateForm()
     
 
     if request.method == 'POST' and request.POST.get("delete_token"):
         parent = third_p_check.content_object
-        parent_model = parent.__class__.__name__
 
-        #acá va a ir el modelo de las ventas de granos también
         parent.status = 'por cobrar'
         parent.save()
 

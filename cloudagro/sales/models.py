@@ -344,6 +344,8 @@ class GrainSales(models.Model):
     def get_update_url(self):
         return reverse('sales:grain_sale_update',args=[self.id])                                        
         
+    class Meta:
+        ordering = ('-fecha',)
 
 class Deductions(models.Model):
 
