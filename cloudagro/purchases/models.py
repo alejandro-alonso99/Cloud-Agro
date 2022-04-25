@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse, reverse_lazy
-from land.models import Campaign, Land
+from land.models import Land
 from cloudagro.utils import unique_slug_generator
 from django.contrib.contenttypes.models import ContentType
 
