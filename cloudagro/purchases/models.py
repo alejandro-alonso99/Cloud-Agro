@@ -64,9 +64,11 @@ class Purchases(models.Model):
 
         self_checks = self.self_checks
 
+        self_checks = [check for check in self_checks if check.estado != 'anulado']
+
         endorsed_checks = self.endorsed_checks
 
-        check_payed = sum(list(map(int,self_checks.values_list('monto', flat=True))))
+        check_payed = sum([int(check.monto) for check in self_checks ])
 
         payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
 
