@@ -8,58 +8,73 @@
 
 <div class="info-container">
     <h1 id="list-title">Viendo venta: {{grain_sale}}</h1>
+    </h1>
     {% if grain_sale.status == 'por cobrar' %}
-    <h1 id="total-list-title">Total por cobrar: Agregar calulate amount to pay</h1>
+    <h1 id="total-list-title">Total por cobrar: ${{grain_sale.calculate_amount_to_receive | floatformat:2 | intcomma}}
+    </h1>
     {% endif %}
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="title-client-tag">Fecha</h2>
+                <h2 id="title-client-tag">Estado</h2>
                 <h2 id="title-client-tag">Cliente</h2>
                 <h2 id="title-client-tag">Grano</h2>
                 <h2 id="title-client-tag">Precio Tn</h2>
                 <h2 id="title-client-tag">Camionero</h2>
-                <h2 id="title-client-tag">Patente</h2>
-                <h2 id="title-client-tag">Estado</h2>
             </div>
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{ grain_sale.fecha | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ grain_sale.status | capfirst}}</h2>
                 <h2 id="client-tag">{{ grain_sale.cliente | capfirst }}</h2>
                 <h2 id="client-tag">{{ grain_sale.grano | capfirst }}</h2>
                 <h2 id="client-tag">{{ grain_sale.precio_tn }}</h2>
                 <h2 id="client-tag">{{ grain_sale.camionero | capfirst}}</h2>
-                <h2 id="client-tag">{{ grain_sale.patente }}</h2>
-                <h2 id="client-tag">{{ grain_sale.status | capfirst}}</h2>
             </div>
         </div>
     </div>
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
+                <h2 id="title-client-tag">Patente</h2>
                 <h2 id="title-client-tag">Kg Bruto</h2>
                 <h2 id="title-client-tag">Kg Tara</h2>
                 <h2 id="title-client-tag">Kg total</h2>
                 <h2 id="title-client-tag">Precio / Kg</h2>
-                <h2 id="title-client-tag">Subtotal</h2>
-                <h2 id="title-client-tag">IVA</h2>
-                <h2 id="title-client-tag">Total</h2>
             </div>
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
+                <h2 id="client-tag">{{ grain_sale.patente }}</h2>
                 <h2 id="client-tag">{{ grain_sale.kg_bruto}}</h2>
                 <h2 id="client-tag">{{ grain_sale.kg_tara }}</h2>
                 <h2 id="client-tag">{{ grain_sale.calculate_total_kg | floatformat:2}}</h2>
                 <h2 id="client-tag">${{ grain_sale.calculate_precio_kg | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-tag">${{ grain_sale.calculate_subtotal | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-tag">${{ grain_sale.calculate_iva | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-total-tag">${{ grain_sale.calculate_total | floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </div>
-
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Subtotal</h2>
+                <h2 id="title-client-tag">IVA</h2>
+                <h2 id="title-client-tag">Total</h2>
+                <h2 id="title-client-tag">Saldo venta</h2>
+                <h2 id="title-client-tag">IVA transf</h2>
+            </div>
+        </div>
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">${{ grain_sale.calculate_subtotal | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">${{ grain_sale.calculate_iva | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-total-tag">${{ grain_sale.calculate_total | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-total-tag">${{ grain_sale.calculate_saldo | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-total-tag">${{ grain_sale.calculate_iva_transf | floatformat:2 | intcomma }}</h2>
+            </div>
+        </div>
+    </div>
     {% if grain_sale.get_deductions %}
     <h1 id="list-title">Deducciones</h1>
     <div id="wrapper">
@@ -69,7 +84,9 @@
                 <h2 id="title-client-tag">Base cálculo</h2>
                 <h2 id="title-client-tag">IVA</h2>
                 <h2 id="title-client-tag">Monto</h2>
+                {% if grain_sale.status == 'por cobrar' %}
                 <h2 id="title-client-tag">Eliminar</h2>
+                {% endif %}
             </div>
         </div>
         {% for ded in grain_sale.get_deductions %}
@@ -82,8 +99,10 @@
                     <h2 id="client-tag">${{ded.calculate_total | floatformat:2 | intcomma}}</h2>
                     {% csrf_token %}
                     {{ destroy_object_form.field.as_hidden }}
+                    {% if grain_sale.status == 'por cobrar' %}
                     <input type="button" id="delete-tag" value="Eliminar" class="ded-btn">
                     <input type="hidden" name="ded_id" value="{{ ded.id }}">
+                    {% endif %}
                 </div>
             </div>
         </form>
@@ -94,7 +113,9 @@
                 <h2 id="client-total-tag">- - -</h2>
                 <h2 id="client-total-tag">${{grain_sale.calculate_deductions_iva | floatformat:2 | intcomma}}</h2>
                 <h2 id="client-total-tag">${{grain_sale.calculate_deductions_total | floatformat:2 | intcomma }}</h2>
+                {% if grain_sale.status == 'por cobrar' %}
                 <h2 id="client-total-tag">- - -</h2>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -106,7 +127,9 @@
             <div id="card-row-1">
                 <h2 id="title-client-tag">Tipo</h2>
                 <h2 id="title-client-tag">Monto</h2>
+                {% if grain_sale.status == 'por cobrar' %}
                 <h2 id="title-client-tag">Eliminar</h2>
+                {% endif %}
             </div>
         </div>
         {% for ret in grain_sale.get_retentions %}
@@ -117,8 +140,10 @@
                 <div id="card-row-1">
                     <h2 id="client-tag">{{ret.tipo | capfirst}}</h2>
                     <h2 id="client-tag">${{ret.monto | floatformat:2 | intcomma}}</h2>
+                    {% if grain_sale.status == 'por cobrar' %}
                     <input type="button" id="delete-tag" value="Eliminar" class="ret-btn">
                     <input type="hidden" name="ret_id" value="{{ ret.id }}">
+                    {% endif %}
                 </div>
             </div>
         </form>
@@ -127,13 +152,46 @@
             <div id="total-card-row">
                 <h2 id="title-client-tag">Total:</h2>
                 <h2 id="client-total-tag">${{grain_sale.calculate_retentions_total | floatformat:2 | intcomma }}</h2>
+                {% if grain_sale.status == 'por cobrar' %}
                 <h2 id="client-total-tag">- - -</h2>
+                {% endif %}
             </div>
         </div>
     </div>
-
     {% endif %}
 
+    {% if grain_sale.payments or grain_sale.third_party_checks %}
+    <h1 id="list-title">Pagos:</h1>
+    <div class="title-movement-card">
+        <div id="card-row-1">
+            <h2 id="title-client-tag">Tipo:</h2>
+            <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Total:</h2>
+        </div>
+    </div>
+    {% for payment in grain_sale.payments %}
+    <a href="{{ payment.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag">{{ payment.tipo | capfirst}}</h2>
+                <h2 id="client-tag"> {{ payment.date | date:"d M Y"}} </h2>
+                <h2 id="client-total-tag">${{ payment.monto| intcomma }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% for check in grain_sale.third_party_checks %}
+    <a href="{{ check.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> Cheque </h2>
+                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-total-tag">${{ check.monto | intcomma }}</h2>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+    {% endif %}
     {% if grain_sale.status == 'por cobrar' %}
     <h1 id="list-title">Agregar deducción:</h1>
     <form action="" method="post">
@@ -183,6 +241,102 @@
         </div>
     </form>
     {% endif %}
+    {% if grain_sale.status == 'por cobrar' %}
+    <h1 id="list-title">Agregar pagos:</h1>
+    <h1 id="list-title">Cheque:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ third_p_form.content_type.as_hidden }}
+        {{ third_p_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Fecha pago</h3>
+                        <h2 id="title-client-tag">{{third_p_form.fecha_deposito}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Banco Emisión:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.banco_emision}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Número Cheque:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.numero_cheque}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Titular Cheque:</h3>
+                        <h2 id="title-client-tag">{{third_p_form.titular_cheque}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-image"></i>Monto:
+                        </h3>
+                        <h2 id="title-client-tag">{{third_p_form.monto}}</h2>
+                    </div>
+                </div>
+                {{third_p_form.errors}}
+            </div>
+            <input type="submit" value="Crear" id="create-btn">
+        </div>
+    </form>
+    <h1 id="list-title">Pagos Efectivo o Transferencia:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ payment_form.content_type.as_hidden }}
+        {{ payment_form.object_id.as_hidden }}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-invoice-dollar"></i>Tipo:</h3>
+                        <h2 id="title-client-tag">{{payment_form.tipo}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{payment_form.monto}}</h2>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Agregar" id="create-btn">
+        </div>
+    </form>
+    {% endif %}
+</div>
+<div class="actions-sidebar">
+    <div id="actions">
+        <div id="action">
+            <a href="{{grain_sale.get_update_url}}">
+                <h1 id="edit-btn">Editar venta<i class="fa-solid fa-chevron-right"></i></h1>
+            </a>
+            <form method="post" id="delete-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar venta" class="delete-btn">
+                <input type="hidden" name="delete_token" value="1">
+            </form>
+            {% if grain_sale.iva_status == 'por cobrar' %}
+
+            <form method="post" id="iva-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Cobrar iva" class="iva-btn">
+                <input type="hidden" name="iva_token" value="1">
+            </form>
+            {% else %}
+
+            <form method="post" id="delete-iva-form" action="">
+                {% csrf_token %}
+                {{ detroy_object_form.field.as_hidden }}
+                <input type="button" id="delete-btn" value="Eliminar IVA" class="iva-del-btn">
+                <input type="hidden" name="iva_del_token" value="1">
+            </form>
+
+            {% endif %}
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -205,6 +359,48 @@
             input.addEventListener("click", function () {
                 if (confirm('Quiere eliminar la retención?')) {
                     document.getElementById('ret ' + i.toString()).submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+
+    if (document.querySelectorAll('.iva-btn')) {
+        var inputs = document.querySelectorAll('.iva-btn')
+        inputs.forEach((input) => {
+            input.addEventListener("click", function () {
+                if (confirm('Confirme para cobrar el iva')) {
+                    document.getElementById('iva-form').submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+
+    if (document.querySelectorAll('.iva-del-btn')) {
+        var inputs = document.querySelectorAll('.iva-del-btn')
+        inputs.forEach((input) => {
+            input.addEventListener("click", function () {
+                if (confirm('Eliminar el pago del IVA?')) {
+                    document.getElementById('delete-iva-form').submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
+
+    if (document.querySelectorAll('.delete-btn')) {
+        var inputs = document.querySelectorAll('.delete-btn')
+        inputs.forEach((input) => {
+            input.addEventListener("click", function () {
+                if (confirm('Si elimina la venta se eliminan los pagos asociados y los endosos de los cheques de esta venta.')) {
+                    document.getElementById('delete-form').submit()
                 } else {
                     return false;
                 }

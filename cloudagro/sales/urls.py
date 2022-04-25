@@ -12,4 +12,5 @@ urlpatterns= [
     path('grains/create/', views.grains_sale_create, name='grains_sale_create'),
     path('grains/list/', views.grains_sales_list, name='grains_sales_list'),
     path('grains/<int:id>/',views.grain_sale_detail, name='grain_sale_detail'),
+    path('grains/update/<int:id>/',views.grain_sale_update, name='grain_sale_update'),
 ]

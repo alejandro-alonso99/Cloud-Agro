@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from payments.models import Payments, ThirdPartyChecks
 from django.contrib.contenttypes.models import ContentType
 from land.models import Land
-
+from payments.models import EndorsedChecks
 
 class Sales(models.Model):
 
@@ -114,6 +114,7 @@ class Sales(models.Model):
         instace = self
         content_type = ContentType.objects.get_for_model(instace.__class__)
         return content_type
+
 
 
 class SaleRow(models.Model):
@@ -251,9 +252,83 @@ class GrainSales(models.Model):
         
         return self.retentions_set.all()
     
+    def calculate_amount_to_receive(self):
+
+        payments_total = sum([pay.monto for pay in list(self.payments)])
+
+        checks_total = sum([check.monto for check in list(self.third_party_checks)])
+
+        return self.calculate_saldo() - float(payments_total) - float(checks_total)
+
+    def del_iva_transf(self):
+
+        payments = self.payments
+
+        payment= payments.filter(monto=round(self.calculate_iva_transf(),2)).first()
+
+        payment.delete()
+
+        self.iva_status = 'por cobrar'
+
+        self.save()
+
+    def del_payments(self):
+
+        payments = self.payments
+
+        [pay.delete() for pay in payments]
+    
+    def del_checks(self):
+
+        checks = self.third_party_checks
+
+        for check in checks:
+                check_id = check.id
+                if EndorsedChecks.objects.filter(third_p_id = check_id):
+                    endorsed_check = EndorsedChecks.objects.filter(third_p_id = check_id).first()
+                    parent = endorsed_check.content_object
+                    parent.status = 'por pagar'
+                    parent.save()
+                    endorsed_check.delete()
+
+                check.delete()
+
+    def del_retentions(self):
+        retentions = self.retentions_set.all()
+
+        for ret in retentions:
+            ret.delete()
+    
+    def del_deductions(self):
+        deductions = self.deductions_set.all()
+
+        for ded in deductions:
+            ded.delete()  
+
+    @property
+    def payments(self):
+        instance = self
+        qs = Payments.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def third_party_checks(self):
+        instance = self
+        qs = ThirdPartyChecks.objects.filter_by_instance(instance)
+        return qs
+
+    @property
+    def get_content_type(self):
+        instace = self
+        content_type = ContentType.objects.get_for_model(instace.__class__)
+        return content_type
+
     def get_absolute_url(self):
         return reverse ('sales:grain_sale_detail',
                                         args=[self.id])
+
+    def get_update_url(self):
+        return reverse('sales:grain_sale_update',args=[self.id])                                        
         
 
 class Deductions(models.Model):

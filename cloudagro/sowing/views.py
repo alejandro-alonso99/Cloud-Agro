@@ -563,7 +563,6 @@ def lote_detail(request,  lote_id):
     sowing_purchases = SowingPurchases.objects.all()
 
     products = sowing_purchases.values_list('producto',flat=True)
-
     return render(request, 'sowing/lote_detail.html', {
                                                         'lote':lote,
                                                         'application_form':application_form,

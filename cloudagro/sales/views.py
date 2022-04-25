@@ -11,6 +11,7 @@ from django.forms.models import modelformset_factory
 from .models import Deductions, GrainSales, Payments, Retentions
 from purchases.forms import SearchForm, DateForm
 from payments.forms import DestroyObjectForm
+import datetime
 
 @login_required
 def sales_list(request):
@@ -366,6 +367,15 @@ def grain_sale_detail(request,id):
 
     destroy_object_form = DestroyObjectForm(request.POST or None)
 
+    initial_payment_data = {
+        'content_type': grain_sale.get_content_type,
+        'object_id': grain_sale.id, 
+    }
+
+    payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
+
+    third_p_form = ThirdPartyChecksForm(request.POST or None, initial= initial_payment_data)
+
     if deduction_form.is_valid():
 
         new_ded = deduction_form.save(commit=False)
@@ -383,6 +393,15 @@ def grain_sale_detail(request,id):
         return redirect(grain_sale.get_absolute_url())
 
     
+    if destroy_object_form.is_valid and request.POST.get('delete_token'):
+
+        grain_sale.del_payments()
+        grain_sale.del_checks()
+
+        grain_sale.delete()
+
+        return redirect('sales:grains_sales_list')
+
     if destroy_object_form.is_valid and request.POST.get('ded_id'):
         ded_id = int(request.POST.get("ded_id"))
         ded = Deductions.objects.get(pk=ded_id)
@@ -396,11 +415,120 @@ def grain_sale_detail(request,id):
         ret.delete()
 
         return redirect(grain_sale.get_absolute_url())
+
+    if destroy_object_form.is_valid and request.POST.get('iva_token'):
+
+        attrs = {'content_type': grain_sale.get_content_type,
+                'object_id': grain_sale.id,
+                'monto':grain_sale.calculate_iva_transf(),
+                'tipo':'transferencia',
+                'date':datetime.date.today(),
+                }
         
+        new_payment = Payments(**attrs)
+        new_payment.save()
+
+        grain_sale.iva_status = 'cobrado'
+        grain_sale.save()
+
+        return redirect(grain_sale.get_absolute_url())
+    
+    if destroy_object_form.is_valid and request.POST.get('iva_del_token'):
+        
+        grain_sale.del_iva_transf()
+
+        return redirect(grain_sale.get_absolute_url())
+
+    if payment_form.is_valid():
+        content_type = payment_form.cleaned_data.get('content_type')
+        obj_id = payment_form.cleaned_data.get('object_id')
+        monto = payment_form.cleaned_data.get('monto')
+        tipo = payment_form.cleaned_data.get('tipo')
+
+        attrs = {'content_type':content_type, 'object_id':obj_id, 'monto':monto, 'tipo':tipo}
+
+        new_payment = Payments(**attrs)
+        new_payment.save()
+        
+        return redirect(grain_sale.get_absolute_url())
+
+    if third_p_form.is_valid():
+        content_type = third_p_form.cleaned_data.get('content_type')
+        obj_id = third_p_form.cleaned_data.get('object_id')
+        fecha_deposito = third_p_form.cleaned_data.get('fecha_deposito')
+        banco_emision = third_p_form.cleaned_data.get('banco_emision')
+        numero_cheque = third_p_form.cleaned_data.get('numero_cheque')
+        titular_cheque = third_p_form.cleaned_data.get('titular_cheque')
+        monto = third_p_form.cleaned_data.get('monto')
+        observacion = ''
+
+        cliente = grain_sale.cliente
+        descripcion = grain_sale
+        attrs = {'content_type':content_type, 'object_id':obj_id,
+                                     'cliente':cliente,
+                                     'descripcion': descripcion,                                      
+                                     'fecha_deposito':fecha_deposito,
+                                     'banco_emision':banco_emision,
+                                     'numero_cheque':numero_cheque,
+                                     'titular_cheque':titular_cheque,
+                                     'monto':monto,
+                                     'observacion':observacion,    
+                                     }
+
+        new_third_p_check = ThirdPartyChecks(**attrs)
+        new_third_p_check.save()
+        
+        return redirect(grain_sale.get_absolute_url())
 
     return render(request, 'sales/grain_sale_detail.html',{
                                                             'grain_sale':grain_sale,
                                                             'deduction_form':deduction_form,
                                                             'retention_form':retention_form,
                                                             'destroy_object_form':destroy_object_form,
+                                                            'payment_form':payment_form,
+                                                            'third_p_form':third_p_form,
+                                                            })
+
+@login_required
+def grain_sale_update(request,id):
+
+    grain_sale = get_object_or_404(GrainSales, id=id)
+
+    grain_sale_form = GrainSaleForm(request.POST or None)
+
+    campana = Campaign.objects.get(id=1)
+
+    if grain_sale_form.is_valid():
+        
+        grain_sale.del_payments()
+        grain_sale.del_checks()
+        grain_sale.del_retentions()
+        grain_sale.del_deductions()
+
+        cliente = grain_sale_form.cleaned_data.get('cliente')
+        grano = grain_sale_form.cleaned_data.get('grano')
+        precio_tn = grain_sale_form.cleaned_data.get('precio_tn')
+        iva = grain_sale_form.cleaned_data.get('iva')
+        camionero = grain_sale_form.cleaned_data.get('camionero')
+        patente = grain_sale_form.cleaned_data.get('patente')
+        kg_bruto = grain_sale_form.cleaned_data.get('kg_bruto')
+        kg_tara = grain_sale_form.cleaned_data.get('kg_tara')
+
+        fecha = grain_sale.fecha
+
+        attrs = {'cliente':cliente,'grano':grano,'precio_tn':precio_tn,
+                'iva':iva, 'camionero':camionero, 'patente':patente,
+                'kg_bruto':kg_bruto, 'kg_tara':kg_tara, 'fecha':fecha,
+                'status': 'por cobrar', 'iva_status':'por cobrar',
+                'campana':campana,
+                }
+        
+        grain_sale = GrainSales(id=id, **attrs)
+        grain_sale.save()
+
+        return redirect(grain_sale.get_absolute_url())
+
+    return render(request, 'sales/grain_sale_update.html',{
+                                                            'grain_sale':grain_sale,
+                                                            'grain_sale_form':grain_sale_form,
                                                             })

@@ -221,7 +221,7 @@
             <input type="submit" value="Crear" id="create-btn">
         </div>
     </form>
-    {% else %}
+    {% elif lote.estado == 'no cosechado'%}
     <h1 id="list-title">Para agregar aplicaciones registre compras de insumos</h1>
     {% endif %}
     {% if lote.estado == 'no cosechado' %}

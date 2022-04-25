@@ -839,6 +839,17 @@ e {
   border-radius: 5px;
 }
 
+#total-sale-list-title {
+  text-align: center;
+  font-size: 17px;
+  margin: 30px 0;
+  background-color: #fff;
+  color: #04c404;
+  padding: 10px;
+  border: 2px solid #04c404;
+  border-radius: 5px;
+}
+
 .list-container a {
   text-decoration: none;
   color: #232230;
