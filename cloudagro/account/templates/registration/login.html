@@ -52,10 +52,12 @@
                     {% csrf_token %}
 
                     <div class="form-element">
-                        <i class="fas fa-user"></i> {{form.username}}
+                        <i class="fa-solid fa-user"></i>Usuario
+                        {{form.username}}
                     </div>
                     <div class="form-element">
-                        <i class="fas fa-lock"></i> {{form.password}}
+                        <i class="fa-solid fa-lock"></i>Contraseña
+                        {{form.password}}
                     </div>
                     <input type="hidden" name="next" value="{{ next }}" />
                     <p><input type="submit" value="Ingresar" id="form-btn"></p>
