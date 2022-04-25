@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from payments.models import SelfChecks
 from harvest.models import Harvest
 from purchases.models import Purchases, Animal
 from purchases.forms import SearchForm
-from sales.models import Sales, SaleRow
+from sales.models import Sales, SaleRow, GrainSales
 from expenses.models import Expenses
 from sowing.models import SowingPurchases
 from funds.models import FundManualMove
@@ -24,6 +25,9 @@ def dashboard(request):
         sales = Sales.objects.all()
         expenses = Expenses.objects.all()
         sowing_purchases = SowingPurchases.objects.all()
+        grain_sales = GrainSales.objects.all()
+        self_checks = SelfChecks.objects.all()
+        third_p_checks = ThirdPartyChecks.objects.all()
 
         purchase_cash_payed_totals = []
         purchase_trans_payed_totals = []
@@ -57,11 +61,22 @@ def dashboard(request):
             sowing_purchase_cash_payed_totals.append(sowing_purchase_cash_payed_total)
             sowing_purchase_trans_payed_totals.append(sowing_purchase_trans_payed_total)
         
-        #agregar ventas de granos.
 
-        #agregar cheques propios.
+        grain_sales_cash_payed = sum([sum(list(map(int,grain_sale.payments.filter(tipo='efectivo').values_list('monto',flat=True)))) for grain_sale in grain_sales])
+        grain_sales_bank_payed = sum([sum(list(map(int,grain_sale.payments.filter(tipo='transferencia').values_list('monto',flat=True)))) for grain_sale in grain_sales])
+        
 
-        #agregar iva transferencia.
+        if self_checks:
+            payed_self_checks = self_checks.filter(estado='pagado')
+            self_checks_total = sum([int(check.monto) for check in payed_self_checks])
+        else:
+            self_checks_total = 0
+        
+        if third_p_checks:
+            payed_third_p_checks = third_p_checks.filter(estado='depositado')
+            third_p_checks_payed = sum([int(check.monto) for check in payed_third_p_checks])
+        else:
+            third_p_checks_payed = 0
 
         purchase_cash_total = sum(purchase_cash_payed_totals)
         sale_cash_total = sum(sale_cash_payed_totals)
@@ -82,12 +97,10 @@ def dashboard(request):
         manualmoves_trans_remove_total = sum(list(map(int,manualmoves_trans.filter(action='quitar').values_list('monto',flat=True))))
 
 
-        cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total
+        cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total + grain_sales_cash_payed
 
-        trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total
-
-        third_p_checks = ThirdPartyChecks.objects.all()
-
+        trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total + grain_sales_bank_payed - self_checks_total + third_p_checks_payed
+       
         to_deposit_checks = third_p_checks.filter(estado= 'a depositar')
 
         third_p_checks_total = sum(list(map(int,to_deposit_checks.values_list('monto',flat=True)))) 
