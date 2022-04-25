@@ -305,7 +305,7 @@ def grains_sale_create(request):
         new_grain_sale.campana = campana
         new_grain_sale.save()
 
-        return render('sales:grain_sales_list')
+        return redirect('sales:grains_sales_list')
 
     return render(request, 'sales/grains_sales_create.html',{
                                                             'grain_sale_form':grain_sale_form,
@@ -325,6 +325,11 @@ def grains_sales_list(request):
     date_query_end = None
 
     grain_sales = GrainSales.objects.filter(campana=campana)
+
+    if grain_sales:
+        amount_to_receive = grain_sales[0].calculate_campaign_amount_to_receive(campana)
+    else:
+        amount_to_receive = 0
 
     total_sales = grain_sales.count()
 
@@ -354,6 +359,7 @@ def grains_sales_list(request):
                                                         'query':query,
                                                         'date_query_start':date_query_start,
                                                         'date_query_end':date_query_end,
+                                                        'amount_to_receive':amount_to_receive,
                                                         })
 
 @login_required
@@ -479,6 +485,8 @@ def grain_sale_detail(request,id):
         new_third_p_check.save()
         
         return redirect(grain_sale.get_absolute_url())
+
+    grain_sale.check_state()
 
     return render(request, 'sales/grain_sale_detail.html',{
                                                             'grain_sale':grain_sale,

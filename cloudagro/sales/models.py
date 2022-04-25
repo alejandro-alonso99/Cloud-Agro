@@ -184,6 +184,14 @@ class GrainSales(models.Model):
 
          return str(self.cliente) + ' ' + self.fecha.strftime("%d/%m/%Y")
 
+    def calculate_campaign_amount_to_receive(self,campaing):
+        campana = campaing
+        grain_sales = GrainSales.objects.filter(campana=campana).filter(status='por cobrar')
+        amount_to_receive = sum([sale.calculate_amount_to_receive() for sale in grain_sales])
+
+        return amount_to_receive
+        
+
     def calculate_total_kg(self):
 
         return self.kg_bruto - self.kg_tara
@@ -304,6 +312,12 @@ class GrainSales(models.Model):
 
         for ded in deductions:
             ded.delete()  
+
+    def check_state(self):
+
+        if self.calculate_amount_to_receive() <= 0:
+            self.status = 'cobrado'
+            self.save()
 
     @property
     def payments(self):
