@@ -83,7 +83,6 @@ def sowing_purchases_create(request):
         sowing_p_form = SowingPurchasesForm(data=request.POST)
 
         if sowing_p_form.is_valid():
-            campo = sowing_p_form.cleaned_data.get('campo')
             factura = sowing_p_form.cleaned_data.get('factura')
             proveedor = sowing_p_form.cleaned_data.get('proveedor')
             producto = sowing_p_form.cleaned_data.get('producto')
@@ -98,8 +97,7 @@ def sowing_purchases_create(request):
             elif Campaign.objects.all():
                 campana = Campaign.objects.all()[0]
 
-            attrs = {'campaña':campana,'campo':campo, 
-                                        'factura':factura,
+            attrs = {'campaña':campana,'factura':factura,
                                         'proveedor':proveedor,
                                         'producto':producto,
                                         'precio_lt_kg_usd':precio_lt_kg_usd,
@@ -302,7 +300,6 @@ def sowing_purchase_update(request, id):
             for payment in payments:
                 payment.delete()
 
-            campo = sowing_p_form.cleaned_data.get('campo')
             factura = sowing_p_form.cleaned_data.get('factura')
             proveedor = sowing_p_form.cleaned_data.get('proveedor')
             producto = sowing_p_form.cleaned_data.get('producto')
@@ -317,7 +314,7 @@ def sowing_purchase_update(request, id):
             elif Campaign.objects.all():
                 campana = Campaign.objects.all()[0]
 
-            attrs = {'campaña':campana,'campo':campo, 
+            attrs = {'campaña':campana,
                                         'factura':factura,
                                         'proveedor':proveedor,
                                         'producto':producto,
@@ -368,7 +365,7 @@ def lotes_list(request):
     number_form = LoteNumberForm()
 
     query = None
-
+ 
     campo = None
 
     number_query = None
