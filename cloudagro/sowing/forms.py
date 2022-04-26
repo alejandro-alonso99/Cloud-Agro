@@ -1,5 +1,5 @@
-from math import prod
 from django import forms
+from land.models import Campaign
 from .models import Labors, SowingPurchases, Applications
 from land.models import Lote
 from django.forms.models import ModelForm
@@ -23,6 +23,16 @@ class LoteForm(ModelForm):
     class Meta:
         model = Lote
         exclude = ('slug','campaña','estado')
+    
+    def __init__(self, *args, **kwargs):
+        self.campana = kwargs.pop("campana")
+        campana = self.campana
+        campos = Land.objects.filter(campaign=campana)
+        super(LoteForm, self).__init__(*args, **kwargs)
+        self.fields['campo'] = forms.ChoiceField(
+            choices=[(o.lower(), str(o)) for o in list(set(map(str,campos.values_list('nombre',flat=True))))]
+        )
+
 
 sowing_purchases = SowingPurchases.objects.all()
 products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
@@ -47,9 +57,13 @@ class LaborsForm(ModelForm):
         model = Labors
         exclude = ('slug','lote')
 
-campos = Land.objects.all()
+
+
 class ChooseCampoForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop("request")
+        campana = Campaign.objects.get(nombre=self.request['campaign'])
+        campos = Land.objects.filter(campaign=campana)
         super(ChooseCampoForm, self).__init__(*args, **kwargs)
         self.fields['campo'] = forms.ChoiceField(
             choices=[(o.lower(), str(o)) for o in list(set(map(str,campos.values_list('nombre',flat=True))))]

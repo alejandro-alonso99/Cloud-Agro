@@ -1,13 +1,18 @@
-from itertools import product
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Land, Campaign
 from .forms import CampaignForm, LandForm
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def land_main(request):
 
-    lands = Land.objects.all()
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
+    lands = Land.objects.filter(campaign=campana)
 
     return render(request,'land/land_main.html',{
                                                 'lands':lands,
@@ -16,11 +21,18 @@ def land_main(request):
 @login_required
 def land_create(request):
 
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     if request.method == 'POST':
         land_form = LandForm(data=request.POST)
 
         if land_form.is_valid():
-            land_form.save()
+            new_land = land_form.save(commit=False)
+            new_land.campaign = campana
+            new_land.save()
         
         
         return redirect('land:land_main')
@@ -75,4 +87,5 @@ def campaign_detail(request, campaign, pk):
     return render(request, 'land/campaign_detail.html',{
                                                         'campaign':campaign,
                                                         })
+
 

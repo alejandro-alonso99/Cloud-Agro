@@ -409,8 +409,13 @@ def lotes_list(request):
 @login_required
 def lote_create(request):
 
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     if request.method == 'POST':
-        lote_form = LoteForm(data=request.POST)
+        lote_form = LoteForm(request.POST, campana=campana)
 
         if lote_form.is_valid():
 
@@ -418,11 +423,6 @@ def lote_create(request):
             numero = lote_form.cleaned_data.get('numero')
             hectareas= lote_form.cleaned_data.get('hectareas')
             tipo= lote_form.cleaned_data.get('tipo')
-
-            if 'campaign' in request.session:
-                campana = Campaign.objects.get(nombre=request.session['campaign']) 
-            elif Campaign.objects.all():
-                campana = Campaign.objects.all()[0]
             
             attrs = {'campo':campo, 'numero':numero,
                     'hectareas':hectareas, 'tipo':tipo,
@@ -435,7 +435,7 @@ def lote_create(request):
             return redirect('sowing:lotes_list')
         
     else:
-        lote_form = LoteForm()
+        lote_form = LoteForm(campana=campana)
 
     return render(request, 'sowing/lote_create.html',{
                                                     'lote_form':lote_form,
