@@ -298,8 +298,8 @@ def grains_sale_create(request):
 
     if 'campaign' in request.session:
         campana = Campaign.objects.get(nombre=request.session['campaign']) 
-    elif GrainSales.objects.all():
-        campana = GrainSales.objects.all()[0]
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
 
     grain_sale_form = GrainSaleForm(request.POST or None)
 
@@ -318,8 +318,8 @@ def grains_sales_list(request):
 
     if 'campaign' in request.session:
         campana = Campaign.objects.get(nombre=request.session['campaign']) 
-    elif GrainSales.objects.all():
-        campana = GrainSales.objects.all()[0]
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
 
     search_form = SearchForm()
 
@@ -512,8 +512,8 @@ def grain_sale_update(request,id):
 
     if 'campaign' in request.session:
         campana = Campaign.objects.get(nombre=request.session['campaign']) 
-    elif GrainSales.objects.all():
-        campana = GrainSales.objects.all()[0]
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
 
 
     if grain_sale_form.is_valid():

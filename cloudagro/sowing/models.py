@@ -91,10 +91,9 @@ class SowingPurchases(models.Model):
 
         return amount_to_pay
 
-    def calculate_averages():
-        campaña = Campaign.objects.filter(estado = 'vigente').first()
+    def calculate_averages(campana):
 
-        sowing_purchases = SowingPurchases.objects.filter(campaña = campaña)
+        sowing_purchases = SowingPurchases.objects.filter(campaña = campana)
 
         sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
 

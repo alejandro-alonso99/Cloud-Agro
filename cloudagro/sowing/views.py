@@ -27,9 +27,13 @@ def sowing_purchases_list(request):
     date_query_start = None
     date_query_end = None
 
-    campaña = Campaign.objects.filter(estado = 'vigente').first()
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     
-    sowing_purchases = SowingPurchases.objects.filter(campaña = campaña)
+    sowing_purchases = SowingPurchases.objects.filter(campaña = campana)
 
     total_purchases = sowing_purchases.count()
 
@@ -59,7 +63,7 @@ def sowing_purchases_list(request):
     total_amount_to_pay = sum(total_amounts_to_pay)
 
     return render(request, 'sowing/sowing_purchases_list.html', {
-                                                                'campaña':campaña,
+                                                                'campaña':campana,
                                                                 'sowing_purchases':sowing_purchases,
                                                                 'total_purchases':total_purchases,
                                                                 'total_unpayed_purchases':total_unpayed_purchases,
@@ -89,9 +93,12 @@ def sowing_purchases_create(request):
             tipo_cambio = sowing_p_form.cleaned_data.get('tipo_cambio')
             iva = sowing_p_form.cleaned_data.get('iva')
 
-            campaña = Campaign.objects.filter(estado = 'vigente').first()
+            if 'campaign' in request.session:
+                campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            elif Campaign.objects.all():
+                campana = Campaign.objects.all()[0]
 
-            attrs = {'campaña':campaña,'campo':campo, 
+            attrs = {'campaña':campana,'campo':campo, 
                                         'factura':factura,
                                         'proveedor':proveedor,
                                         'producto':producto,
@@ -305,9 +312,12 @@ def sowing_purchase_update(request, id):
             iva = sowing_p_form.cleaned_data.get('iva')
 
             date = sowing_purchase.date
-            campaña = Campaign.objects.filter(estado = 'vigente').first()
+            if 'campaign' in request.session:
+                campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            elif Campaign.objects.all():
+                campana = Campaign.objects.all()[0]
 
-            attrs = {'campaña':campaña,'campo':campo, 
+            attrs = {'campaña':campana,'campo':campo, 
                                         'factura':factura,
                                         'proveedor':proveedor,
                                         'producto':producto,
@@ -330,20 +340,26 @@ def sowing_purchase_update(request, id):
 @login_required
 def products_averages(request):
 
-    campaña = Campaign.objects.filter(estado = 'vigente').first()
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
 
-    product_dict = SowingPurchases.calculate_averages()[0]
+    product_dict = SowingPurchases.calculate_averages(campana)[0]
     
     return render(request, 'sowing/product_averages.html',{ 
                                                             'product_dict':product_dict,
-                                                            'campaña':campaña,
+                                                            'campaña':campana,
                                                             })
 
 @login_required
 def lotes_list(request):
-    campaña = Campaign.objects.filter(estado = 'vigente').first()
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
 
-    lotes = Lote.objects.filter(campaña=campaña)
+    lotes = Lote.objects.filter(campaña=campana)
 
     search_form = SearchForm()
 
@@ -381,7 +397,7 @@ def lotes_list(request):
 
     return render(request,'sowing/lotes_list.html',{
                                                     'lotes':lotes,
-                                                    'campaña':campaña,
+                                                    'campaña':campana,
                                                     'search_form':search_form,
                                                     'query':query,
                                                     'campo_form':campo_form,
@@ -403,11 +419,14 @@ def lote_create(request):
             hectareas= lote_form.cleaned_data.get('hectareas')
             tipo= lote_form.cleaned_data.get('tipo')
 
-            campaña = Campaign.objects.filter(estado = 'vigente').first()
+            if 'campaign' in request.session:
+                campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            elif Campaign.objects.all():
+                campana = Campaign.objects.all()[0]
             
             attrs = {'campo':campo, 'numero':numero,
                     'hectareas':hectareas, 'tipo':tipo,
-                    'campaña':campaña }
+                    'campaña':campana }
 
             new_lote = Lote(**attrs)
             new_lote.save()
@@ -600,11 +619,14 @@ def lote_update(request, id):
             hectareas= lote_form.cleaned_data.get('hectareas')
             tipo= lote_form.cleaned_data.get('tipo')
 
-            campaña = Campaign.objects.filter(estado = 'vigente').first()
+            if 'campaign' in request.session:
+                campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            elif Campaign.objects.all():
+                campana = Campaign.objects.all()[0]
             
             attrs = {'campo':campo, 'numero':numero,
                     'hectareas':hectareas, 'tipo':tipo,
-                    'campaña':campaña }
+                    'campaña':campana }
 
 
             lote = Lote(id=id, **attrs)
