@@ -5,6 +5,7 @@ from .forms import ExpenseForm, FilterExpenseForm
 from payments.models import Payments, SelfChecks, ThirdPartyChecks, EndorsedChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm, DestroyObjectForm
 from purchases.forms import DateForm
+from land.models import Campaign
 
 @login_required
 def expenses_list(request, category_id=''):
@@ -62,11 +63,18 @@ def expenses_list(request, category_id=''):
 @login_required
 def expense_create(request):
 
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     if request.method == 'POST':
         expense_form = ExpenseForm(data=request.POST)
 
         if expense_form.is_valid():
-            expense_form.save()
+            new_expense = expense_form.save(commit=False)
+            new_expense.campana = campana
+            new_expense.save()
         
         return redirect('expenses:expenses_list')
     
@@ -298,13 +306,13 @@ def expense_update(request, id):
             monto = expense_form.cleaned_data.get('monto')
             descripcion = expense_form.cleaned_data.get('descripcion')
             categoria = expense_form.cleaned_data.get('categoria')
-
+            campana = expense.campana
             date = expense.date
 
             attrs = {'campo':campo,'concepto':concepto,
                     'monto':monto, 'descripcion':descripcion,
                     'categoria':categoria, 'date':date,
-                    'status':'por pagar'}
+                    'status':'por pagar','campana':campana}
             
             expense = Expenses(id=id, **attrs)
             expense.save()
