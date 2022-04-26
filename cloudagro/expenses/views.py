@@ -10,6 +10,11 @@ from land.models import Campaign
 @login_required
 def expenses_list(request, category_id=''):
 
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     date_form = DateForm()
 
     filter_expense = FilterExpenseForm()
@@ -19,7 +24,7 @@ def expenses_list(request, category_id=''):
 
     filter_query = None
 
-    expenses = Expenses.objects.all()
+    expenses = Expenses.objects.filter(campana=campana)
 
     total_expenses = expenses.count()
     unpayed_expenses = expenses.filter(status = 'por pagar')
@@ -95,11 +100,18 @@ def expenses_summary(request):
         ('impuestos', 'Impuestos'),
     )
 
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
+    expenses = Expenses.objects.filter(campana=campana)
+
     #Vector de montos totales por categoría de gasto.
     expense_category_totals = []
     expenses_by_category = []
     for choice in CATEGORY_CHOICES:
-        expense_by_category = Expenses.objects.filter(categoria = str(choice[0]))
+        expense_by_category = expenses.filter(categoria = str(choice[0]))
         expenses_by_category_totals = sum(list(map(int,expense_by_category.values_list('monto', flat=True)))) 
         expense_category_totals.append(expenses_by_category_totals)
         expenses_by_category.append(expense_by_category)
@@ -117,7 +129,7 @@ def expenses_summary(request):
     #Diccionario con categoría: descripción: total por descripción
     for category in category_names:
         expenses_dict[category] = {}
-        expense_by_category = Expenses.objects.filter(categoria = category)
+        expense_by_category = expenses.filter(categoria = category)
         expense_category_descriptions = list(map(str,expense_by_category.values_list('descripcion', flat=True)))
         expense_category_descriptions = dict.fromkeys(expense_category_descriptions)
         for description in expense_category_descriptions:
