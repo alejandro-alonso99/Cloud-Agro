@@ -456,8 +456,12 @@ def lote_detail(request,  lote_id):
 
     lote_view = request.get_full_path()
 
+    sowing_purchases = SowingPurchases.objects.all()
+
+    products = sowing_purchases.values_list('producto',flat=True)
+
     if request.method == 'POST':
-        application_form = ApplicationForm(data=request.POST)
+        application_form = ApplicationForm(data=request.POST, products=products)
         labors_form = LaborsForm(data=request.POST)
         harvest_form = HarvestForm(data=request.POST)
         change_state_form = ChangeStateForm(data=request.POST)
@@ -515,7 +519,7 @@ def lote_detail(request,  lote_id):
             return redirect('sowing:lotes_list')
 
     else:
-        application_form = ApplicationForm()
+        application_form = ApplicationForm(products=products)
         labors_form = LaborsForm()
         harvest_form = HarvestForm()
         change_state_form = ChangeStateForm()
@@ -583,9 +587,6 @@ def lote_detail(request,  lote_id):
         kg_totales = None
         quintales_ha = None
 
-    sowing_purchases = SowingPurchases.objects.all()
-
-    products = sowing_purchases.values_list('producto',flat=True)
     return render(request, 'sowing/lote_detail.html', {
                                                         'lote':lote,
                                                         'application_form':application_form,
