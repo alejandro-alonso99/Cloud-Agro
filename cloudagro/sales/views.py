@@ -296,7 +296,10 @@ def sale_update(request, id):
 @login_required
 def grains_sale_create(request):
 
-    campana = Campaign.objects.get(id=1)
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif GrainSales.objects.all():
+        campana = GrainSales.objects.all()[0]
 
     grain_sale_form = GrainSaleForm(request.POST or None)
 
@@ -313,7 +316,10 @@ def grains_sale_create(request):
 @login_required
 def grains_sales_list(request):
 
-    campana = Campaign.objects.first()
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif GrainSales.objects.all():
+        campana = GrainSales.objects.all()[0]
 
     search_form = SearchForm()
 
@@ -340,14 +346,14 @@ def grains_sales_list(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            grain_sales = GrainSales.objects.annotate(search=SearchVector('cliente'),).filter(search=query)
+            grain_sales = grain_sales.annotate(search=SearchVector('cliente'),).filter(search=query)
         
     if 'date_query_start' and 'date_query_end' in request.GET:
         form = DateForm(request.GET)
         if form.is_valid():
             date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
             date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
-            grain_sales = GrainSales.objects.filter(fecha__range=[date_query_start, date_query_end])
+            grain_sales = grain_sales.filter(fecha__range=[date_query_start, date_query_end])
 
     return render(request,'sales/grains_sales_list.html',{
                                                         'grain_sales':grain_sales,
@@ -504,7 +510,11 @@ def grain_sale_update(request,id):
 
     grain_sale_form = GrainSaleForm(request.POST or None)
 
-    campana = Campaign.objects.get(id=1)
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif GrainSales.objects.all():
+        campana = GrainSales.objects.all()[0]
+
 
     if grain_sale_form.is_valid():
         

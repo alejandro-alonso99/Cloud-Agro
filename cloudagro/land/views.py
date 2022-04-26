@@ -44,22 +44,11 @@ def land_detail(request, nombre):
 @login_required
 def campaign_create(request):
 
-    campaigns = Campaign.objects.all()
-
     if request.method == 'POST':
         campaign_form = CampaignForm(data=request.POST)
 
         if campaign_form.is_valid():
             campaign_form.save()
-
-            for campaign in campaigns:
-                campaign.estado = 'cerrada'
-                campaign.save()      
-
-            last_camp = list(campaigns)[0]      
-
-            last_camp.estado = 'vigente'
-            last_camp.save()
         
         return redirect('land:campaign_list')
         
