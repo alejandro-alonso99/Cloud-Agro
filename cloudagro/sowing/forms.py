@@ -8,7 +8,7 @@ from land.models import Land
 class SowingPurchasesForm(forms.ModelForm):
     class Meta:
         model = SowingPurchases
-        fields = ['campo','factura','proveedor','producto','producto','precio_lt_kg_usd',
+        fields = ['factura','proveedor','producto','producto','precio_lt_kg_usd',
                     'lt_kg','tipo_cambio','iva']
         
             

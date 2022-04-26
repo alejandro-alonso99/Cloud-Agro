@@ -16,7 +16,6 @@ class SowingPurchases(models.Model):
 
     slug = models.SlugField(max_length=250, unique_for_date='date')
     campaña = models.ForeignKey(Campaign, on_delete = models.CASCADE)
-    campo = models.ForeignKey(Land,on_delete= models.CASCADE)
     date = models.DateTimeField(default=datetime.datetime.now)
     factura = models.CharField(max_length=100, blank=True, null=True)
     proveedor = models.CharField(max_length=100)
