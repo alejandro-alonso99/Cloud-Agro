@@ -1,9 +1,15 @@
 from django.db import models
+from land.models import Campaign
 from cloudagro.utils import unique_slug_generator
 from django.urls import reverse
 from payments.models import Payments, SelfChecks, EndorsedChecks
 from django.contrib.contenttypes.models import ContentType
-from land.models import Land
+
+def get_sentinel_campaign():
+    return Campaign.objects.get_or_create(nombre='default', estado='vigente', slug='default')[0]
+
+def get_sentinel_campaign_id():
+    return get_sentinel_campaign().id
 
 class Expenses(models.Model):
     
@@ -20,7 +26,7 @@ class Expenses(models.Model):
         ('impuestos', 'Impuestos'),
     )
 
-    campo = models.ForeignKey(Land, on_delete=models.CASCADE)
+    campana = models.ForeignKey(to=Campaign, on_delete=models.SET(get_sentinel_campaign), default=get_sentinel_campaign_id)
     slug = models.SlugField(max_length=250,unique_for_date='date')
     concepto = models.CharField(max_length=250)
     date = models.DateTimeField(auto_now_add=True)

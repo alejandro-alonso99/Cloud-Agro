@@ -61,8 +61,8 @@ class LaborsForm(ModelForm):
 
 class ChooseCampoForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop("request")
-        campana = Campaign.objects.get(nombre=self.request['campaign'])
+        self.campana = kwargs.pop("campana")
+        campana = self.campana
         campos = Land.objects.filter(campaign=campana)
         super(ChooseCampoForm, self).__init__(*args, **kwargs)
         self.fields['campo'] = forms.ChoiceField(

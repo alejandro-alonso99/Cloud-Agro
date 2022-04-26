@@ -4,7 +4,7 @@ from .models import Expenses
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expenses
-        fields = ('campo','concepto', 'monto', 'descripcion', 'categoria')
+        fields = ('concepto', 'monto', 'descripcion', 'categoria')
 
 CATEGORY_CHOICES = (
         ('costos directos', 'Costos Directos'),

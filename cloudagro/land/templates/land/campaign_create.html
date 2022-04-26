@@ -8,8 +8,7 @@
     <div id="list-title">
         Agregar Campaña:
     </div>
-    <form action="" method="post"
-        onsubmit="return confirm('Al crear una nueva campaña, la anterior se marcará como terminada.')">
+    <form action="" method="post" onsubmit="confirm('Crear campaña?')">
         {% csrf_token %}
         <div id="form-wrapper">
             <div id="small-wrapper">

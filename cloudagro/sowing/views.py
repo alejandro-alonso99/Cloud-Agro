@@ -363,7 +363,7 @@ def lotes_list(request):
 
     search_form = SearchForm()
 
-    campo_form = ChooseCampoForm()
+    campo_form = ChooseCampoForm(campana=campana)
 
     number_form = LoteNumberForm()
 
@@ -380,7 +380,7 @@ def lotes_list(request):
             lotes = lotes.filter(numero = number_query)
 
     if 'campo' in request.GET:
-        form = ChooseCampoForm(request.GET)
+        form = ChooseCampoForm(request.GET, campana=campana)
         if form.is_valid():
             campo = str(form.cleaned_data['campo'])
             campo = campo.capitalize()
