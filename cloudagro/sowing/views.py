@@ -45,14 +45,14 @@ def sowing_purchases_list(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            sowing_purchases = SowingPurchases.objects.annotate(search=SearchVector('proveedor'),).filter(search=query)
+            sowing_purchases = sowing_purchases.annotate(search=SearchVector('proveedor'),).filter(search=query)
         
     if 'date_query_start' and 'date_query_end' in request.GET:
         form = DateForm(request.GET)
         if form.is_valid():
             date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
             date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
-            sowing_purchases = SowingPurchases.objects.filter(date__range=[date_query_start, date_query_end])
+            sowing_purchases = sowing_purchases.filter(date__range=[date_query_start, date_query_end])
         
 
     total_amounts_to_pay = []
@@ -385,13 +385,13 @@ def lotes_list(request):
             campo = str(form.cleaned_data['campo'])
             campo = campo.capitalize()
             campo_query = Land.objects.filter(nombre=campo).first()
-            lotes = Lote.objects.filter(campo=campo_query)
+            lotes = lotes.filter(campo=campo_query)
 
     if 'query' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            lotes = Lote.objects.annotate(search=SearchVector('tipo'),).filter(search=query)
+            lotes = lotes.annotate(search=SearchVector('tipo'),).filter(search=query)
 
 
 

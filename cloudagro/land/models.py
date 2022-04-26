@@ -45,7 +45,7 @@ class Land(models.Model):
     )
 
     slug = models.SlugField(unique=True, default="campo", max_length=255)
-    campaign = models.ForeignKey(Campaign, blank=True, null=True, on_delete=models.PROTECT)
+    campaign = models.ForeignKey(Campaign, blank=True, null=True, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=100, unique=True)
     tipo = models.CharField(choices=TYPE_CHOICES, default='propio', max_length=9)
     estado = models.CharField(choices=STATUS_CHOICES, default='en explotación', max_length=14)
