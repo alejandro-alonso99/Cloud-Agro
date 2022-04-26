@@ -444,13 +444,18 @@ def lote_create(request):
 @login_required
 def lote_detail(request,  lote_id):
 
+    if 'campaign' in request.session:
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     lote = get_object_or_404(Lote, pk=lote_id)
 
-    product_choices = SowingPurchases.calculate_averages()[1]
+    product_choices = SowingPurchases.calculate_averages(campana)[1]
 
     product_choices = tuple(tuple(product) for product in product_choices)
 
-    product_averages = SowingPurchases.calculate_averages()[0]
+    product_averages = SowingPurchases.calculate_averages(campana)[0]
 
     lote_view = request.get_full_path()
 

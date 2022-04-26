@@ -235,8 +235,6 @@ class Applications(models.Model):
         return reverse_lazy('sowing:application_update', args=[self.id])
 
     def calculate_lt_by_type():
-
-        campaña = Campaign.objects.filter(estado = 'vigente').first()
         
         applications = Applications.objects.all()
 
