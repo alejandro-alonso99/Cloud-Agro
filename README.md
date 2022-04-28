@@ -17,6 +17,10 @@ AgroCloud is an accounting and stock-managing web app created for industrial agr
 
 ## This project Includes:
 
+## Dashboard view:
+Here the user can see their funds, cereals' stock, animals' stock, and fertilizers, seeds and other products' stock.
+![dashboard](resumen.png)
+
 ## Create views:
 Create views include forms, formsets, and other functionalities. Once you create an object, you are redirected to the objects detail. In this case, this user just sold 20 cows.
 ![gif](create_sale.gif)
