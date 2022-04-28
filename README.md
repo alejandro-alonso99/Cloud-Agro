@@ -6,8 +6,7 @@ AgroCloud is an accounting and stock-managing web app created for industrial agr
 This software was initially created for a client of mine, but given the growing demand in my area for these kind of products, I decided to make the app as generic as possible so that it can be re-selled. This would be a great fit for any family-driven or small agriculture company that is needing to keep track of it's bussinesse´s accounting and/or yields.
 
 ## Sections:
-* **General:** Allows you to create named farms that then can be linked to purchases/sales, etc. As well as letting you create a farming campaign. 
-*  In this section you can also access the farm´s allotments, in the allotments tab you register your sowing product´s usage.
+* **General:** Allows you to create named farms that then can be linked to purchases/sales, etc. As well as letting you create a farming campaign. In this section you can also access the farm´s allotments, in the allotments tab you register your sowing product´s usage.
 *  **Compras:** Allows you to create animal and sowing purchases, from here you can also access their list views. 
 *  **Ventas:** Allows you to create animal and sowing sales, from here you can also access their detail views. 
 *  **Siembra:** Allows you to see the average price of every sowing product you bought (Fertilizers, seeds, etc.).
