@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="info-container">
+    {% if campana %}
     <div id="list-title">
         Agregar Campo:
     </div>
@@ -27,5 +28,11 @@
             <input type="submit" value="Crear" id="create-btn">
         </div>
     </form>
+    {% else %}
+    <div id="list-title">
+        No tiene campañas registradas. <a href="{% url 'land:campaign_create' %}" class="page-link">Crear
+            campaña.</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

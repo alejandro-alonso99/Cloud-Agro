@@ -297,7 +297,10 @@ def sale_update(request, id):
 def grains_sale_create(request):
 
     if 'campaign' in request.session:
-        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        else:
+            campana = []
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
 
@@ -312,14 +315,21 @@ def grains_sale_create(request):
 
     return render(request, 'sales/grains_sales_create.html',{
                                                             'grain_sale_form':grain_sale_form,
+                                                            'campana':campana,
                                                             })
 @login_required
 def grains_sales_list(request):
 
     if 'campaign' in request.session:
-        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            grain_sales = GrainSales.objects.filter(campana=campana)
+        else:
+            campana = []
+            grain_sales = GrainSales.objects.none()
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
+        grain_sales = GrainSales.objects.filter(campana=campana)
 
     search_form = SearchForm()
 
@@ -330,7 +340,6 @@ def grains_sales_list(request):
     date_query_start = None
     date_query_end = None
 
-    grain_sales = GrainSales.objects.filter(campana=campana)
 
     if grain_sales:
         amount_to_receive = grain_sales[0].calculate_campaign_amount_to_receive(campana)

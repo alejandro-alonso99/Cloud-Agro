@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class="info-container">
+    {% if campana %}
     <div id="list-title">
         Listado de campos:
     </div>
@@ -26,6 +27,12 @@
     </div>
 
     {% endfor %}
+    {% else %}
+    <div id="list-title">
+        No tiene campañas registradas. <a href="{% url 'land:campaign_create' %}" class="page-link">Crear
+            campaña.</a>
+    </div>
+    {% endif %}
 </div>
 <div class="actions-sidebar">
     <div id="actions">

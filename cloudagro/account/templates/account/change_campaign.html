@@ -5,6 +5,7 @@
 {% block content %}
 
 <div class="info-container">
+    {% if campana %}
     <div id="list-title">
         Seleccionar campaña:
     </div>
@@ -22,6 +23,12 @@
             <input type="submit" value="Seleccionar" id="create-btn">
         </div>
     </form>
+    {% else %}
+    <div id="list-title">
+        No tiene campañas registradas. <a href="{% url 'land:campaign_create' %}" class="page-link">Crear
+            campaña.</a>
+    </div>
+    {% endif %}
 </div>
 <div class="actions-sidebar">
 

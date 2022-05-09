@@ -28,13 +28,17 @@ def sowing_purchases_list(request):
     date_query_end = None
 
     if 'campaign' in request.session:
-        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            sowing_purchases = SowingPurchases.objects.filter(campaña = campana)
+        else:
+            campana = []
+            sowing_purchases = SowingPurchases.objects.none()
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
+        sowing_purchases = SowingPurchases.objects.filter(campaña = campana)
 
-    
-    sowing_purchases = SowingPurchases.objects.filter(campaña = campana)
-
+        
     total_purchases = sowing_purchases.count()
 
     unpayed_purchases = sowing_purchases.filter(status='por pagar')
@@ -79,6 +83,14 @@ def sowing_purchases_list(request):
 @login_required
 def sowing_purchases_create(request):
 
+    if 'campaign' in request.session:
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        else:
+            campana = []
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     if request.method == 'POST':
         sowing_p_form = SowingPurchasesForm(data=request.POST)
 
@@ -91,11 +103,6 @@ def sowing_purchases_create(request):
             lt_kg = sowing_p_form.cleaned_data.get('lt_kg')
             tipo_cambio = sowing_p_form.cleaned_data.get('tipo_cambio')
             iva = sowing_p_form.cleaned_data.get('iva')
-
-            if 'campaign' in request.session:
-                campana = Campaign.objects.get(nombre=request.session['campaign']) 
-            elif Campaign.objects.all():
-                campana = Campaign.objects.all()[0]
 
             attrs = {'campaña':campana,'factura':factura,
                                         'proveedor':proveedor,
@@ -116,6 +123,7 @@ def sowing_purchases_create(request):
 
     return render(request,'sowing/sowing_purchases_create.html',{
                                                                 'sowing_p_form':sowing_p_form,
+                                                                'campana':campana,
                                                                     })
 
 @login_required
@@ -338,11 +346,17 @@ def sowing_purchase_update(request, id):
 def products_averages(request):
 
     if 'campaign' in request.session:
-        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            product_dict = SowingPurchases.calculate_averages(campana)[0]
+        else:
+            campana = []
+            product_dict = {}
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
+        product_dict = SowingPurchases.calculate_averages(campana)[0]
 
-    product_dict = SowingPurchases.calculate_averages(campana)[0]
+
     
     return render(request, 'sowing/product_averages.html',{ 
                                                             'product_dict':product_dict,
@@ -352,15 +366,22 @@ def products_averages(request):
 @login_required
 def lotes_list(request):
     if 'campaign' in request.session:
-        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            lotes = Lote.objects.filter(campaña=campana)
+            campo_form = ChooseCampoForm(campana=campana)
+        else:
+            campana = []
+            lotes = []
+            campo_form = []
+
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
+        lotes = Lote.objects.filter(campaña=campana)
+        campo_form = ChooseCampoForm(campana=campana)
 
-    lotes = Lote.objects.filter(campaña=campana)
 
     search_form = SearchForm()
-
-    campo_form = ChooseCampoForm(campana=campana)
 
     number_form = LoteNumberForm()
 
@@ -407,10 +428,17 @@ def lotes_list(request):
 def lote_create(request):
 
     if 'campaign' in request.session:
-        campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+            lote_form = LoteForm(campana=campana)
+        else:
+            campana = []
+            lote_form = []
+
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
-
+        lote_form = LoteForm(campana=campana)
+    
     if request.method == 'POST':
         lote_form = LoteForm(request.POST, campana=campana)
 
@@ -430,12 +458,10 @@ def lote_create(request):
         
 
             return redirect('sowing:lotes_list')
-        
-    else:
-        lote_form = LoteForm(campana=campana)
 
     return render(request, 'sowing/lote_create.html',{
                                                     'lote_form':lote_form,
+                                                    'campana':campana,
                                                     })
 
 @login_required

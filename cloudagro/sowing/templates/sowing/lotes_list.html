@@ -5,6 +5,7 @@
 {% block content %}
 {% if query or campo or number_query%}
 
+{% if campana %}
 <div class="info-container">
     {% if query %}
     <div id="list-title">
@@ -114,6 +115,15 @@
             {{number_form.number_query}}
             <input type="submit" value="Buscar" id="search-btn">
         </form>
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<div class="info-container">
+    <div id="list-title">
+        No tiene campañas registradas. <a href="{% url 'land:campaign_create' %}" class="page-link">Crear
+            campaña.</a>
     </div>
 </div>
 {% endif %}

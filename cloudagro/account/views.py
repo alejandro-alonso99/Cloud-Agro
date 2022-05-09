@@ -13,6 +13,7 @@ from payments.models import ThirdPartyChecks
 from stock.models import ManualMove
 from sowing.models import SowingPurchases, Applications
 import difflib
+from land.models import Campaign
 
 @login_required
 def dashboard(request):
@@ -99,6 +100,8 @@ def dashboard(request):
 
 
         cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total + grain_sales_cash_payed
+
+        print(manualmoves_cash_add_total)
 
         trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total + grain_sales_bank_payed - self_checks_total + third_p_checks_payed
        
@@ -246,6 +249,14 @@ def dashboard(request):
 
 def change_campaign(request):
 
+    if 'campaign' in request.session:
+        if request.session['campaign'] != []:
+            campana = Campaign.objects.get(nombre=request.session['campaign']) 
+        else:
+            campana = []
+    elif Campaign.objects.all():
+        campana = Campaign.objects.all()[0]
+
     select_campaign_form = SelectCampaignForm(request.POST or None)
 
     if select_campaign_form.is_valid():
@@ -257,5 +268,6 @@ def change_campaign(request):
         return redirect('account:dashboard')
 
     return render(request,'account/change_campaign.html',{
-                                                        'select_campaign_form':select_campaign_form
+                                                        'select_campaign_form':select_campaign_form,
+                                                        'campana':campana,
                                                         })

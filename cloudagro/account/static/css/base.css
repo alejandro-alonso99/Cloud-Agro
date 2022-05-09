@@ -74,14 +74,14 @@ a:visited {
 
 .page-link {
   border: none;
-  color: #63ff9b !important;
+  color: #04c404 !important;
   padding: 0;
   width: fit-content;
-  font-size: 20px;
+  font-size: 17px;
 }
 
 .page-link:hover {
-  background-color: #fff;
+  text-decoration: underline;
 }
 
 h1,

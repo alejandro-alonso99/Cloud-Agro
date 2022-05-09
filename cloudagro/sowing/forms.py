@@ -19,7 +19,7 @@ class SowingPurchasesForm(forms.ModelForm):
 
 
 class LoteForm(ModelForm):
-
+    
     class Meta:
         model = Lote
         exclude = ('slug','campaña','estado')
@@ -29,8 +29,8 @@ class LoteForm(ModelForm):
         campana = self.campana
         campos = Land.objects.filter(campaign=campana)
         super(LoteForm, self).__init__(*args, **kwargs)
-        self.fields['campo'] = forms.ChoiceField(
-            choices=[(o.lower(), str(o)) for o in list(set(map(str,campos.values_list('nombre',flat=True))))]
+        self.fields['campo'] = forms.ModelChoiceField(
+            queryset=campos
         )
 
 class ApplicationForm(ModelForm):
