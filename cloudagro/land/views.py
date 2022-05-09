@@ -74,7 +74,7 @@ def campaign_create(request):
 @login_required
 def campaign_list(request):
 
-    campaigns = Campaign.objects.all()
+    campaigns = Campaign.objects.exclude(nombre='default')
 
     return render(request, 'land/campaign_list.html',{
                                                         'campaings':campaigns,
