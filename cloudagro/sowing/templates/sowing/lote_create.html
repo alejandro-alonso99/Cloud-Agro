@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="info-container">
+    {% if campos %}
     <div id="list-title">
         Agregar Lote
     </div>
@@ -37,5 +38,10 @@
             <input type="submit" value="Crear" id="create-btn">
         </div>
     </form>
+    {% else %}
+    <div id="list-title">
+        No tiene campos registrados. <a href="{% url 'land:land_create' %}" class="page-link">Registrar campo.</a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

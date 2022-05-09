@@ -411,6 +411,8 @@ def lote_create(request):
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
 
+    campos = Land.objects.all()
+
     if request.method == 'POST':
         lote_form = LoteForm(request.POST, campana=campana)
 
@@ -436,6 +438,7 @@ def lote_create(request):
 
     return render(request, 'sowing/lote_create.html',{
                                                     'lote_form':lote_form,
+                                                    'campos':campos,
                                                     })
 
 @login_required
