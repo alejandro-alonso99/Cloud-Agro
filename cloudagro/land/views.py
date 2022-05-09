@@ -8,30 +8,21 @@ from django.contrib.auth.decorators import login_required
 def land_main(request):
 
     if 'campaign' in request.session:
-        if request.session['campaign'] != []:
-            campana = Campaign.objects.get(nombre=request.session['campaign']) 
-            lands = Land.objects.filter(campaign=campana)
-        else:
-            campana = []
-            lands = []
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
 
-        lands = Land.objects.filter(campaign=campana)
+    lands = Land.objects.filter(campaign=campana)
 
     return render(request,'land/land_main.html',{
                                                 'lands':lands,
-                                                'campana':campana,
                                                 })
 
 @login_required
 def land_create(request):
 
     if 'campaign' in request.session:
-        if request.session['campaign'] != []:
-            campana = Campaign.objects.get(nombre=request.session['campaign']) 
-        else:
-            campana = []
+        campana = Campaign.objects.get(nombre=request.session['campaign']) 
     elif Campaign.objects.all():
         campana = Campaign.objects.all()[0]
 
@@ -51,7 +42,6 @@ def land_create(request):
 
     return render(request, 'land/land_create.html',{
                                             'land_form':land_form,
-                                            'campana':campana,
                                             })
 
 @login_required

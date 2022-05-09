@@ -8,7 +8,6 @@
 
 {% block content %}
 
-{% if campana %}
 {% if query or date_query_end %}
 <div class="info-container">
     {% if query %}
@@ -142,14 +141,6 @@
         </div>
     </div>
 
-</div>
-{% endif %}
-{% else %}
-<div class="info-container">
-    <div id="list-title">
-        No tiene campañas registradas. <a href="{% url 'land:campaign_create' %}" class="page-link">Crear
-            campaña.</a>
-    </div>
 </div>
 {% endif %}
 {% endblock %}

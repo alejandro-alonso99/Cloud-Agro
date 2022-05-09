@@ -7,8 +7,9 @@
 {% block title %} Promedio de productos {% endblock %}
 
 {% block content %}
+
 <div class="info-container">
-    {% if campaña %}
+
     <div id="list-title">
         Promedio de precios para campaña: "{{campaña | capfirst}}"
     </div>
@@ -30,12 +31,6 @@
     </div>
 
     {% endfor %}
-    {% else %}
-    <div id="list-title">
-        No tiene campañas registradas. <a href="{% url 'land:campaign_create' %}" class="page-link">Crear
-            campaña.</a>
-    </div>
-    {% endif %}
 </div>
 <div class="actions-sidebar">
 
@@ -51,7 +46,6 @@
         </div>
     </div>
 </div>
-
 
 
 {% endblock %}

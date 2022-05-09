@@ -258,6 +258,9 @@
 
     <div id="actions">
         <div id="action">
+            <div id="action-section">
+                Lote
+            </div>
             <a href="{{lote.get_update_url}}">
                 <h1 id="edit-btn">Editar lote<i class="fa-solid fa-chevron-right"></i></h1>
             </a>
@@ -269,6 +272,9 @@
             </form>
         </div>
         <div id="action">
+            <div id="action-section">
+                Cosecha
+            </div>
             {% if lote.estado == 'cosechado' %}
             <form method="post" action="" id="delete-harvest-form">
                 {% csrf_token %}
