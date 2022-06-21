@@ -31,10 +31,6 @@
                     <a href="{% url 'land:campaign_create' %}">Crear campaña</a>
                     <a href="{% url 'land:campaign_list' %}">Campañas</a>
                     <a href="{% url 'account:change_campaign' %}">Seleccionar campaña</a>
-                    <a href="{% url 'land:land_main' %}">Campos</a>
-                    <a href="{% url 'land:land_create' %}">Agregar campo</a>
-                    <a href="{% url 'sowing:lotes_list' %}">Lotes</a>
-                    <a href="{% url 'sowing:lote_create' %}">Agregar Lote</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -67,6 +63,10 @@
                     <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
+                    <a href="{% url 'land:land_main' %}">Campos</a>
+                    <a href="{% url 'land:land_create' %}">Agregar campo</a>
+                    <a href="{% url 'sowing:lotes_list' %}">Lotes</a>
+                    <a href="{% url 'sowing:lote_create' %}">Agregar Lote</a>
                     <a href="{% url 'sowing:product_averages' %}">Precios promedio</a>
                 </div>
             </div>

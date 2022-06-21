@@ -13,7 +13,7 @@
 
         <div id="form-wrapper">
             <div id="small-wrapper">
-                <div class="create-section-horizontal">
+                <div class="create-section">
                     <div class="create-element">
                         <h3><i class="fa-solid fa-receipt"></i>Factura (opcional):</h3>
                         <h2 id="title-client-tag">{{sowing_p_form.factura}}</h2>
@@ -24,22 +24,12 @@
                         <h2 id="title-client-tag">{{sowing_p_form.proveedor}}</h2>
                     </div>
                     <div class="create-element">
-                        <h3><i class="fa-solid fa-vial"></i>Producto:</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.producto}}</h2>
+                        <h3><i class="fa-solid fa-dollar"></i>Total:
+                        </h3>
+                        <h2 id="title-client-tag">{{sowing_p_form.total}}</h2>
                     </div>
                 </div>
-            </div>
-            <div id="small-wrapper">
-                <div class="create-section-horizontal">
-                    <div class="create-element">
-                        <h3><i class="fa-solid fa-money-bill-wave"></i>Precio lt/kg usd:</h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.precio_lt_kg_usd}}</h2>
-                    </div>
-                    <div class="create-element">
-                        <h3><i class="fa-solid fa-weight-hanging"></i>Litros o Kg
-                        </h3>
-                        <h2 id="title-client-tag">{{sowing_p_form.lt_kg}}</h2>
-                    </div>
+                <div class="create-section">
                     <div class="create-element">
                         <h3><i class="fa-solid fa-hand-holding-dollar"></i>Tipo cambio:</h3>
                         <h2 id="title-client-tag">{{sowing_p_form.tipo_cambio}}</h2>
@@ -49,6 +39,7 @@
                         </h3>
                         <h2 id="title-client-tag">{{sowing_p_form.iva}}</h2>
                     </div>
+
                 </div>
             </div>
             <input type="submit" value="Crear" id="create-btn">

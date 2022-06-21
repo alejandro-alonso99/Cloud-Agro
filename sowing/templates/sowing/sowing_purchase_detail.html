@@ -20,9 +20,6 @@
                 <h2 id="title-client-tag">Fecha:</h2>
                 <h2 id="title-client-tag">Factura:</h2>
                 <h2 id="title-client-tag">Proveedor:</h2>
-                <h2 id="title-client-tag">Precio por lt/kg USD:</h2>
-                <h2 id="title-client-tag">Precio por lt/kg</h2>
-                <h2 id="title-client-tag">Lt / KG</h2>
             </div>
         </div>
         <div class="title-movement-card">
@@ -34,40 +31,66 @@
                 <h2 id="client-tag"> - - - </h2>
                 {% endif %}
                 <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
-                <h2 id="client-tag">{{ sowing_purchase.precio_lt_kg_usd | floatformat:2 | usd_currency }}</h2>
-                <h2 id="client-tag">${{ precio_lt_kg | intcomma}}</h2>
-                <h2 id="client-tag">{{ sowing_purchase.lt_kg | floatformat:2}}</h2>
             </div>
         </div>
     </div>
     <div id="wrapper">
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="title-client-tag">Producto:</h2>
-                <h2 id="title-client-tag">Subtotal:</h2>
                 <h2 id="title-client-tag">Tipo de cambio:</h2>
                 <h2 id="title-client-tag">IVA</h2>
-                <h2 id="title-client-tag">Total USD:</h2>
-                <h2 id="title-client-tag">Total Pesos:</h2>
+                <h2 id="title-client-tag">Total</h2>
                 <h2 id="title-client-tag">Estado:</h2>
             </div>
         </div>
         <div class="title-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ sowing_purchase.producto }}</h2>
-                <h2 id="client-tag">{{ sub_total_usd | floatformat:2 | usd_currency }}</h2>
                 <h2 id="client-tag">${{ sowing_purchase.tipo_cambio | intcomma}}</h2>
                 {% if sowing_purchase.iva %}
                 <h2 id="client-tag">{{ sowing_purchase.iva | percentage }}</h2>
                 {% else %}
                 <h2 id="client-tag">- - -</h2>
                 {% endif %}
-                <h2 id="client-tag">{{ total_usd | floatformat:2 | usd_currency }}</h2>
-                <h2 id="client-tag">${{ sowing_purchase.calculate_total | intcomma}}</h2>
+                <h2 id="client-tag">${{ sowing_purchase.total | intcomma}}</h2>
                 <h2 id="client-tag">{{ sowing_purchase.status | capfirst}}</h2>
+
             </div>
         </div>
     </div>
+
+    {% if product_rows %}
+    <div id="wrapper">
+        <div class="title-movement-card">
+            <div id="card-row-1">
+                <h2 id="title-client-tag">Producto</h2>
+                <h2 id="title-client-tag">Lt/Kg</h2>
+                <h2 id="title-client-tag">USD X Kg/Lt</h2>
+                {% if sowing_purchase.status == 'por pagar' %}
+                <h2 id="title-client-tag">Eliminar</h2>
+                {% endif %}
+            </div>
+        </div>
+        {% for product_row in product_rows %}
+        <form method="post" id="row {{ forloop.counter0 }}" action="">
+            {% csrf_token %}
+            {{ destroy_object_form.field.as_hidden }}
+            <div class="title-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ product_row.product | capfirst}}</h2>
+                    <h2 id="client-tag">{{ product_row.lt_kg | floatformat:2 | intcomma}}</h2>
+                    <h2 id="client-tag">{{ product_row.precio_lt_kg_usd }}</h2>
+
+                    {% if sowing_purchase.status == 'por pagar' %}
+                    <input type="button" id="delete-tag" value="Eliminar" class="row-btn">
+                    <input type="hidden" name="row_id" value="{{ product_row.id }}">
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+
+        {% endfor %}
+    </div>
+    {% endif %}
 
     {%if payments or self_checks or endorsed_checks %}
     <h1 id="list-title">Pagos:</h1>
@@ -113,12 +136,38 @@
     {% endfor %}
     {% endif %}
 
+
     {% if sowing_purchase.status == 'por pagar' %}
+    <h1 id="list-title">Agregar producto:</h1>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-file-invoice-dollar"></i>Producto:</h3>
+                        <h2 id="title-client-tag">{{products_row_form.product}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill"></i>Precio lt/kg USD</h3>
+                        <h2 id="title-client-tag">{{products_row_form.precio_lt_kg_usd}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-money-bill"></i>Litros o kg:</h3>
+                        <h2 id="title-client-tag">{{products_row_form.lt_kg}}</h2>
+                    </div>
+
+                </div>
+            </div>
+            <input type="submit" value="Agregar" id="create-btn">
+        </div>
+    </form>
     <h1 id="list-title">Pagos Efectivo o Transferencia:</h1>
     <form action="" method="post">
         {% csrf_token %}
-        {{ payment_form.content_type.as_hidden }}
-        {{ payment_form.object_id.as_hidden }}
         <div id="form-wrapper">
             <div id="small-wrapper">
                 <div class="create-section">
@@ -225,6 +274,20 @@
     </div>
 </div>
 <script type="text/javascript">
+    if (document.querySelectorAll('.row-btn')) {
+        var btns = document.querySelectorAll('.row-btn')
+        btns.forEach((input, i) => {
+            input.addEventListener("click", function () {
+                if (confirm('Quiere eliminar el producto?')) {
+                    console.log(i)
+                    document.getElementById('row ' + i.toString()).submit()
+                } else {
+                    return false;
+                }
+            })
+        }
+        )
+    }
 
     var harvestElement = document.getElementById("delete-btn")
     harvestElement.addEventListener("click", function () {

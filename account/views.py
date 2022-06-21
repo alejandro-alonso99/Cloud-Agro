@@ -14,6 +14,7 @@ from payments.models import ThirdPartyChecks
 from stock.models import ManualMove
 from sowing.models import SowingPurchases, Applications
 import difflib
+import itertools
 
 @login_required
 def dashboard(request):
@@ -164,21 +165,29 @@ def dashboard(request):
 
         applications_lt_dict = Applications.calculate_lt_by_type()
 
-        product_choices = list(map(str,SowingPurchases.objects.values_list('producto',flat=True)))
+        sowing_purchases = SowingPurchases.objects.all()
 
-        product_choices = list(dict.fromkeys(product_choices))
+        sowing_purchases_products_rows = [sowing_purchase.productsrows_set.all() for sowing_purchase in sowing_purchases]
 
-        product_choices = [x.lower() for x in product_choices]
+        products_names = [list(set(map(str,row.values_list('product',flat=True)))) for row in sowing_purchases_products_rows]
+
+        products_names = list(itertools.chain(*products_names))
+        
+        products_names = list(dict.fromkeys(products_names))
+
+        products_names =[p.lower() for p in products_names]
+
+        products_names = list(dict.fromkeys(products_names))
 
         if 'query' in request.GET:
             form = SearchForm(request.GET)
             if form.is_valid():
                 query = form.cleaned_data['query']
-                product_choices = difflib.get_close_matches(query, product_choices)
+                products_names = difflib.get_close_matches(query, products_names)
 
 
         product_lt_kg = {}
-        for product in product_choices:
+        for product in products_names:
             if product in applications_lt_dict.keys():
                 product = product.lower()
                 product_lt_kg[product] = products_lt_dict[product] - applications_lt_dict[product]
@@ -209,7 +218,7 @@ def dashboard(request):
                 cereal_dict[sale_type] -= sale.calculate_total_kg()
 
             else:
-                cereal_dict[lote_type] = sale.calculate_total_kg()
+                cereal_dict[sale_type] = sale.calculate_total_kg()
 
         return cereal_dict
 

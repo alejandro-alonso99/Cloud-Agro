@@ -18,7 +18,6 @@
         <div id="card-row-1">
             <h2 id="title-client-tag">Producto</h2>
             <h2 id="title-client-tag">Promedio USD:</h2>
-            <h2 id="title-client-tag">Promedio Pesos:</h2>
         </div>
     </div>
     {% for key1,value1 in product_dict.items %}
@@ -26,7 +25,6 @@
         <div id="card-row-1">
             <h2 id="client-tag">{{key1 | capfirst}}</h2>
             <h2 id="client-total-tag">{{ value1.0 | floatformat:2 | usd_currency}} </h2>
-            <h2 id="client-total-tag">${{ value1.1 | intcomma}} </h2>
         </div>
     </div>
 

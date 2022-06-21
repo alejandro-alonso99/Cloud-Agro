@@ -6,6 +6,7 @@ from django.urls import reverse, reverse_lazy
 from payments.models import EndorsedChecks, SelfChecks, Payments
 from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
+import itertools
 
 class SowingPurchases(models.Model):
 
@@ -19,12 +20,13 @@ class SowingPurchases(models.Model):
     date = models.DateTimeField(default=datetime.datetime.now)
     factura = models.CharField(max_length=100, blank=True, null=True)
     proveedor = models.CharField(max_length=100)
-    producto = models.CharField(max_length=100)
+    producto = models.CharField(max_length=100, default='default')
     precio_lt_kg_usd = models.FloatField(default=0)
     lt_kg = models.FloatField(default=0)
     status = models.CharField(choices=STATUS_CHOICES, max_length=50, default='por pagar')
     tipo_cambio = models.FloatField( default=0)
     iva = models.FloatField(default=0)
+    total = models.FloatField(default=0)
 
     def __str__(self):
         return str(self.proveedor) + ' ' + self.date.strftime("%d-%m-%Y") + ' Siembra'
@@ -34,17 +36,6 @@ class SowingPurchases(models.Model):
     
     def get_update_url(self):
         return reverse_lazy('sowing:sowing_purchase_update',args=[self.id])
-
-
-    def calculate_total(self):
-
-        precio_lt_kg = self.precio_lt_kg_usd * self.tipo_cambio
-
-        subtotal = precio_lt_kg * self.lt_kg
-
-        total = subtotal + (subtotal * (self.iva/100))
-
-        return total 
     
     def calculate_total_usd(self):
 
@@ -83,7 +74,7 @@ class SowingPurchases(models.Model):
 
         total_payed = check_payed + payments_payed + endorsed_payed
 
-        amount_to_pay = self.calculate_total() - total_payed
+        amount_to_pay = self.total - total_payed
 
         if amount_to_pay <= 0:
             amount_to_pay = 0
@@ -94,31 +85,39 @@ class SowingPurchases(models.Model):
 
         sowing_purchases = SowingPurchases.objects.filter(campaña = campana)
 
+        sowing_purchases_products_rows = [sowing_purchase.productsrows_set.all() for sowing_purchase in sowing_purchases]
+
+        products_names = [list(set(map(str,row.values_list('product',flat=True)))) for row in sowing_purchases_products_rows]
+
+        products_names = list(itertools.chain(*products_names))
+        
+        products_names = list(dict.fromkeys(products_names))
+        
+        sowing_purchases_products_rows = list(itertools.chain(*sowing_purchases_products_rows))
+
+        ids = [row.id for row in sowing_purchases_products_rows]
+
+        sowing_purchases_products_rows = ProductsRows.objects.filter(id__in=ids)
+
         sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
 
-        #cálculo de precios promedi
+        #cálculo de precios promedio
         #devuelve un dict producto -> [prom usd, prom peso]
         product_dict = {}
-        for product in sowing_purchases_products: 
-            product_purchases = sowing_purchases.filter(producto = product)
+        for product in products_names: 
+            product_purchases = sowing_purchases_products_rows.filter(product = product)
             product = product.lower()
-            product_totals_arg = []
             product_totals_usd = []
             product_avgs = []
 
             for product_purchase in product_purchases:
-                purchase_peso_lt = float(product_purchase.precio_lt_kg_usd * product_purchase.tipo_cambio)
                 purchase_usd_lt = product_purchase.precio_lt_kg_usd
                 product_totals_usd.append(purchase_usd_lt)
-                product_totals_arg.append(purchase_peso_lt)
                 product_total_usd_lt = sum(product_totals_usd)
-                product_total_arg_lt = sum(product_totals_arg)
                 
             
             product_usd_avg = product_total_usd_lt / (product_purchases.count())
-            product_peso_avg = product_total_arg_lt / (product_purchases.count())
             product_avgs.append(product_usd_avg)
-            product_avgs.append(product_peso_avg)
             product_dict[product] = product_avgs
 
 
@@ -132,14 +131,28 @@ class SowingPurchases(models.Model):
         return(product_dict,product_choices)
 
     def calculate_lt_by_type():
-    
+        
         sowing_purchases = SowingPurchases.objects.all()
 
-        sowing_purchases_products = list(set(map(str,sowing_purchases.values_list('producto',flat=True))))
+        sowing_purchases_products_rows = [sowing_purchase.productsrows_set.all() for sowing_purchase in sowing_purchases]
+
+        products_names = [list(set(map(str,row.values_list('product',flat=True)))) for row in sowing_purchases_products_rows]
+
+        products_names = list(itertools.chain(*products_names))
+        
+        products_names = list(dict.fromkeys(products_names))
+        
+        sowing_purchases_products_rows = list(itertools.chain(*sowing_purchases_products_rows))
+
+        ids = [row.id for row in sowing_purchases_products_rows]
+
+        sowing_purchases_products_rows = ProductsRows.objects.filter(id__in=ids)
+
+        print(products_names)
 
         product_lt_dict = {}
-        for product in sowing_purchases_products:
-            product_purchases = sowing_purchases.filter(producto = product)
+        for product in products_names:
+            product_purchases = sowing_purchases_products_rows.filter(product = product)
             product = product.lower()
             product_total_lt_kg = sum(list(map(float, product_purchases.values_list('lt_kg',flat=True))))
             product_lt_dict[product] = product_total_lt_kg
@@ -189,7 +202,12 @@ class SowingPurchases(models.Model):
         self.slug = unique_slug_generator(self, self.proveedor, self.slug)
         super(SowingPurchases, self).save(*args,**kwargs)
 
+class ProductsRows(models.Model):
 
+    sowing_purchase = models.ForeignKey(SowingPurchases, on_delete=models.CASCADE)
+    lt_kg = models.FloatField()
+    product = models.CharField(max_length=100)
+    precio_lt_kg_usd = models.FloatField(default=0)
 
 
 class Applications(models.Model):

@@ -1,6 +1,6 @@
 from django import forms
 from land.models import Campaign
-from .models import Labors, SowingPurchases, Applications
+from .models import Labors, SowingPurchases, Applications, ProductsRows
 from land.models import Lote
 from django.forms.models import ModelForm
 from land.models import Land
@@ -8,8 +8,7 @@ from land.models import Land
 class SowingPurchasesForm(forms.ModelForm):
     class Meta:
         model = SowingPurchases
-        fields = ['factura','proveedor','producto','producto','precio_lt_kg_usd',
-                    'lt_kg','tipo_cambio','iva']
+        fields = ['factura','proveedor','tipo_cambio','iva','total']
         
             
     def __init__(self, *args, **kwargs):
@@ -66,3 +65,9 @@ class ChooseCampoForm(forms.Form):
 class LoteNumberForm(forms.Form):
 
     number_query = forms.IntegerField()
+
+class ProductRowForm(ModelForm):
+
+    class Meta:
+        model = ProductsRows
+        exclude = ('sowing_purchase',)

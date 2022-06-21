@@ -2,8 +2,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from land.models import Land
 from harvest.models import Harvest
-from .models import Applications, Labors, SowingPurchases
-from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm
+from .models import Applications, Labors, SowingPurchases, ProductsRows
+from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm, ProductRowForm
 from land .models import Campaign, Lote
 from payments.models import EndorsedChecks, SelfChecks, Payments, ThirdPartyChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
@@ -13,6 +13,8 @@ from django.contrib.postgres.search import SearchVector
 from harvest.forms import HarvestForm
 from payments.forms import ChangeStateForm, DestroyObjectForm
 from .forms import ChooseCampoForm, LoteNumberForm
+import itertools
+from payments.forms import DestroyObjectForm
 
 
 @login_required
@@ -79,18 +81,17 @@ def sowing_purchases_list(request):
 @login_required
 def sowing_purchases_create(request):
 
+    new_sowing_purchase = None
+
     if request.method == 'POST':
         sowing_p_form = SowingPurchasesForm(data=request.POST)
 
         if sowing_p_form.is_valid():
             factura = sowing_p_form.cleaned_data.get('factura')
             proveedor = sowing_p_form.cleaned_data.get('proveedor')
-            producto = sowing_p_form.cleaned_data.get('producto')
-            producto = producto.lower()
-            precio_lt_kg_usd = sowing_p_form.cleaned_data.get('precio_lt_kg_usd')
-            lt_kg = sowing_p_form.cleaned_data.get('lt_kg')
             tipo_cambio = sowing_p_form.cleaned_data.get('tipo_cambio')
             iva = sowing_p_form.cleaned_data.get('iva')
+            total = sowing_p_form.cleaned_data.get('total')
 
             if 'campaign' in request.session:
                 campana = Campaign.objects.get(nombre=request.session['campaign']) 
@@ -99,16 +100,13 @@ def sowing_purchases_create(request):
 
             attrs = {'campaña':campana,'factura':factura,
                                         'proveedor':proveedor,
-                                        'producto':producto,
-                                        'precio_lt_kg_usd':precio_lt_kg_usd,
-                                        'lt_kg':lt_kg,
                                         'tipo_cambio':tipo_cambio,
-                                        'iva':iva,}
+                                        'iva':iva, 'total':total}
 
             new_sowing_purchase = SowingPurchases(**attrs)
             new_sowing_purchase.save()
 
-        return redirect('sowing:sowing_purchases_list')
+        return redirect(new_sowing_purchase.get_absolute_url())
         
     else:
         sowing_p_form = SowingPurchasesForm()
@@ -150,11 +148,14 @@ def sowing_purchase_detail(request, id):
 
     endorsed_checks_form = EndorsedChecksForm(request.POST or None, initial=initial_payment_data)
 
+    products_row_form = ProductRowForm(request.POST or None)
+    
+    destroy_object_form = DestroyObjectForm(request.POST or None)
+
     if sowing_purchase.calculate_amount_to_pay() <= 0:
         sowing_purchase.status = 'pagado'
         sowing_purchase.save()
     
-
     if payment_form.is_valid():
         content_type = payment_form.cleaned_data.get('content_type')
         obj_id = payment_form.cleaned_data.get('object_id')
@@ -198,7 +199,6 @@ def sowing_purchase_detail(request, id):
     
     if endorsed_checks_form.is_valid() and request.POST.get("check_id"):
         third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
-        print(third_p_check)
 
         content_type = endorsed_checks_form.cleaned_data.get('content_type')
         obj_id = endorsed_checks_form.cleaned_data.get('object_id')
@@ -254,6 +254,30 @@ def sowing_purchase_detail(request, id):
     else:
         destroy_object_form = DestroyObjectForm()
 
+    if products_row_form.is_valid():
+
+        lt_kg = products_row_form.cleaned_data.get('lt_kg')
+        product = products_row_form.cleaned_data.get('product')
+        precio_lt_kg_usd = products_row_form.cleaned_data.get('precio_lt_kg_usd')
+        
+        attrs = {
+            'lt_kg':lt_kg, 'product':product.lower(), 'precio_lt_kg_usd':precio_lt_kg_usd,
+            'sowing_purchase':sowing_purchase,
+        }
+
+        new_product_row = ProductsRows(**attrs)
+        new_product_row.save()
+
+        return redirect(sowing_purchase.get_absolute_url())
+
+    if destroy_object_form.is_valid and request.POST.get('row_id'):
+        row_id = int(request.POST.get("row_id"))
+        row = ProductsRows.objects.get(pk=row_id)
+        row.delete()
+
+        return redirect(sowing_purchase.get_absolute_url())
+
+    product_rows = sowing_purchase.productsrows_set.all()
 
     return render(request, 'sowing/sowing_purchase_detail.html', {
                                                                 'sowing_purchase':sowing_purchase,
@@ -268,6 +292,8 @@ def sowing_purchase_detail(request, id):
                                                                 'endorsed_checks_form':endorsed_checks_form,
                                                                 'endorsed_checks':endorsed_checks,
                                                                 'destroy_object_form':destroy_object_form,
+                                                                'product_rows':product_rows,
+                                                                'products_row_form':products_row_form,
                                                                 })                                
 
 
@@ -461,7 +487,15 @@ def lote_detail(request,  lote_id):
 
     sowing_purchases = SowingPurchases.objects.all()
 
-    products = sowing_purchases.values_list('producto',flat=True)
+    sowing_purchases_products_rows = [sowing_purchase.productsrows_set.all() for sowing_purchase in sowing_purchases]
+
+    products = [list(set(map(str,row.values_list('product',flat=True)))) for row in sowing_purchases_products_rows]
+
+    products = list(itertools.chain(*products))
+    
+    products = list(dict.fromkeys(products))
+
+
 
     if request.method == 'POST':
         application_form = ApplicationForm(data=request.POST, products=products)
