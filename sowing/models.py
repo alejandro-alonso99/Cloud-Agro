@@ -51,6 +51,10 @@ class SowingPurchases(models.Model):
 
         return usd_lt
 
+    def calculate_total(self):
+
+        return (self.total * self.tipo_cambio) + ((self.total * self.tipo_cambio) * (self.iva / 100))
+
     def calculate_peso_lt(self):
 
         peso_lt = self.calculate_total() / self.lt_kg
@@ -74,7 +78,7 @@ class SowingPurchases(models.Model):
 
         total_payed = check_payed + payments_payed + endorsed_payed
 
-        amount_to_pay = self.total - total_payed
+        amount_to_pay = self.calculate_total() - total_payed
 
         if amount_to_pay <= 0:
             amount_to_pay = 0
@@ -235,12 +239,14 @@ class Applications(models.Model):
         super(Applications, self).save(*args,**kwargs)
 
     def calculate_sub_total(self, averages):
+        
+        has = self.lote.hectareas
 
         producto = self.producto.lower()
 
         avg = averages[producto][0]
 
-        sub_total = Decimal(avg) * Decimal(self.lt_kg)
+        sub_total = Decimal(avg) * Decimal(self.lt_kg) * has
 
         return [sub_total, avg]
 
