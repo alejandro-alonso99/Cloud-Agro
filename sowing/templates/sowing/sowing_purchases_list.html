@@ -42,7 +42,7 @@
                 {% endif %}
                 <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
                 <h2 id="client-tag"> {{ sowing_purchase.date | date:"d M Y"}} </h2>
-                <h2 id="total-tag">${{ sowing_purchase.total | intcomma }}</h2>
+                <h2 id="total-tag">${{ sowing_purchase.calculate_total | floatformat:2 | intcomma }}</h2>
                 {% if sowing_purchase.status == 'por pagar' %}
                 <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% else %}
@@ -114,7 +114,7 @@
                 {% endif %}
                 <h2 id="client-tag">{{ sowing_purchase.proveedor }}</h2>
                 <h2 id="client-tag"> {{ sowing_purchase.date | date:"d M Y" }} </h2>
-                <h2 id="total-tag">${{ sowing_purchase.total | intcomma }}</h2>
+                <h2 id="total-tag">${{ sowing_purchase.calculate_total | floatformat:2 | intcomma }}</h2>
                 {% if sowing_purchase.status == 'por pagar' %}
                 <h2 id="status-tag">{{ sowing_purchase.status | capfirst}}</h2>
                 {% else %}

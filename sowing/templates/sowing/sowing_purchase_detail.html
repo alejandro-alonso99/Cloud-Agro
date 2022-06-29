@@ -11,7 +11,8 @@
 
     <h1 id="list-title">Viendo compra: {{sowing_purchase}}</h1>
     {% if sowing_purchase.status == 'por pagar' %}
-    <h1 id="total-list-title">Total por pagar: ${{ sowing_purchase.calculate_amount_to_pay | intcomma}}</h1>
+    <h1 id="total-list-title">Total por pagar: ${{ sowing_purchase.calculate_amount_to_pay | floatformat:2 | intcomma}}
+    </h1>
     {% endif %}
 
     <div id="wrapper">
