@@ -60,9 +60,9 @@
                 <h2 id="client-tag">{{row.cantidad}}</h2>
                 <h2 id="client-tag">{{kg_cabeza | floatformat:2}}</h2>
                 <h2 id="client-tag">{{kg_total | floatformat:2}}</h2>
-                <h2 id="client-tag">${{sub_total | intcomma }}</h2>
-                <h2 id="client-tag">${{ iva | intcomma }}</h2>
-                <h2 id="client-tag">${{total | intcomma}}</h2>
+                <h2 id="client-tag">${{sub_total | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-tag">${{ iva | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-tag">${{total | floatformat:2 | intcomma}}</h2>
             </div>
         </div>
         {% endfor %}

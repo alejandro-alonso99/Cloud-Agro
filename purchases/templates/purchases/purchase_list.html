@@ -81,7 +81,7 @@
         <div class="data total-sales-month">
             <i class="fa-solid fa-cash-register"></i>
             <h1>Monto por pagar:</h1>
-            <h2>${{ amount_to_pay_total | intcomma }}</h2>
+            <h2>${{ amount_to_pay_total | floatformat:2 | intcomma }}</h2>
         </div>
     </div>
     <div id="list-title">
@@ -108,7 +108,7 @@
                 {% else %}
                 <h2 id="status-done-tag">{{ purchase.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">${{ purchase.calculate_total | intcomma }}</h2>
+                <h2 id="total-tag">${{ purchase.calculate_total | floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>

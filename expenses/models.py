@@ -56,15 +56,15 @@ class Expenses(models.Model):
 
         endorsed_checks = self.endorsed_checks
 
-        check_payed = sum([int(check.monto) for check in self_checks ])
+        check_payed = sum([float(check.monto) for check in self_checks ])
 
-        payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+        payments_payed = sum(list(map(float,payments.values_list('monto', flat=True))))
 
-        endorsed_payed = sum(list(map(int,endorsed_checks.values_list('monto', flat=True))))
+        endorsed_payed = sum(list(map(float,endorsed_checks.values_list('monto', flat=True))))
 
         total_payed = check_payed + payments_payed + endorsed_payed
 
-        amount_to_pay = self.monto - total_payed
+        amount_to_pay = float(self.monto) - total_payed
 
 
         return amount_to_pay
