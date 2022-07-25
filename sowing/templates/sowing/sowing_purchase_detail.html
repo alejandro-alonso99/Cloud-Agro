@@ -169,6 +169,8 @@
     <h1 id="list-title">Pagos Efectivo o Transferencia:</h1>
     <form action="" method="post">
         {% csrf_token %}
+        {{ payment_form.content_type.as_hidden }}
+        {{ payment_form.object_id.as_hidden }}
         <div id="form-wrapper">
             <div id="small-wrapper">
                 <div class="create-section">
