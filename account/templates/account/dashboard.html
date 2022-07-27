@@ -86,6 +86,7 @@
                 {% for i in totals_len|loop_maker %}
                 <h2 id="title-client-tag">{% get_index choices_names i %}</h2>
                 {% endfor %}
+                <h2 id="title-client-tag">Total</h2>
             </div>
         </div>
         <div class="title-movement-card">
@@ -94,6 +95,7 @@
                 {% for i in totals_len|loop_maker %}
                 <h2 id="client-tag">{% get_index category_totals i %}</h2>
                 {% endfor %}
+                <h2 id="client-tag">{{ total_animals }}</h2>
             </div>
         </div>
     </div>

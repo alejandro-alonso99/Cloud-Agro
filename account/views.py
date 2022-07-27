@@ -157,7 +157,9 @@ def dashboard(request):
         
         totals_len = len(purchase_category_totals)
 
-        return category_totals, choices_names, totals_len
+        total_animals = sum(category_totals)    
+
+        return category_totals, choices_names, totals_len, total_animals
 
     def calculate_products_stock():
 
@@ -230,6 +232,7 @@ def dashboard(request):
     category_totals = calculate_animals_stock()[0]
     choices_names = calculate_animals_stock()[1]
     totals_len = calculate_animals_stock()[2]
+    total_animals = calculate_animals_stock()[3]
 
     product_lt_kg = calculate_products_stock()
 
@@ -252,6 +255,7 @@ def dashboard(request):
                                                     'cereal_dict':cereal_dict,
                                                     'search_form':search_form,
                                                     'query':query,
+                                                    'total_animals':total_animals
                                                     })
 
 def change_campaign(request):
