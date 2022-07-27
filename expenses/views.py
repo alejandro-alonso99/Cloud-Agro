@@ -313,7 +313,6 @@ def expense_update(request, id):
             for payment in payments:
                 payment.delete()
 
-            campo = expense_form.cleaned_data.get('campo')
             concepto = expense_form.cleaned_data.get('concepto')
             monto = expense_form.cleaned_data.get('monto')
             descripcion = expense_form.cleaned_data.get('descripcion')
@@ -321,7 +320,7 @@ def expense_update(request, id):
             campana = expense.campana
             date = expense.date
 
-            attrs = {'campo':campo,'concepto':concepto,
+            attrs = {'concepto':concepto,
                     'monto':monto, 'descripcion':descripcion,
                     'categoria':categoria, 'date':date,
                     'status':'por pagar','campana':campana}
