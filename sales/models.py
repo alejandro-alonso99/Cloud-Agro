@@ -51,11 +51,11 @@ class Sales(models.Model):
         for row in sale_rows:
             kg_totales.append(row.cantidad * kg_cabeza)
 
-        animal_precio_kg =list(map(int,sale_rows.values_list('precio_por_kg', flat=True)))
+        animal_precio_kg =list(map(float,sale_rows.values_list('precio_por_kg', flat=True)))
 
         sub_totals= [a * b for a, b in zip(animal_precio_kg, kg_totales)]
 
-        animal_ivas = list(map(int,sale_rows.values_list('iva', flat=True)))
+        animal_ivas = list(map(float,sale_rows.values_list('iva', flat=True)))
 
         animal_totals = [a + b for a, b in zip(animal_ivas, sub_totals)]
 
@@ -68,9 +68,9 @@ class Sales(models.Model):
         
         third_p_checks = self.third_party_checks
 
-        check_payed =sum(list(map(int,third_p_checks.values_list('monto', flat=True))))
+        check_payed =sum(list(map(float,third_p_checks.values_list('monto', flat=True))))
         
-        payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+        payments_payed = sum(list(map(float,payments.values_list('monto', flat=True))))
 
         total_payed = check_payed + payments_payed
 

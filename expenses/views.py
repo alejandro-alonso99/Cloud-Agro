@@ -112,7 +112,7 @@ def expenses_summary(request):
     expenses_by_category = []
     for choice in CATEGORY_CHOICES:
         expense_by_category = expenses.filter(categoria = str(choice[0]))
-        expenses_by_category_totals = sum(list(map(int,expense_by_category.values_list('monto', flat=True)))) 
+        expenses_by_category_totals = sum(list(map(float,expense_by_category.values_list('monto', flat=True)))) 
         expense_category_totals.append(expenses_by_category_totals)
         expenses_by_category.append(expense_by_category)
 
@@ -134,7 +134,7 @@ def expenses_summary(request):
         expense_category_descriptions = dict.fromkeys(expense_category_descriptions)
         for description in expense_category_descriptions:
             expense_by_category_and_desc = expense_by_category.filter(descripcion=description)
-            description_total = sum(list(map(int,expense_by_category_and_desc.values_list('monto', flat=True))))    
+            description_total = sum(list(map(float,expense_by_category_and_desc.values_list('monto', flat=True))))    
             description_totals.append(description_total)
             expenses_dict[category][description] = description_total
 

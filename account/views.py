@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from account.forms import SelectCampaignForm
 from land.models import Campaign
 from payments.models import SelfChecks
-from harvest.models import Harvest
+from harvest.models import GrainManualMove, Harvest
 from purchases.models import Purchases, Animal
 from purchases.forms import SearchForm
 from sales.models import Sales, SaleRow, GrainSales
@@ -35,49 +35,49 @@ def dashboard(request):
         purchase_cash_payed_totals = []
         purchase_trans_payed_totals = []
         for purchase in purchases:
-            purchase_cash_payed_total = sum(list(map(int,purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-            purchase_trans_payed_total = sum(list(map(int,purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
+            purchase_cash_payed_total = sum(list(map(float,purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
+            purchase_trans_payed_total = sum(list(map(float,purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
             purchase_cash_payed_totals.append(purchase_cash_payed_total)
             purchase_trans_payed_totals.append(purchase_trans_payed_total)
 
         sale_cash_payed_totals = []
         sale_trans_payed_totals = []
         for sale in sales:
-            sale_cash_payed_total = sum(list(map(int,sale.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-            sale_trans_payed_total = sum(list(map(int,sale.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
+            sale_cash_payed_total = sum(list(map(float,sale.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
+            sale_trans_payed_total = sum(list(map(float,sale.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
             sale_cash_payed_totals.append(sale_cash_payed_total)
             sale_trans_payed_totals.append(sale_trans_payed_total)
 
         expense_cash_payed_totals = []
         expense_trans_payed_totals = []
         for expense in expenses:
-            expense_cash_payed_total = sum(list(map(int,expense.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-            expense_trans_payed_total = sum(list(map(int,expense.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
+            expense_cash_payed_total = sum(list(map(float,expense.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
+            expense_trans_payed_total = sum(list(map(float,expense.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
             expense_cash_payed_totals.append(expense_cash_payed_total)
             expense_trans_payed_totals.append(expense_trans_payed_total)
 
         sowing_purchase_cash_payed_totals = []
         sowing_purchase_trans_payed_totals = []
         for sowing_purchase in sowing_purchases:
-            sowing_purchase_cash_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
-            sowing_purchase_trans_payed_total = sum(list(map(int,sowing_purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
+            sowing_purchase_cash_payed_total = sum(list(map(float,sowing_purchase.payments.filter(tipo='efectivo').values_list('monto',flat=True))))
+            sowing_purchase_trans_payed_total = sum(list(map(float,sowing_purchase.payments.filter(tipo='transferencia').values_list('monto',flat=True))))
             sowing_purchase_cash_payed_totals.append(sowing_purchase_cash_payed_total)
             sowing_purchase_trans_payed_totals.append(sowing_purchase_trans_payed_total)
         
 
-        grain_sales_cash_payed = sum([sum(list(map(int,grain_sale.payments.filter(tipo='efectivo').values_list('monto',flat=True)))) for grain_sale in grain_sales])
-        grain_sales_bank_payed = sum([sum(list(map(int,grain_sale.payments.filter(tipo='transferencia').values_list('monto',flat=True)))) for grain_sale in grain_sales])
+        grain_sales_cash_payed = sum([sum(list(map(float,grain_sale.payments.filter(tipo='efectivo').values_list('monto',flat=True)))) for grain_sale in grain_sales])
+        grain_sales_bank_payed = sum([sum(list(map(float,grain_sale.payments.filter(tipo='transferencia').values_list('monto',flat=True)))) for grain_sale in grain_sales])
         
 
         if self_checks:
             payed_self_checks = self_checks.filter(estado='pagado')
-            self_checks_total = sum([int(check.monto) for check in payed_self_checks])
+            self_checks_total = sum([float(check.monto) for check in payed_self_checks])
         else:
             self_checks_total = 0
         
         if third_p_checks:
             payed_third_p_checks = third_p_checks.filter(estado='depositado')
-            third_p_checks_payed = sum([int(check.monto) for check in payed_third_p_checks])
+            third_p_checks_payed = sum([float(check.monto) for check in payed_third_p_checks])
         else:
             third_p_checks_payed = 0
 
@@ -92,12 +92,12 @@ def dashboard(request):
         sowing_purchases_trans_total = sum(sowing_purchase_trans_payed_totals)
 
         manualmoves_cash = FundManualMove.objects.filter(tipo='efectivo')
-        manualmoves_cash_add_total = sum(list(map(int,manualmoves_cash.filter(action='agregar').values_list('monto',flat=True))))
-        manualmoves_cash_remove_total = sum(list(map(int,manualmoves_cash.filter(action='quitar').values_list('monto',flat=True))))
+        manualmoves_cash_add_total = sum(list(map(float,manualmoves_cash.filter(action='agregar').values_list('monto',flat=True))))
+        manualmoves_cash_remove_total = sum(list(map(float,manualmoves_cash.filter(action='quitar').values_list('monto',flat=True))))
 
         manualmoves_trans = FundManualMove.objects.filter(tipo='transferencia')
-        manualmoves_trans_add_total = sum(list(map(int,manualmoves_trans.filter(action='agregar').values_list('monto',flat=True))))
-        manualmoves_trans_remove_total = sum(list(map(int,manualmoves_trans.filter(action='quitar').values_list('monto',flat=True))))
+        manualmoves_trans_add_total = sum(list(map(float,manualmoves_trans.filter(action='agregar').values_list('monto',flat=True))))
+        manualmoves_trans_remove_total = sum(list(map(float,manualmoves_trans.filter(action='quitar').values_list('monto',flat=True))))
 
 
         cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total + grain_sales_cash_payed
@@ -106,7 +106,7 @@ def dashboard(request):
        
         to_deposit_checks = third_p_checks.filter(estado= 'a depositar')
 
-        third_p_checks_total = sum(list(map(int,to_deposit_checks.values_list('monto',flat=True)))) 
+        third_p_checks_total = sum(list(map(float,to_deposit_checks.values_list('monto',flat=True)))) 
 
         return cash_total, trans_total, third_p_checks_total
 
@@ -125,28 +125,28 @@ def dashboard(request):
         purchase_category_totals=[]
         for item in ANIMAL_CHOICES:
             purchase_category_animals = Animal.objects.filter(categoria = str(item[0]))
-            purchase_category_total = sum(list(map(int,purchase_category_animals.values_list('cantidad', flat=True))))
+            purchase_category_total = sum(list(map(float,purchase_category_animals.values_list('cantidad', flat=True))))
             purchase_category_totals.append(purchase_category_total)
 
         #Vector de ventas de animales totales por categoría
         sale_category_totals=[]
         for item in ANIMAL_CHOICES:
             sale_category_animals = SaleRow.objects.filter(categoria = str(item[0]))
-            sale_category_total = sum(list(map(int,sale_category_animals.values_list('cantidad', flat=True))))
+            sale_category_total = sum(list(map(float,sale_category_animals.values_list('cantidad', flat=True))))
             sale_category_totals.append(sale_category_total)
 
         #Vector de animales totales por categoría agregados a mano
         manual_add_category_totals=[]
         for item in ANIMAL_CHOICES:
             manual_add_category = ManualMove.objects.filter(tipo='agregado',categoria= str(item[0]))
-            manual_add_category_total = sum(list(map(int,manual_add_category.values_list('cantidad', flat=True))))
+            manual_add_category_total = sum(list(map(float,manual_add_category.values_list('cantidad', flat=True))))
             manual_add_category_totals.append(manual_add_category_total)
 
         #Vector de animales totales por categoría quitados a mano
         manual_remove_category_totals=[]
         for item in ANIMAL_CHOICES:
             manual_remove_category = ManualMove.objects.filter(tipo='quitado',categoria= str(item[0]))
-            manual_remove_category_total = sum(list(map(int,manual_remove_category.values_list('cantidad', flat=True))))
+            manual_remove_category_total = sum(list(map(float,manual_remove_category.values_list('cantidad', flat=True))))
             manual_remove_category_totals.append(manual_remove_category_total)
 
         #Vector total
@@ -201,7 +201,7 @@ def dashboard(request):
     def calculate_cereal_stock():
         harvests = Harvest.objects.all()
         grain_sales = GrainSales.objects.all()
-
+        grain_manualmoves = GrainManualMove.objects.all()
         cereal_dict = {}
         for harvest in harvests:
             lote = harvest.lote
@@ -221,6 +221,15 @@ def dashboard(request):
 
             else:
                 cereal_dict[sale_type] = sale.calculate_total_kg()
+        
+        for move in grain_manualmoves:
+            move_type = move.grano
+
+            if move_type in cereal_dict:
+                cereal_dict[move_type] -= move.calculate_total()
+
+            else:
+                cereal_dict[move_type] = move.calculate_total()
 
         return cereal_dict
 

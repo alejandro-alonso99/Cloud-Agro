@@ -70,11 +70,11 @@ class SowingPurchases(models.Model):
 
         endorsed_checks = self.endorsed_checks
 
-        check_payed = sum([int(check.monto) for check in self_checks ])
+        check_payed = sum([float(check.monto) for check in self_checks ])
 
-        payments_payed = sum(list(map(int,payments.values_list('monto', flat=True))))
+        payments_payed = sum(list(map(float,payments.values_list('monto', flat=True))))
 
-        endorsed_payed = sum(list(map(int,endorsed_checks.values_list('monto', flat=True))))
+        endorsed_payed = sum(list(map(float,endorsed_checks.values_list('monto', flat=True))))
 
         total_payed = check_payed + payments_payed + endorsed_payed
 
@@ -151,8 +151,6 @@ class SowingPurchases(models.Model):
         ids = [row.id for row in sowing_purchases_products_rows]
 
         sowing_purchases_products_rows = ProductsRows.objects.filter(id__in=ids)
-
-        print(products_names)
 
         product_lt_dict = {}
         for product in products_names:

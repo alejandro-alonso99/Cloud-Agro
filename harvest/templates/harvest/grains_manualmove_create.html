@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="info-container">
+    <div id="list-title">
+        Modificar stock hacienda
+    </div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>kg totales</h3>
+                        <h2 id="title-client-tag">{{move_form.kg_totales}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Acción</h3>
+                        <h2 id="title-client-tag">{{move_form.tipo}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Grano:</h3>
+                        <h2 id="title-client-tag">{{move_form.grano}}</h2>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Crear" id="create-btn">
+        </div>
+    </form>
+</div>
+</div>
+{% endblock %}

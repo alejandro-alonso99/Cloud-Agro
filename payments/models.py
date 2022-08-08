@@ -214,7 +214,7 @@ class SelfChecks(models.Model):
     def get_update_url(self):
         return reverse ('funds:self_check_update',
                                         args=[self.id])                                              
-
+                                        
     class Meta:
         ordering = ('-fecha_salida',)
 

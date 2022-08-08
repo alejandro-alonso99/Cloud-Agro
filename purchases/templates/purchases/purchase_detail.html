@@ -73,9 +73,9 @@
                 <h2 id="client-tag">{{ total_cabezas }}</h2>
                 <h2 id="client-tag">- - -</h2>
                 <h2 id="client-tag">{{total_kg_total | floatformat:2 }}</h2>
-                <h2 id="client-tag">${{ total_sub_totals | intcomma }}</h2>
-                <h2 id="client-tag">${{ total_ivas | intcomma}}</h2>
-                <h2 id="client-tag">${{ purchase_total | intcomma}}</h2>
+                <h2 id="client-tag">${{ total_sub_totals | floatformat:2 | intcomma }}</h2>
+                <h2 id="client-tag">${{ total_ivas | floatformat:2 | intcomma}}</h2>
+                <h2 id="client-tag">${{ purchase_total | floatformat:2 | intcomma}}</h2>
             </div>
         </div>
     </div>

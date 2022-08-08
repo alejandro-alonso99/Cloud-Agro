@@ -967,6 +967,16 @@ e {
   border-bottom: 1px solid rgb(177, 177, 177);
 }
 
+#red-card-row-1 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  padding: 7px 0;
+  border: 1px solid var(--red-accent-color);
+}
+
 #total-card-row {
   display: flex;
   justify-content: space-around;

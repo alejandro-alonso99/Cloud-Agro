@@ -80,11 +80,11 @@ def purchase_detail(request, id):
 
     animal_cabezas = list(map(int,animals.values_list('cantidad', flat=True)))
 
-    animal_precio_kg =list(map(int,animals.values_list('precio_por_kg', flat=True)))
+    animal_precio_kg =list(map(float,animals.values_list('precio_por_kg', flat=True)))
 
     sub_totals= [a * b for a, b in zip(animal_precio_kg, kg_totales)]
 
-    animal_ivas = list(map(int,animals.values_list('iva', flat=True)))
+    animal_ivas = list(map(float,animals.values_list('iva', flat=True)))
 
     animal_totals = [a + b for a, b in zip(animal_ivas, sub_totals)]
 
@@ -104,8 +104,6 @@ def purchase_detail(request, id):
     self_checks = purchase.self_checks
 
     self_checks = [check for check in self_checks if check.estado != 'anulado']
-
-    print(self_checks)
 
     endorsed_checks = purchase.endorsed_checks
 

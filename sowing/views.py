@@ -59,7 +59,7 @@ def sowing_purchases_list(request):
 
     total_amounts_to_pay = []
     for purchase in unpayed_purchases:
-        unpayed_amount = int(purchase.calculate_amount_to_pay())
+        unpayed_amount = float(purchase.calculate_amount_to_pay())
         total_amounts_to_pay.append(unpayed_amount)
 
     total_amount_to_pay = sum(total_amounts_to_pay)

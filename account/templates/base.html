@@ -76,8 +76,10 @@
                     <i class="fa fa-caret-down"></i>
                 </button>
                 <div class="dropdown-content">
-                    <a href="{% url 'stock:manualmove_create' %}">Modificar</a>
-                    <a href="{% url 'stock:manualmove_list' %}">Historial movimientos a mano</a>
+                    <a href="{% url 'stock:manualmove_create' %}">Modificar Hacienda</a>
+                    <a href="{% url 'stock:manualmove_list' %}">Modificaciones Hacienda</a>
+                    <a href="{% url 'harvest:grains_manualmove_create' %}">Modificar Granos</a>
+                    <a href="{% url 'stock:manualmove_list' %}">Modificaciones Granos</a>
                 </div>
             </div>
             <div class="dropdown">

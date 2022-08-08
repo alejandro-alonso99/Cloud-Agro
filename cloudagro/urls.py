@@ -12,4 +12,5 @@ urlpatterns = [
     path('funds/',include('funds.urls', namespace='funds')),
     path('land/', include('land.urls', namespace='land')),
     path('sowing/', include('sowing.urls', namespace='sowing')),
+    path('harvest/', include('harvest.urls', namespace='harvest')),
 ]

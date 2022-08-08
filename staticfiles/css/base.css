@@ -893,6 +893,14 @@ e {
   transition: all 0.5s;
 }
 
+.red-movement-card {
+  padding: 0 30px;
+  height: fit-content;
+  background-color: transparent;
+  border: 1px solid var(--red-accent-color);
+  transition: all 0.5s;
+}
+
 .movement-card:hover {
   cursor: pointer;
   background-color: #c4c4c4c4;
@@ -958,6 +966,16 @@ e {
 }
 
 #card-row-1 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  padding: 7px 0;
+  border-bottom: 1px solid rgb(177, 177, 177);
+}
+
+#red-card-row-1 {
   display: flex;
   justify-content: space-around;
   align-items: center;
