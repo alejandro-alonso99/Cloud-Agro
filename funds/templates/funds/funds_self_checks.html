@@ -24,23 +24,25 @@
     {% if self_checks %}
     <div class="title-movement-card">
         <div id="card-row-1">
-            <h2 id="title-client-tag">Número:</h2>
-            <h2 id="title-client-tag">Proveedor:</h2>
             <h2 id="title-client-tag">Salida:</h2>
+            <h2 id="title-client-tag">Proveedor:</h2>
             <h2 id="title-client-tag">Depósito:</h2>
+            <h2 id="title-client-tag">Número:</h2>
             <h2 id="title-client-tag">Estado:</h2>
             <h2 id="title-client-tag">Monto:</h2>
         </div>
     </div>
     {% endif %}
     {% for check in self_checks %}
+    {% if check.estado == 'depositado' %}
+
     <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
-                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                 <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                 <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -49,15 +51,75 @@
                 {% elif check.estado == 'pagado' %}
                 <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
             </div>
         </div>
-    </a>
-    {% empty %}
-    <div id="list-title">
-        No hay resultados para la búsqueda
-    </div>
-    {% endfor %}
+        </a>
+
+    {% endif %}
+    {% if check.calculate_remaining < -30 or check.estado == "anulado" %} <a href="{{ check.get_absolute_url }}">
+        <a href="{{ check.get_absolute_url }}">
+        <div class="red-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                </h2>
+                {% if check.estado == 'a pagar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'anulado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'pagado' %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+            </div>
+        </div>
+        </a>
+
+    {% elif check.calculate_remaining < 0 and check.estado == 'a pagar' %}
+        <a href="{{ check.get_absolute_url }}">
+        <div class="yellow-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                </h2>
+                {% if check.estado == 'a pagar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'anulado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'pagado' %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+            </div>
+        </div>
+        </a>
+    {% elif check.calculate_remaining > 0 and check.estado == 'a pagar' %}
+        <a href="{{ check.get_absolute_url }}">
+            <div class="green-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                    <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                    </h2>
+                    {% if check.estado == 'a pagar' %}
+                    <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                    {% elif check.estado == 'anulado' %}
+                    <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                    {% elif check.estado == 'pagado' %}
+                    <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                    {% endif %}
+                    <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+                </div>
+            </div>
+            </a>
+    {% endif %}
+        {% endfor %}
 </div>
 <div class="actions-sidebar">
 
@@ -104,24 +166,25 @@
     {% if self_checks %}
     <div class="title-movement-card">
         <div id="card-row-1">
-            <h2 id="title-client-tag">Número:</h2>
-            <h2 id="title-client-tag">Proveedor:</h2>
             <h2 id="title-client-tag">Salida:</h2>
+            <h2 id="title-client-tag">Proveedor:</h2>
             <h2 id="title-client-tag">Depósito:</h2>
+            <h2 id="title-client-tag">Número:</h2>
             <h2 id="title-client-tag">Estado:</h2>
             <h2 id="title-client-tag">Monto:</h2>
         </div>
     </div>
     {% endif %}
     {% for check in self_checks %}
-    {% if check.calculate_remaining < 0 or check.estado == "anulado" %} <a href="{{ check.get_absolute_url }}">
-        <a href="{{ check.get_absolute_url }}">
+    {% if check.estado == 'pagado' %}
+
+    <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
-            <div id="red-card-row-1">
-                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
-                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+            <div id="card-row-1">
                 <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                 <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -130,31 +193,74 @@
                 {% elif check.estado == 'pagado' %}
                 <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
             </div>
         </div>
         </a>
-    {% else %}
-    <a href="{{ check.get_absolute_url }}">
-    <div class="movement-card">
-        <div id="card-row-1">
-            <h2 id="client-tag">{{ check.numero_cheque}}</h2>
-            <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-            <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
-            <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
-            </h2>
-            {% if check.estado == 'a pagar' %}
-            <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
-            {% elif check.estado == 'anulado' %}
-            <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
-            {% elif check.estado == 'pagado' %}
-            <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
-            {% endif %}
-            <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
+
+    {% endif %}
+    {% if check.calculate_remaining < -30 or check.estado == "anulado" %} <a href="{{ check.get_absolute_url }}">
+        <a href="{{ check.get_absolute_url }}">
+        <div class="red-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                </h2>
+                {% if check.estado == 'a pagar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'anulado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'pagado' %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+            </div>
         </div>
-    </div>
-    </a>
-        {% endif %}
+        </a>
+
+    {% elif check.calculate_remaining < 0 and check.estado == 'a pagar' %}
+        <a href="{{ check.get_absolute_url }}">
+        <div class="yellow-movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                </h2>
+                {% if check.estado == 'a pagar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'anulado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'pagado' %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+            </div>
+        </div>
+        </a>
+    {% elif check.calculate_remaining > 0 and check.estado == 'a pagar' %}
+        <a href="{{ check.get_absolute_url }}">
+            <div class="green-movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                    <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                    </h2>
+                    {% if check.estado == 'a pagar' %}
+                    <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                    {% elif check.estado == 'anulado' %}
+                    <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                    {% elif check.estado == 'pagado' %}
+                    <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                    {% endif %}
+                    <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+                </div>
+            </div>
+            </a>
+    {% endif %}
         {% endfor %}
 </div>
 <div class="actions-sidebar">

@@ -893,7 +893,31 @@ e {
   transition: all 0.5s;
 }
 
-.movement-card:hover {
+.red-movement-card {
+  padding: 0 30px;
+  height: fit-content;
+  background-color: rgb(254, 73, 73);
+  transition: all 0.5s;
+}
+
+.yellow-movement-card {
+  padding: 0 30px;
+  height: fit-content;
+  background-color: rgb(253, 253, 64);
+  transition: all 0.5s;
+}
+
+.green-movement-card {
+  padding: 0 30px;
+  height: fit-content;
+  background-color: rgb(61, 182, 61);
+  transition: all 0.5s;
+}
+
+.movement-card:hover,
+.yellow-movement-card:hover,
+.red-movement-card:hover,
+.green-movement-card:hover {
   cursor: pointer;
   background-color: #c4c4c4c4;
 }
@@ -974,7 +998,17 @@ e {
   text-align: left;
   width: 100%;
   padding: 7px 0;
-  border: 1px solid var(--red-accent-color);
+  background-color: #fb6264;
+}
+
+#yelow-card-row-1 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+  padding: 7px 0;
+  background-color: yellow;
 }
 
 #total-card-row {

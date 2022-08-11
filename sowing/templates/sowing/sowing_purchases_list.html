@@ -86,7 +86,7 @@
         <div class="data total-sales-month">
             <i class="fa-solid fa-cash-register"></i>
             <h1>Monto por pagar:</h1>
-            <h2>${{ total_amount_to_pay | intcomma}}</h2>
+            <h2>${{ total_amount_to_pay | floatformat:2 | intcomma}}</h2>
         </div>
     </div>
     <div id="list-title">

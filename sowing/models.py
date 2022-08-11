@@ -238,13 +238,11 @@ class Applications(models.Model):
 
     def calculate_sub_total(self, averages):
         
-        has = self.lote.hectareas
-
         producto = self.producto.lower()
 
         avg = averages[producto][0]
 
-        sub_total = Decimal(avg) * Decimal(self.lt_kg) * has
+        sub_total = Decimal(avg) * Decimal(self.lt_kg)
 
         return [sub_total, avg]
 
