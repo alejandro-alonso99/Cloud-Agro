@@ -69,9 +69,9 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">Total:</h2>
-                <h2 id="client-total-tag"> ${{ cash_total | intcomma}}</h2>
+                <h2 id="client-total-tag"> ${{ cash_total | floatformat:2 | intcomma}}</h2>
                 <h2 id="client-total-tag"> ${{ bank_total | floatformat:2 | intcomma}}</h2>
-                <h2 id="client-total-tag"> ${{ third_p_checks_total | intcomma}}</h2>
+                <h2 id="client-total-tag"> ${{ third_p_checks_total | floatformat:2 | intcomma}}</h2>
             </div>
         </div>
     </div>

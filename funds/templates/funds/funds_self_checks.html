@@ -34,7 +34,7 @@
     </div>
     {% endif %}
     {% for check in self_checks %}
-    {% if check.estado == 'depositado' %}
+    {% if check.estado == 'pagado' %}
 
     <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
