@@ -244,9 +244,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="green-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag">{{ check.numero_cheque}}</h2>
-                    <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
                     <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                    <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                    <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
                     </h2>
                     {% if check.estado == 'a pagar' %}
