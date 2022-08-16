@@ -197,9 +197,7 @@
             </div>
         </div>
         </a>
-
-    {% endif %}
-    {% if check.calculate_remaining < -30 or check.estado == "anulado" and check.estado != "pagado" %} <a href="{{ check.get_absolute_url }}">
+    {% elif check.calculate_remaining < -30 or check.estado == "anulado" and check.estado != "pagado" %} <a href="{{ check.get_absolute_url }}">
         <a href="{{ check.get_absolute_url }}">
         <div class="red-movement-card">
             <div id="card-row-1">
