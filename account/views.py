@@ -226,10 +226,15 @@ def dashboard(request):
             move_type = move.grano
 
             if move_type in cereal_dict:
-                cereal_dict[move_type] -= move.calculate_total()
-
+                if move.tipo == 'agregado':
+                    cereal_dict[move_type] += move.calculate_total()
+                else:
+                    cereal_dict[move_type] += move.calculate_total()
             else:
-                cereal_dict[move_type] = move.calculate_total()
+                if move.tipo == 'agregado':
+                    cereal_dict[move_type] = move.calculate_total()
+                else:
+                    cereal_dict[move_type] = move.calculate_total()
 
         return cereal_dict
 
