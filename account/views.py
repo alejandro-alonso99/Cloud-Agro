@@ -229,7 +229,7 @@ def dashboard(request):
                 if move.tipo == 'agregado':
                     cereal_dict[move_type] += move.calculate_total()
                 else:
-                    cereal_dict[move_type] -= move.calculate_total()
+                    cereal_dict[move_type] += move.calculate_total()
             else:
                 if move.tipo == 'agregado':
                     cereal_dict[move_type] = move.calculate_total()
