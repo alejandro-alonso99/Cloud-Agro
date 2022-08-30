@@ -220,7 +220,7 @@ def dashboard(request):
                 cereal_dict[sale_type] -= sale.calculate_total_kg()
 
             else:
-                cereal_dict[sale_type] = sale.calculate_total_kg()
+                cereal_dict[sale_type] = sale.calculate_total_kg() * -1
         
         for move in grain_manualmoves:
             move_type = move.grano
@@ -229,7 +229,7 @@ def dashboard(request):
                 if move.tipo == 'agregado':
                     cereal_dict[move_type] += move.calculate_total()
                 else:
-                    cereal_dict[move_type] += move.calculate_total()
+                    cereal_dict[move_type] -= move.calculate_total()
             else:
                 if move.tipo == 'agregado':
                     cereal_dict[move_type] = move.calculate_total()
