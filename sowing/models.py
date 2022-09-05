@@ -211,6 +211,9 @@ class ProductsRows(models.Model):
     product = models.CharField(max_length=100)
     precio_lt_kg_usd = models.FloatField(default=0)
 
+    def __str__(self):
+        return str(self.product) + ', lts/kg: ' + str(self.lt_kg)
+
 
 class Applications(models.Model):
 
