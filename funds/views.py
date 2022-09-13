@@ -2,11 +2,11 @@ from http import client
 from django.shortcuts import get_object_or_404, render, redirect
 from payments.forms import ThirdPartyChecksForm
 from payments.forms import SelfChecksForm
-from payments.models import EndorsedChecks
+from payments.models import EndorsedChecks, Payments
 from payments.models import ThirdPartyChecks, SelfChecks
-from payments.forms import ChangeStateForm
-from .forms import FundManualMoveForm
-from .models import FundManualMove
+from payments.forms import ChangeStateForm, EndorsedChecksForm, PaymentForm
+from .forms import FundManualMoveForm, IncomeOutcomeForm
+from .models import FundManualMove, IncomeOutcomes
 from django.contrib.auth.decorators import login_required
 from payments.forms import DestroyObjectForm
 from purchases.forms import DateForm, SearchForm
@@ -468,6 +468,177 @@ def self_check_update(request, id):
 
         return redirect(parent.get_absolute_url())
 
-    return render(request, 'funds/self_check_update.html',{'self_check':self_check,
-                                                            'self_check_form':self_check_form,    
-                                                        })
+    return render(request, 'funds/self_check_update.html',              {'self_check':self_check,
+                                'self_check_form':self_check_form,    
+                            })
+
+@login_required
+def intcome_outcome_create(request):
+
+    if request.method == 'POST':
+        income_outcome_form = IncomeOutcomeForm(data=request.POST)
+        if income_outcome_form.is_valid():
+            income_outcome = income_outcome_form.save()
+
+            return redirect(income_outcome.get_absolute_url())            
+        
+    else:
+        income_outcome_form = IncomeOutcomeForm()
+
+    return render(request, 'funds/intcome_outcome_create.html',{
+        'income_outcome_form':income_outcome_form,
+    })
+
+@login_required
+def income_outcome_detail(request, id):
+
+    income_outcome = get_object_or_404(IncomeOutcomes, id=id)
+
+    #Pagos
+
+    payments = income_outcome.payments
+
+    self_checks = []
+
+    third_p_checks = []
+
+    endorsed_checks = []
+
+    initial_payment_data = {
+        'content_type': income_outcome.get_content_type,
+        'object_id': income_outcome.id,
+    }
+
+    payment_form = PaymentForm(request.POST or None, initial= initial_payment_data)
+
+    third_p_form = ThirdPartyChecksForm(request.POST or None, initial= initial_payment_data)
+
+    self_check_form =SelfChecksForm(request.POST or None, initial=initial_payment_data)
+
+    endorsed_checks_form = EndorsedChecksForm(request.POST or None, initial=initial_payment_data)
+
+    if payment_form.is_valid():
+        content_type = payment_form.cleaned_data.get('content_type')
+        obj_id = payment_form.cleaned_data.get('object_id')
+        monto = payment_form.cleaned_data.get('monto')
+        tipo = payment_form.cleaned_data.get('tipo')
+
+        attrs = {'content_type':content_type, 'object_id':obj_id, 'monto':monto, 'tipo':tipo}
+
+        new_payment = Payments(**attrs)
+        new_payment.save()
+        
+        return redirect(income_outcome.get_absolute_url())
+
+    if income_outcome.tipo == 'ingreso':
+        third_p_checks = income_outcome.third_party_checks
+
+        if third_p_form.is_valid():
+            content_type = third_p_form.cleaned_data.get('content_type')
+            obj_id = third_p_form.cleaned_data.get('object_id')
+            fecha_deposito = third_p_form.cleaned_data.get('fecha_deposito')
+            banco_emision = third_p_form.cleaned_data.get('banco_emision')
+            numero_cheque = third_p_form.cleaned_data.get('numero_cheque')
+            titular_cheque = third_p_form.cleaned_data.get('titular_cheque')
+            monto = third_p_form.cleaned_data.get('monto')
+            observacion = ''
+
+            cliente = income_outcome.operador
+            descripcion = income_outcome
+            attrs = {'content_type':content_type, 'object_id':obj_id,
+                                        'cliente':cliente,
+                                        'descripcion': descripcion,                                      
+                                        'fecha_deposito':fecha_deposito,
+                                        'banco_emision':banco_emision,
+                                        'numero_cheque':numero_cheque,
+                                        'titular_cheque':titular_cheque,
+                                        'monto':monto,
+                                        'observacion':observacion,    
+                                        }
+
+            new_third_p_check = ThirdPartyChecks(**attrs)
+            new_third_p_check.save()
+        
+            return redirect(income_outcome.get_absolute_url())
+
+    else:
+        self_checks = income_outcome.self_checks
+
+        self_checks = [check for check in self_checks if check.estado != 'anulado']
+
+        endorsed_checks = income_outcome.endorsed_checks
+
+        third_p_checks = ThirdPartyChecks.objects.filter(estado='a depositar')    
+
+        if self_check_form.is_valid():
+            content_type = self_check_form.cleaned_data.get('content_type')
+            obj_id = self_check_form.cleaned_data.get('object_id')
+            fecha_pago = self_check_form.cleaned_data.get('fecha_pago')
+            banco_emision = self_check_form.cleaned_data.get('banco_emision')
+            numero_cheque = self_check_form.cleaned_data.get('numero_cheque')
+            titular_cheque = self_check_form.cleaned_data.get('titular_cheque')
+            monto = self_check_form.cleaned_data.get('monto')
+
+            cliente = income_outcome.operador
+            descripcion = income_outcome
+
+            attrs = {'content_type':content_type, 'object_id':obj_id, 
+                                                    'cliente':cliente,
+                                                    'descripcion':descripcion,
+                                                    'fecha_pago':fecha_pago, 
+                                                    'banco_emision':banco_emision,
+                                                    'numero_cheque':numero_cheque,
+                                                    'titular_cheque':titular_cheque,
+                                                    'monto':monto,
+                                                        }
+        
+            new_self_check = SelfChecks(**attrs)
+            new_self_check.save()
+
+            return redirect(income_outcome.get_absolute_url())
+
+        if endorsed_checks_form.is_valid() and request.POST.get("check_id"):
+            third_p_check = ThirdPartyChecks.objects.get(pk=int(request.POST.get("check_id")))
+            content_type = endorsed_checks_form.cleaned_data.get('content_type')
+            obj_id = endorsed_checks_form.cleaned_data.get('object_id')
+            fecha_deposito = third_p_check.fecha_deposito
+            banco_emision = third_p_check.banco_emision
+            numero_cheque = third_p_check.numero_cheque
+            titular_cheque = third_p_check.titular_cheque
+            monto = third_p_check.monto
+            cliente = third_p_check.cliente
+            descripcion = third_p_check.descripcion
+            observacion = '' 
+            third_p_id = third_p_check.id   
+
+            attrs = {'content_type':content_type, 'object_id':obj_id,
+                                        'cliente':cliente,
+                                        'descripcion': descripcion,                                      
+                                        'fecha_deposito':fecha_deposito,
+                                        'banco_emision':banco_emision,
+                                        'numero_cheque':numero_cheque,
+                                        'titular_cheque':titular_cheque,
+                                        'monto':monto,
+                                        'observacion':observacion,    
+                                        'third_p_id':third_p_id,
+                                        }
+
+            new_endorsed_check = EndorsedChecks(**attrs)
+            new_endorsed_check.save()
+
+            third_p_check.estado = 'endosado'
+            third_p_check.save()
+
+            return redirect(income_outcome.get_absolute_url())
+
+    return render(request, 'funds/income_outcome_detail.html',{
+                                                'income_outcome':income_outcome,
+                                                'payments':payments,
+                                                'self_checks': self_checks,
+                                                'third_p_checks':third_p_checks,
+                                                'endorsed_checks': endorsed_checks,
+                                                'payment_form': payment_form,
+                                                'endorsed_checks_form':endorsed_checks_form,
+                                                'self_check_form':self_check_form,
+                                                'third_p_form':third_p_form,
+                                                })

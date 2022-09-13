@@ -711,8 +711,18 @@ def application_update(request,id):
 
     lote = application.lote
 
+    sowing_purchases = SowingPurchases.objects.all()
+
+    sowing_purchases_products_rows = [sowing_purchase.productsrows_set.all() for sowing_purchase in sowing_purchases]
+
+    products = [list(set(map(str,row.values_list('product',flat=True)))) for row in sowing_purchases_products_rows]
+
+    products = list(itertools.chain(*products))
+    
+    products = list(dict.fromkeys(products))
+
     if request.method == 'POST':
-        application_form = ApplicationForm(data=request.POST)
+        application_form = ApplicationForm(data=request.POST, products=products)
 
         if application_form.is_valid():
 
@@ -735,7 +745,7 @@ def application_update(request,id):
             return redirect(lote.get_absolute_url())
         
     else:
-        application_form = ApplicationForm()
+        application_form = ApplicationForm(products=products)
 
     return render(request, 'sowing/application_update.html',{   
                                                             'application':application,

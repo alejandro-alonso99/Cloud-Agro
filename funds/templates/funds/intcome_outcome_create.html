@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="info-container">
+    <h1 id="list-title">Registro de ingreso, egreso:</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div id="form-wrapper">
+            <div id="small-wrapper">
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-tractor"></i>Operador:</h3>
+                        <h2 id="title-client-tag">{{income_outcome_form.operador}}</h2>
+                    </div>                    
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Descripción:</h3>
+                        <h2 id="title-client-tag">{{income_outcome_form.description}}</h2>
+                    </div>
+                </div>
+                <div class="create-section">
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-mountain"></i>Factura (opcional):</h3>
+                        <h2 id="title-client-tag">{{income_outcome_form.factura}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Tipo:</h3>
+                        <h2 id="title-client-tag">{{income_outcome_form.tipo}}</h2>
+                    </div>
+                    <div class="create-element">
+                        <h3><i class="fa-solid fa-list-ol"></i>Monto:</h3>
+                        <h2 id="title-client-tag">{{income_outcome_form.monto}}</h2>
+                    </div>
+                </div>
+                
+            </div>
+            {{ income_outcome_form.errors }}
+            <input type="submit" value="Crear" id="create-btn">
+        </div>
+    </form>
+</div>
+<div class="actions-sidebar">
+    <div id="actions">
+    </div>
+</div>
+{% endblock %}
