@@ -1,35 +1,36 @@
 {% extends "base.html" %}
 
-{% load purchase_extras %}
-
 {% load humanize %}
 
-{% block title %} Movimientos a mano {% endblock %}
+{% block title %} Listado de ingresos y egresos {% endblock %}
 
 {% block content %}
+
 {% if date_query_end %}
 <div class="info-container">
     <div id="list-title">
         Filtrando entre Fechas: "{{date_query_start }}" y "{{date_query_end}}"
     </div>
-    {% if manual_moves %}
+    {% if income_outcomes %}
     <div class="title-movement-card">
         <div id="card-row-1">
             <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Operador:</h2>
+            <h2 id="title-client-tag">Factura:</h2>
             <h2 id="title-client-tag">Tipo:</h2>
-            <h2 id="title-client-tag">Acción:</h2>
             <h2 id="title-client-tag">Monto:</h2>
         </div>
     </div>
     {% endif %}
-    {% for move in manual_moves %}
-    <a href="{{move.get_absolute_url}}">
+    {% for in_out in income_outcomes %}
+    <a href="{{in_out.get_absolute_url}}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="date-tag"> {{ move.date | date:"d M Y"}} </h2>
-                <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
-                <h2 id="client-tag">{{ move.action | capfirst}}</h2>
-                <h2 id="total-tag">${{ move.monto | floatformat:2 | intcomma }}</h2>
+                <h2 id="date-tag"> {{ in_out.date | date:"d M Y"}} </h2>
+                <h2 id="client-tag">{{ in_out.operador | capfirst}}</h2>
+                <h2 id="client-tag">{{ in_out.factura | capfirst}}</h2>
+                <h2 id="total-tag">{{ in_out.tipo }}</h2>
+                <h2 id="total-tag">{{ in_out.monto | floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -46,7 +47,7 @@
             <div id="action-section">
                 Volver a listado
             </div>
-            <a href="{% url 'funds:funds_manualmoves' %}">
+            <a href="{% url 'funds:income_outcome_list' %}">
                 <h1 id="action-title">Volver <i class="fa-solid fa-chevron-right"></i></h1>
             </a>
         </div>
@@ -57,12 +58,13 @@
     <div id="list-title">
         Historial de movimientos a mano de fondos:
     </div>
-    {% if manual_moves %}
+    {% if income_outcomes %}
     <div class="title-movement-card">
         <div id="card-row-1">
             <h2 id="title-client-tag">Fecha:</h2>
+            <h2 id="title-client-tag">Operador:</h2>
+            <h2 id="title-client-tag">Factura:</h2>
             <h2 id="title-client-tag">Tipo:</h2>
-            <h2 id="title-client-tag">Acción:</h2>
             <h2 id="title-client-tag">Monto:</h2>
         </div>
     </div>
@@ -71,14 +73,15 @@
         Aún no hay modificaciones a mano:
     </div>
     {% endif %}
-    {% for move in manual_moves %}
-    <a href="{{move.get_absolute_url}}">
+    {% for in_out in income_outcomes %}
+    <a href="{{in_out.get_absolute_url}}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="date-tag"> {{ move.date | date:"d M Y"}} </h2>
-                <h2 id="client-tag">{{ move.tipo | capfirst}}</h2>
-                <h2 id="client-tag">{{ move.action | capfirst}}</h2>
-                <h2 id="total-tag">${{ move.monto | intcomma }}</h2>
+                <h2 id="date-tag"> {{ in_out.date | date:"d M Y"}} </h2>
+                <h2 id="client-tag">{{ in_out.operador | capfirst}}</h2>
+                <h2 id="client-tag">{{ in_out.factura | capfirst}}</h2>
+                <h2 id="total-tag">{{ in_out.tipo }}</h2>
+                <h2 id="total-tag">{{ in_out.monto | floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -102,3 +105,4 @@
 </div>
 {% endif %}
 {% endblock %}
+

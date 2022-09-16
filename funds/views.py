@@ -82,6 +82,8 @@ def funds_manualmove_detail(request, move):
 def funds_third_party_checks(request):
     third_party_checks = ThirdPartyChecks.objects.all()
 
+    print(third_party_checks[0])
+
     to_deposit_checks = third_party_checks.filter(estado="a depositar")
 
     today_checks = 0
@@ -642,3 +644,26 @@ def income_outcome_detail(request, id):
                                                 'self_check_form':self_check_form,
                                                 'third_p_form':third_p_form,
                                                 })
+
+def income_outcome_list(request):
+
+    income_outcomes = IncomeOutcomes.objects.all()
+
+    date_form = DateForm()
+
+    date_query_start = None
+    date_query_end = None
+
+    if 'date_query_start' and 'date_query_end' in request.GET:
+        form = DateForm(request.GET)
+        if form.is_valid():
+            date_query_start = form.cleaned_data['date_query_start'].strftime("%Y-%m-%d")
+            date_query_end = form.cleaned_data['date_query_end'].strftime("%Y-%m-%d")
+            income_outcomes = income_outcomes.filter(date__range=[date_query_start, date_query_end])
+
+    return render(request, 'funds/income_outcome_list.html',{
+                                                            'income_outcomes':income_outcomes,
+                                                            'date_form': date_form,
+                                                            'date_query_start':date_query_start,
+                                                            'date_query_end':date_query_end,
+                                                                })

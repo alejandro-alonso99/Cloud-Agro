@@ -9,7 +9,7 @@ from purchases.forms import SearchForm
 from sales.models import Sales, SaleRow, GrainSales
 from expenses.models import Expenses
 from sowing.models import SowingPurchases
-from funds.models import FundManualMove
+from funds.models import FundManualMove, IncomeOutcomes
 from payments.models import ThirdPartyChecks
 from stock.models import ManualMove
 from sowing.models import SowingPurchases, Applications
@@ -31,6 +31,8 @@ def dashboard(request):
         grain_sales = GrainSales.objects.all()
         self_checks = SelfChecks.objects.all()
         third_p_checks = ThirdPartyChecks.objects.all()
+        income_outcomes = IncomeOutcomes.objects.all()
+
 
         purchase_cash_payed_totals = []
         purchase_trans_payed_totals = []
@@ -68,6 +70,13 @@ def dashboard(request):
         grain_sales_cash_payed = sum([sum(list(map(float,grain_sale.payments.filter(tipo='efectivo').values_list('monto',flat=True)))) for grain_sale in grain_sales])
         grain_sales_bank_payed = sum([sum(list(map(float,grain_sale.payments.filter(tipo='transferencia').values_list('monto',flat=True)))) for grain_sale in grain_sales])
         
+        income_outcome_add_cash_total = sum([sum(list(map(float,in_out.payments.filter(tipo='efectivo').values_list('monto',flat=True)))) for in_out in income_outcomes.filter(tipo="ingreso")])
+
+        income_outcome_remove_cash_total = sum([sum(list(map(float,in_out.payments.filter(tipo='efectivo').values_list('monto',flat=True)))) for in_out in income_outcomes.filter(tipo="egreso")])
+
+        income_outcome_add_trans_total = sum([sum(list(map(float,in_out.payments.filter(tipo='transferencia').values_list('monto',flat=True)))) for in_out in income_outcomes.filter(tipo="ingreso")])
+
+        income_outcome_remove_trans_total = sum([sum(list(map(float,in_out.payments.filter(tipo='transferencia').values_list('monto',flat=True)))) for in_out in income_outcomes.filter(tipo="egreso")])
 
         if self_checks:
             payed_self_checks = self_checks.filter(estado='pagado')
@@ -100,9 +109,9 @@ def dashboard(request):
         manualmoves_trans_remove_total = sum(list(map(float,manualmoves_trans.filter(action='quitar').values_list('monto',flat=True))))
 
 
-        cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total + grain_sales_cash_payed
+        cash_total = sale_cash_total - expense_cash_total - purchase_cash_total + manualmoves_cash_add_total - manualmoves_cash_remove_total - sowing_purchases_cash_total + grain_sales_cash_payed + income_outcome_add_cash_total - income_outcome_remove_cash_total
 
-        trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total + grain_sales_bank_payed - self_checks_total + third_p_checks_payed
+        trans_total = sale_trans_total - purchase_trans_total - expense_trans_total + manualmoves_trans_add_total - manualmoves_trans_remove_total - sowing_purchases_trans_total + grain_sales_bank_payed - self_checks_total + third_p_checks_payed + income_outcome_add_trans_total - income_outcome_remove_trans_total
        
         to_deposit_checks = third_p_checks.filter(estado= 'a depositar')
 

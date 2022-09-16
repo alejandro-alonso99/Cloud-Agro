@@ -54,6 +54,25 @@
                 </div>
             </div>
         </a>
+    {% elif check.estado == 'endosado' %}
+    <a href="{{ check.get_absolute_url }}">
+        <div class="movement-card">
+            <div id="card-row-1">
+                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                {% if check.estado == 'a depositar' %}
+                <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                {% elif check.estado == 'endosado' %}
+                <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                {% else %}
+                <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                {% endif %}
+                <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
+            </div>
+        </div>
+    </a>
     {% endif %}
     {% if check.calculate_remaining < -30 or check.estado == "anulado" %}
 
@@ -191,6 +210,25 @@
                     <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
                     {% endif %}
                     <h2 id="total-tag">${{ check.monto | intcomma }}</h2>
+                </div>
+            </div>
+        </a>
+    {% elif check.estado == 'endosado' %}
+        <a href="{{ check.get_absolute_url }}">
+            <div class="movement-card">
+                <div id="card-row-1">
+                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag">{{ check.numero_cheque}}</h2>
+                    {% if check.estado == 'a depositar' %}
+                    <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
+                    {% elif check.estado == 'endosado' %}
+                    <h2 id="endosed-tag">{{ check.estado | capfirst}}</h2>
+                    {% else %}
+                    <h2 id="status-done-tag">{{ check.estado | capfirst}}</h2>
+                    {% endif %}
+                    <h2 id="client-tag">${{ check.monto | intcomma }}</h2>
                 </div>
             </div>
         </a>

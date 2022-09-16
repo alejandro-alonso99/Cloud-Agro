@@ -15,5 +15,6 @@ urlpatterns = [
     path('checks/self/<int:id>/', views.self_check_detail, name='self_check_detail'),
     path('checks/self/update/<int:id>/', views.self_check_update, name='self_check_update'),
     path('intcome_outcome/create',views.intcome_outcome_create, name='intcome_outcome_create'),
-    path('intcome_outcome/<int:id>',views.income_outcome_detail,name='income_outcome_detail')
+    path('intcome_outcome/<int:id>',views.income_outcome_detail,name='income_outcome_detail'),
+    path('intcome_outcome/',views.income_outcome_list,name='income_outcome_list'),
 ]
