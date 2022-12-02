@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from land.models import Land
 from harvest.models import Harvest
 from .models import Applications, Labors, SowingPurchases, ProductsRows
-from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm, ProductRowForm
+from .forms import SowingPurchasesForm, ApplicationForm, LoteForm, LaborsForm, ProductRowForm, EditTipodeCambioForm
 from land .models import Campaign, Lote
 from payments.models import EndorsedChecks, SelfChecks, Payments, ThirdPartyChecks
 from payments.forms import PaymentForm, SelfChecksForm, EndorsedChecksForm
@@ -279,6 +279,19 @@ def sowing_purchase_detail(request, id):
 
     product_rows = sowing_purchase.productsrows_set.all()
 
+    tipo_cambio_form = EditTipodeCambioForm(request.POST or None)
+    
+    if tipo_cambio_form.is_valid() and request.POST.get('change_token'):
+        sowing_purchase.tipo_cambio = tipo_cambio_form.cleaned_data.get('number')
+        
+        if sowing_purchase.calculate_amount_to_pay() > 0:
+            sowing_purchase.status = 'por pagar'
+        
+        sowing_purchase.save()
+
+
+
+
     return render(request, 'sowing/sowing_purchase_detail.html', {
                                                                 'sowing_purchase':sowing_purchase,
                                                                 'precio_lt_kg':precio_lt_kg,
@@ -294,6 +307,7 @@ def sowing_purchase_detail(request, id):
                                                                 'destroy_object_form':destroy_object_form,
                                                                 'product_rows':product_rows,
                                                                 'products_row_form':products_row_form,
+                                                                'tipo_cambio_form':tipo_cambio_form,
                                                                 })                                
 
 

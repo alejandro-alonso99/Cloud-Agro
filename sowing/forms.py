@@ -71,3 +71,7 @@ class ProductRowForm(ModelForm):
     class Meta:
         model = ProductsRows
         exclude = ('sowing_purchase',)
+
+class EditTipodeCambioForm(forms.Form):
+
+    number = forms.IntegerField()

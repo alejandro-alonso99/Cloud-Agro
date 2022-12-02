@@ -273,6 +273,15 @@
                 <input type="button" id="delete-btn" value="Eliminar compra">
                 <input type="hidden" name="delete_token" value="1">
             </form>
+            <div id="action-section">
+                Tipo de cambio
+            </div>
+            <form method="post" action="" id="search-form">
+                {% csrf_token %}
+                {{ tipo_cambio_form.number }}
+                <input type="submit" id="search-btn" value="Editar">
+                <input type="hidden" name="change_token" value="1">
+            </form>
         </div>
     </div>
 </div>
