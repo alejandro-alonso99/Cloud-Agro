@@ -74,4 +74,4 @@ class ProductRowForm(ModelForm):
 
 class EditTipodeCambioForm(forms.Form):
 
-    number = forms.IntegerField()
+    number = forms.FloatField()
