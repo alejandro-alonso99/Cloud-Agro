@@ -41,7 +41,7 @@
                 {% else %}
                 <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-sale-tag">${{ sale.calculate_total|  floatformat:2 | intcomma }}</h2>
+                <h2 id="total-sale-tag">${{ sale.calculate_total |  floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>
@@ -106,7 +106,7 @@
                 {% else %}
                 <h2 id="status-done-tag">{{ sale.status | capfirst}}</h2>
                 {% endif %}
-                <h2 id="total-sale-tag">${{ sale.calculate_total | intcomma }}</h2>
+                <h2 id="total-sale-tag">${{ sale.calculate_total|  floatformat:2 | intcomma }}</h2>
             </div>
         </div>
     </a>
