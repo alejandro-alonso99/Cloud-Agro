@@ -96,7 +96,7 @@
         </a>
     {% elif check.calculate_remaining < 0 and check.estado == 'a depositar' %}
         <a href="{{ check.get_absolute_url }}">
-            <div class="yellow-movement-card">
+            <div class="green-movement-card">
                 <div id="card-row-1">
                     <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
@@ -115,7 +115,7 @@
         </a>
     {% elif check.calculate_remaining > 0 and check.estado == 'a pagar' %}
     <a href="{{ check.get_absolute_url }}">
-        <div class="green-movement-card">
+        <div class="yellow-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
@@ -255,7 +255,7 @@
         </a>
     {% elif check.calculate_remaining < 0 and check.estado == 'a depositar' %}
         <a href="{{ check.get_absolute_url }}">
-            <div class="yellow-movement-card">
+            <div class="green-movement-card">
                 <div id="card-row-1">
                     <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
@@ -274,7 +274,7 @@
         </a>
     {% elif check.calculate_remaining > 0 and check.estado == 'a depositar' %}
     <a href="{{ check.get_absolute_url }}">
-        <div class="green-movement-card">
+        <div class="yellow-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
