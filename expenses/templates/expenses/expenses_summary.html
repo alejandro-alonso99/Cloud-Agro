@@ -23,7 +23,7 @@
             <div id="card-row-1">
                 <h2 id="client-tag">Total:</h2>
                 {% for total in expense_category_totals %}
-                <h2 id="client-tag">${{ total | intcomma | floatformat:2}}</h2>
+                <h2 id="client-tag">${{ total| floatformat:2 | intcomma  }}</h2>
                 {% endfor %}
             </div>
         </div>
@@ -44,7 +44,7 @@
         <div class="title-movement-card">
             <div id="card-row-1">
                 <h2 id="client-tag">{{key2 | capfirst}}</h2>
-                <h2 id="total-tag"> ${{ value2 | intcomma | floatformat:2 }} </h2>
+                <h2 id="total-tag"> ${{ value2 | floatformat:2 | intcomma   }} </h2>
             </div>
         </div>
         {% endfor %}
