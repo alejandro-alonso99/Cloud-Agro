@@ -38,10 +38,10 @@
 
     <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
-            <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+            <div id="card-row-1">{{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}
+                <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
@@ -61,9 +61,9 @@
         <a href="{{ check.get_absolute_url }}">
         <div class="red-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
@@ -82,9 +82,9 @@
         <a href="{{ check.get_absolute_url }}">
         <div class="yellow-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
@@ -102,9 +102,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="green-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                    <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     </h2>
                     {% if check.estado == 'a pagar' %}
@@ -181,9 +181,9 @@
     <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
@@ -201,9 +201,9 @@
         <a href="{{ check.get_absolute_url }}">
         <div class="red-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
@@ -222,9 +222,9 @@
         <a href="{{ check.get_absolute_url }}">
         <div class="green-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 </h2>
                 {% if check.estado == 'a pagar' %}
@@ -242,9 +242,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="yellow-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_salida | date:"d M Y"}}</h2>
+                    <h2 id="client-tag"> {{ check.fecha_salida.day }} / {{ check.fecha_salida.month }} / {{ check.fecha_salida.year }}</h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_pago | date:"d M Y"}}
+                    <h2 id="client-tag"> {{ check.fecha_pago.day }} / {{ check.fecha_pago.month }} / {{ check.fecha_pago.year }}
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     </h2>
                     {% if check.estado == 'a pagar' %}

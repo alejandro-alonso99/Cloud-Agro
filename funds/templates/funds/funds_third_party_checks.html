@@ -39,9 +39,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -58,9 +58,9 @@
     <a href="{{ check.get_absolute_url }}">
         <div class="movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 {% if check.estado == 'a depositar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -79,9 +79,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="red-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -98,9 +98,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="green-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -117,9 +117,9 @@
     <a href="{{ check.get_absolute_url }}">
         <div class="yellow-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 {% if check.estado == 'a depositar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -198,9 +198,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -217,9 +217,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -238,9 +238,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="red-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -257,9 +257,9 @@
         <a href="{{ check.get_absolute_url }}">
             <div class="green-movement-card">
                 <div id="card-row-1">
-                    <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                     <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                    <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                    <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                     <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                     {% if check.estado == 'a depositar' %}
                     <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
@@ -276,9 +276,9 @@
     <a href="{{ check.get_absolute_url }}">
         <div class="yellow-movement-card">
             <div id="card-row-1">
-                <h2 id="client-tag"> {{ check.fecha_ingreso | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{check.fecha_ingreso.day}} / {{check.fecha_ingreso.month }} / {{check.fecha_ingreso.year}} </h2>
                 <h2 id="client-tag">{{ check.cliente | capfirst}}</h2>
-                <h2 id="client-tag"> {{ check.fecha_deposito | date:"d M Y"}} </h2>
+                <h2 id="client-tag"> {{ check.fecha_deposito.day }} / {{ check.fecha_deposito.month }} / {{ check.fecha_deposito.year }} </h2>
                 <h2 id="client-tag">{{ check.numero_cheque}}</h2>
                 {% if check.estado == 'a depositar' %}
                 <h2 id="status-tag">{{ check.estado | capfirst}}</h2>
